@@ -1,0 +1,19 @@
+#Create an Untitled Document at Launch
+defaults write com.apple.TextEdit NSShowAppCentricOpenPanelInsteadOfUntitledFile -bool false
+
+#clean dock
+defaults write com.apple.dock static-only -bool true && \
+killall Dock
+
+#Show all file extensions
+defaults write -g AppleShowAllExtensions -bool true
+
+#show path in finder
+defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+
+#show ~/Library
+chflags nohidden ~/Library
+
+#show "quit" in finder
+defaults write com.apple.finder QuitMenuItem -bool true && \
+killall Finder

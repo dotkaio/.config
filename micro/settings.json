@@ -1,0 +1,6 @@
+{
+    "colorscheme": "atom-dark",
+    "filemanager.openonstart": true,
+    "keepautoindent": true,
+    "tabhighlight": true
+}
