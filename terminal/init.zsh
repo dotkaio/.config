@@ -13,10 +13,12 @@ source $TERMINAL/setopt.zsh
 source $TERMINAL/functions.zsh
 source $TERMINAL/paths.zsh
 source $TERMINAL/export.zsh
+source $TERMINAL/bindkey.zsh
 source $TERMINAL/compdef.zsh
 source $TERMINAL/autoload.zsh
 source $TERMINAL/highlight/init
 source $TERMINAL/zstyle.zsh
+# source /usr/local/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
 FPATH=$TERMINAL/completions:$FPATH
 

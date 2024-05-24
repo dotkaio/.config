@@ -74,7 +74,24 @@ function l {
 }
 
 function block {
-    sudo santactl rule --silent-block --path $@
+    facetime = "/System/Applications/FaceTime.app"
+    messages = "/System/Applications/Messages.app"
+    mail = "/System/Applications/Mail.app"
+    system = "/System/Applications/System\ Settings.app"
+    chromium = "/Applications/Chromium.app"
+    if [[ $@ == $facetime ]]; then
+        sudo santactl rule --silent-block --path $facetime
+    elif [[ $@ == $messages ]]; then
+        sudo santactl rule --silent-block --path $messages
+    elif [[ $@ == $mail ]]; then
+        sudo santactl rule --silent-block --path $mail
+    elif [[ $@ == $system ]]; then
+        sudo santactl rule --silent-block --path $system
+    elif [[ $@ == $chromium ]]; then
+        sudo santactl rule --silent-block --path $chromium
+    else
+        sudo santactl rule --silent-block --path $@
+    fi
 }
 
 function unblock {
@@ -82,11 +99,7 @@ function unblock {
 }
 
 function blockall {
-    sudo santactl rule --silent-block --path /System/Applications/Messages.app
-    sudo santactl rule --silent-block --path /System/Applications/FaceTime.app
-    sudo santactl rule --silent-block --path /System/Applications/Mail.app
-    sudo santactl rule --silent-block --path /System/Applications/System\ Settings.app
-    sudo santactl rule --silent-block --path /Applications/Chromium.app
+
 }
 
 function unblockall {
@@ -355,7 +368,7 @@ function rand {
 
 }
 
-function battery {
+function battery() {
     pmset -g batt | egrep "([0-9]+\%).*" -o --colour=auto | cut -f1 -d';'
 }
 
@@ -391,20 +404,4 @@ function path {
     if [[ -d $1 ]]; then
         export PATH="$1 :$PATH"
     fi
-}
-
-# Usage: bannerSimple "my title" "*"
-function bannerSimple {
-    local msg="${2} ${1} ${2}"
-    local edge
-    edge=${msg//?/$2}
-    echo "${edge}"
-    echo "$(tput bold)${msg}$(tput sgr0)"
-    echo "${edge}"
-    echo
-}
-remove_timestamp_and_unknown() {
-    local input="$1"
-    local output=$(echo "$input" | sed '1,2d')
-    echo "$output"
 }
