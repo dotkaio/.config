@@ -74,24 +74,25 @@ function l {
 }
 
 function block {
-    facetime = "/System/Applications/FaceTime.app"
-    messages = "/System/Applications/Messages.app"
-    mail = "/System/Applications/Mail.app"
-    system = "/System/Applications/System\ Settings.app"
-    chromium = "/Applications/Chromium.app"
-    if [[ $@ == $facetime ]]; then
-        sudo santactl rule --silent-block --path $facetime
-    elif [[ $@ == $messages ]]; then
-        sudo santactl rule --silent-block --path $messages
-    elif [[ $@ == $mail ]]; then
-        sudo santactl rule --silent-block --path $mail
-    elif [[ $@ == $system ]]; then
-        sudo santactl rule --silent-block --path $system
-    elif [[ $@ == $chromium ]]; then
-        sudo santactl rule --silent-block --path $chromium
-    else
-        sudo santactl rule --silent-block --path $@
-    fi
+    #facetime = "/System/Applications/FaceTime.app"
+    #messages = "/System/Applications/Messages.app"
+    #mail = "/System/Applications/Mail.app"
+    #system = "/System/Applications/System\ Settings.app"
+    #chromium = "/Applications/Chromium.app"
+    #if [[ $@ == $facetime ]]; then
+    #    sudo santactl rule --silent-block --path $facetime
+    #elif [[ $@ == $messages ]]; then
+    #    sudo santactl rule --silent-block --path $messages
+    #elif [[ $@ == $mail ]]; then
+    #    sudo santactl rule --silent-block --path $mail
+    #elif [[ $@ == $system ]]; then
+    #    sudo santactl rule --silent-block --path $system
+    #elif [[ $@ == $chromium ]]; then
+    #    sudo santactl rule --silent-block --path $chromium
+    #else
+    #    sudo santactl rule --silent-block --path $@
+    #fi
+    sudo santactl rule --silent-block --path $@
 }
 
 function unblock {

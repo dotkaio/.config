@@ -22,5 +22,7 @@ source $TERMINAL/zstyle.zsh
 
 FPATH=$TERMINAL/completions:$FPATH
 
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 prompt='%F{cyan}%h %F{green}%B%/%F{red}%b $(branch_name)%f
 >_ '
