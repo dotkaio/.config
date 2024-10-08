@@ -282,13 +282,13 @@ history() {
 		for (a in CMD)print CMD[a] " " CMD[a]/count*100 "% " a;}' | column -c3 -s " " -t | sort -nr |
             nl | head -n25
     elif [[ $1 == "clear" || "clean" ]]; then
-        awk '!a[$0]++' $HOME/.histfile >$HOME/.histfile.tmp && mv $HOME/.histfile.tmp $HOME/.histfile
+        awk '!a[$0]++' $HISTFILE >$HISTFILE.tmp && mv $HISTFILE.tmp $HISTFILE
     fi
 }
 
 rand() {
     newUser() {
-        openssl rand -base64 64 | tr -d "=+/1-9" | cut -c-16 | head -1 | pbcopy
+        openssl rand -base64 64 | tr -d "=+/1-9" | cut -c-20 | head -1 | lower | pc
         echo $(pbpaste)
     }
     newPass() {
@@ -407,4 +407,47 @@ extract() {
     else
         echo "You haven't included any arguments"
     fi
+}
+
+yt() {
+    WHERE=$(pwd)
+    cd /tmp &&
+        yt-dlp --restrict-filenames --no-overwrites --no-call-home --force-ipv4 --no-part $1 &&
+        mv *.mp4 $HOME/Movies/TV/Movies/Action
+    echo "done"
+    cd $PWD
+}
+
+# conda() {
+## check if conda is installed
+# if [[ -d /opt/homebrew/Caskroom/miniconda/base ]]; then
+#     # check if conda is in the path
+#     if [[ -d /opt/homebrew/Caskroom/miniconda/base/bin ]]; then
+#         # check if conda is in the shell
+#         if [[ -f /opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh ]]; then
+#             . /opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh
+#         else
+#             export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+#         fi
+#     else
+#         echo "Conda is not in the path"
+#     fi
+# else
+#     echo "Conda is not installed"
+# fi
+# __conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.bash' 'hook' 2>/dev/null)"
+# if [ $? -eq 0 ]; then
+#     eval "$__conda_setup"
+# else
+#     if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+#         . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+#     else
+#         export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+#     fi
+# fi
+# unset __conda_setup
+# }
+
+td() {
+    mkdir -p $(date +%Y-%m-%d)
 }

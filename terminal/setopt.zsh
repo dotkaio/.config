@@ -22,4 +22,4 @@ setopt COMPLETEINWORD
 # setopt pushdtohome        # pushd and popd will use $HOME instead of $PWD
 # setopt pushdminus         # pushd and popd will swap the top two entries on the directory stack
 # setopt pushdignoredups    # ignore duplicates when pushing directories onto the directory stack
-# setopt pushdminus
+# setopt pushdminus        # pushd and popd will swap the top two entries on the directory stack

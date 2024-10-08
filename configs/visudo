@@ -36,4 +36,4 @@ Cmnd_Alias NP = \
 
 root            ALL = (ALL) ALL
 %admin          ALL = (ALL) ALL
-sysadm.         ALL = (ALL) NOPASSWD:NP
+sysadm          ALL = (ALL) NOPASSWD:NP

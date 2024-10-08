@@ -1,3 +1,4 @@
+#!/usr/bin/env zsh
 zstyle :plugin:fast-syntax-highlighting theme "default"
 typeset -g FAST_THEME_NAME="default"
 : ${FAST_HIGHLIGHT_STYLES[defaultdefault]:=none}

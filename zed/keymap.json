@@ -1,0 +1,29 @@
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      "cmd-shift-\\": "workspace::ToggleLeftDock",
+      "cmd-e": "command_palette::Toggle",
+      "cmd-\\": "workspace::ToggleLeftDock",
+      "cmd-r": "workspace::ToggleRightDock",
+      "cmd-j": "workspace::ToggleBottomDock",
+      "cmd-t": "workspace::NewFile",
+      "cmd-.": "workspace::OpenTerminal",
+      "cmd-p": "workspace::OpenFile",
+      "cmd-shift-p": "workspace::OpenFolder",
+      "cmd-shift-t": "workspace::OpenFolder",
+      "cmd-shift-n": "workspace::NewWindow",
+      "cmd-w": "workspace::CloseWindow"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "cmd-.": "workspace::NewTerminal",
+      "cmd-e": "command_palette::Toggle",
+      "cmd-\\": "workspace::ToggleLeftDock",
+      "alt-f": "editor::Format",
+      "cmd-p": "editor::GoToDiagnostic"
+    }
+  }
+]

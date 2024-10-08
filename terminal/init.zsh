@@ -1,34 +1,38 @@
-CONFIG="$HOME/.config"
-TERMINAL="$CONFIG/terminal"
+export CONFIG="$HOME/.config"
+export HISTFILE="$CONFIG/.histfile"
+export SAVEHIST=$HISTSIZE
 
-HISTFILE="$HOME/.histfile"
-HISTSIZE=10000
-SAVEHIST=$HISTSIZE
-
-GITHUB_USER="dotkaio"
-
-source $TERMINAL/alias.zsh
-source $TERMINAL/suggestion.zsh
-source $TERMINAL/setopt.zsh
-source $TERMINAL/functions.zsh
-source $TERMINAL/paths.zsh
-source $TERMINAL/export.zsh
-source $TERMINAL/bindkey.zsh
-source $TERMINAL/compdef.zsh
-source $TERMINAL/autoload.zsh
-source $TERMINAL/highlight/init.zsh
-source $TERMINAL/zstyle.zsh
+source $CONFIG/terminal/alias.zsh
+source $CONFIG/terminal/suggestion.zsh
+source $CONFIG/terminal/setopt.zsh
+source $CONFIG/terminal/functions.zsh
+source $CONFIG/terminal/paths.zsh
+source $CONFIG/terminal/export.zsh
+source $CONFIG/terminal/bindkey.zsh
+source $CONFIG/terminal/compdef.zsh
+source $CONFIG/terminal/autoload.zsh
+source $CONFIG/terminal/highlight/init.zsh
+source $CONFIG/terminal/zstyle.zsh
 
 FPATH=$CONFIG/terminal/completions:$FPATH
-autoload -Uz compinit
-compinit
 
 # prompt='%F{cyan}%h %F{redz}% k∆iØ %F{green}%B%~%F{red}%b $(branch_name)%f
 # >_ '
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"                                       # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
-
 prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
 → '
+
+GITHUB_USER="dotkaio"
+
+# CONDA
+__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.bash' 'hook' 2>/dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+        . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+    else
+        export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+    fi
+fi
+unset __conda_setup

@@ -34,7 +34,7 @@ tell application curApp
 			-- Vertical size
 			set y1 to menubarSize
 			set y2 to displayHeight
-
+			
 			if curApp ends with ":Finder.app:" then
 				-- account for TotalFinder
 				tell application "Finder"

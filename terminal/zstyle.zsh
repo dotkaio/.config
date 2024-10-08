@@ -1,3 +1,4 @@
+#/bin/zsh
 zstyle ':completion:*' menu select
 zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s #
 zstyle ":completion:*" ignore-parents parent pwd
@@ -11,7 +12,6 @@ zstyle ":completion:*" verbose yes
 zstyle ':completion:*' accept-exact '*(N)'
 zstyle ':completion:*' completer _complete _ignored _approximate
 zstyle ':completion:*' expand 'yes'
-# zstyle vsc info is the same as git info
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' stagedstr "!"
