@@ -5,9 +5,12 @@ path /usr/bin
 path /usr/sbin
 path /usr/local/bin
 path /usr/local/sbin
+path $HOME/.gem/bin
+path $GEM_HOME/gems/bin
 
 # rust
 path $HOME/.cargo/bin
+path $HOME/.rustup/toolchains/1.81-aarch64-apple-darwin/bin/
 
 # brew
 if [[ -d /opt/homebrew/bin ]]; then

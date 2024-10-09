@@ -1,3 +1,4 @@
+#/bin/zsh
 autoload -U colors && colors    # Enable colors in prompt
 autoload -Uz compinit           # Load the completion system (compsys)
 autoload -Uz find-command       # Load find-command
@@ -10,4 +11,5 @@ autoload -Uz zcalc              # command line calculator
 autoload -Uz zcalc              # Load zcalc
 autoload -Uz zmv                # Load zmv
 autoload -Uz zmv                # Load zmv
+
 compinit

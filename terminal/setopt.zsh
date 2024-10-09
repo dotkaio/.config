@@ -1,3 +1,4 @@
+#/bin/zsh
 setopt AUTOCD
 setopt NOBEEP
 setopt CORRECT

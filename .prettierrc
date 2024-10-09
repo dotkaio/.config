@@ -1,0 +1,12 @@
+{
+  "tabWidth": 4,
+  "useTabs": false,
+  "printWidth": 120,
+  "embeddedLanguageFormatting": "auto",
+  "pythonIndent": 2,
+  "singleQuote": true,
+  "jsxSingleQuote": true,
+  "json": {
+    "quote": "single"
+  }
+}

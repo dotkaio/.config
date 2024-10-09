@@ -130,8 +130,11 @@ plist() {
     # CONFIG = $HOME/.config
     get_plist() {
         for the_path in $(
-            mdfind -name LaunchDaemons
-            mdfind -name LaunchAgents
+            echo "/Library/LaunchDaemons                                                                                    
+            /Library/Apple/System/Library/LaunchDaemons
+            /Users/sysadm/Library/LaunchAgents
+            /Library/LaunchAgents
+            /Library/Apple/System/Library/LaunchAgents"
         ); do
             for the_file in $(ls -1 $the_path); do
                 echo $the_path/$the_file
@@ -145,16 +148,31 @@ plist() {
         done
     }
 
-    if [[ $1 == "get" ]]; then
+    case $1 in
+    "get")
         if [[ -f $CONFIG/plist_shasum.txt ]]; then
             rm $CONFIG/plist_shasum.txt
         fi
         get_shasum >$CONFIG/plist_shasum.txt
-    elif [[ $1 == "verify" ]]; then
+        ;;
+    "verify")
         colordiff <(get_shasum) <(cat $CONFIG/plist_shasum.txt)
-    else
+        ;;
+    *)
         get_shasum
-    fi
+        ;;
+    esac
+
+    # if [[ $1 == "get" ]]; then
+    #     if [[ -f $CONFIG/plist_shasum.txt ]]; then
+    #         rm $CONFIG/plist_shasum.txt
+    #     fi
+    #     get_shasum >$CONFIG/plist_shasum.txt
+    # elif [[ $1 == "verify" ]]; then
+    #     colordiff <(get_shasum) <(cat $CONFIG/plist_shasum.txt)
+    # else
+    #     get_shasum
+    # fi
 }
 
 remove() {
@@ -196,10 +214,11 @@ dmg() {
 }
 
 update() {
-    brew update &&
-        brew upgrade &&
-        brew cleanup &&
-        brew autoremove
+    brew update
+    brew upgrade
+    brew cleanup
+    brew autoremove
+    brew clean --prune=all
 
 }
 
@@ -410,43 +429,30 @@ extract() {
 }
 
 yt() {
-    WHERE=$(pwd)
-    cd /tmp &&
-        yt-dlp --restrict-filenames --no-overwrites --no-call-home --force-ipv4 --no-part $1 &&
-        mv *.mp4 $HOME/Movies/TV/Movies/Action
-    echo "done"
-    cd $PWD
+    if [[ $1 == "-p" ]]; then
+        WHERE=$(pwd)
+        cd /tmp &&
+            yt-dlp --restrict-filenames --no-overwrites --no-call-home --force-ipv4 --no-part $1 &&
+            mv *.mp4 $HOME/Movies/TV/Movies/Action
+        echo "done"
+        cd $PWD
+    else
+        yt-dlp --restrict-filenames --no-overwrites --no-call-home --force-ipv4 --no-part $1
+    fi
 }
 
-# conda() {
-## check if conda is installed
-# if [[ -d /opt/homebrew/Caskroom/miniconda/base ]]; then
-#     # check if conda is in the path
-#     if [[ -d /opt/homebrew/Caskroom/miniconda/base/bin ]]; then
-#         # check if conda is in the shell
-#         if [[ -f /opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh ]]; then
-#             . /opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh
-#         else
-#             export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
-#         fi
-#     else
-#         echo "Conda is not in the path"
-#     fi
-# else
-#     echo "Conda is not installed"
-# fi
-# __conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.bash' 'hook' 2>/dev/null)"
-# if [ $? -eq 0 ]; then
-#     eval "$__conda_setup"
-# else
-#     if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-#         . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
-#     else
-#         export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
-#     fi
-# fi
-# unset __conda_setup
-# }
+clean() {
+    if [[ $1 == "brew" ]]; then
+        brew cleanup
+    elif [[ $1 == "cache" ]]; then
+        brew cleanup --prune=0 # Remove all cache
+    elif [[ $1 == "all" ]]; then
+        brew cleanup --prune=0
+        rm -rf $HOME/Library/Caches/*
+    else
+        rm -rf $HOME/Library/Caches/*
+    fi
+}
 
 td() {
     mkdir -p $(date +%Y-%m-%d)
