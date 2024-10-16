@@ -36,3 +36,6 @@ else
     fi
 fi
 unset __conda_setup
+
+rm $HOME/.zcompdump* 2>/dev/null
+compinit

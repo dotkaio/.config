@@ -229,10 +229,12 @@ clone() {
         cd $HOME/Developer
         if [[ $1 =~ ^https?:// ]]; then
             git clone $1
-            echo "$@" | cut -d '/' -f 5 | pbc
+            echo "$@" | cut -d '/' -f 5 | pbcopy
+            cd $(pbpaste)
+            echo "done!"
         else
             git clone https://github.com/$@
-            echo "$@" | cut -d '/' -f 2 | pbc
+            echo "$@" | cut -d '/' -f 2 | pbcopy
         fi
     else
         mkdir -p $HOME/Developer
@@ -418,36 +420,6 @@ yt() {
     cd $PWD
 }
 
-# conda() {
-## check if conda is installed
-# if [[ -d /opt/homebrew/Caskroom/miniconda/base ]]; then
-#     # check if conda is in the path
-#     if [[ -d /opt/homebrew/Caskroom/miniconda/base/bin ]]; then
-#         # check if conda is in the shell
-#         if [[ -f /opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh ]]; then
-#             . /opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh
-#         else
-#             export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
-#         fi
-#     else
-#         echo "Conda is not in the path"
-#     fi
-# else
-#     echo "Conda is not installed"
-# fi
-# __conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.bash' 'hook' 2>/dev/null)"
-# if [ $? -eq 0 ]; then
-#     eval "$__conda_setup"
-# else
-#     if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-#         . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
-#     else
-#         export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
-#     fi
-# fi
-# unset __conda_setup
-# }
-
 td() {
-    mkdir -p $(date +%Y-%m-%d)
+    mkdir -p $(date +%m-%d%Y)
 }
