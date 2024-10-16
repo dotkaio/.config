@@ -11,7 +11,6 @@ source $CONFIG/terminal/export.zsh
 source $CONFIG/terminal/bindkey.zsh
 source $CONFIG/terminal/compdef.zsh
 source $CONFIG/terminal/autoload.zsh
-source $CONFIG/terminal/highlight/init.zsh
 source $CONFIG/terminal/zstyle.zsh
 
 FPATH=$CONFIG/terminal/completions:$FPATH
