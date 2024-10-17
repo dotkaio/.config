@@ -1,19 +1,23 @@
 export CONFIG="$HOME/.config"
+
+export TERMINAL="$CONFIG/terminal"
+
 export HISTFILE="$CONFIG/.histfile"
 export SAVEHIST=$HISTSIZE
 
-source $CONFIG/terminal/alias.zsh
-source $CONFIG/terminal/suggestion.zsh
-source $CONFIG/terminal/setopt.zsh
-source $CONFIG/terminal/functions.zsh
-source $CONFIG/terminal/paths.zsh
-source $CONFIG/terminal/export.zsh
-source $CONFIG/terminal/bindkey.zsh
-source $CONFIG/terminal/compdef.zsh
-source $CONFIG/terminal/autoload.zsh
-source $CONFIG/terminal/zstyle.zsh
+source $TERMINAL/alias.zsh
+source $TERMINAL/suggestion.zsh
+source $TERMINAL/setopt.zsh
+source $TERMINAL/functions.zsh
+source $TERMINAL/paths.zsh
+source $TERMINAL/export.zsh
+source $TERMINAL/bindkey.zsh
+source $TERMINAL/compdef.zsh
+source $TERMINAL/autoload.zsh
+source $TERMINAL/zstyle.zsh
+source $TERMINAL/highlight/init.zsh
 
-FPATH=$CONFIG/terminal/completions:$FPATH
+FPATH=$TERMINAL/completions:$FPATH
 
 # prompt='%F{cyan}%h %F{redz}% k∆iØ %F{green}%B%~%F{red}%b $(branch_name)%f
 # >_ '
