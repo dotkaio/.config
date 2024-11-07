@@ -17,3 +17,4 @@ zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' stagedstr "!"
 zstyle ':vcs_info:*' unstagedstr "?"
 zstyle ':vcs_info:*' formats "%F{green}%b%f %F{cyan}%m%f %F{red}%u%f %F{yellow}%c%f"
+zstyle ':vcs_info:*' actionformats "%F{green}%b%f %F{cyan}%a%f %F{red}%u%f %F{yellow}%c%f"
