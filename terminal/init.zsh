@@ -3,6 +3,7 @@ export CONFIG="$HOME/.config"
 export TERMINAL="$CONFIG/terminal"
 
 export HISTFILE="$CONFIG/.histfile"
+export HISTSIZE=10000
 export SAVEHIST=$HISTSIZE
 
 source $TERMINAL/alias.zsh
