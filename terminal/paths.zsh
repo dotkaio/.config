@@ -5,9 +5,10 @@ path /usr/bin
 path /usr/sbin
 path /usr/local/bin
 path /usr/local/sbin
+path /opt/homebrew/bin
 
 # rust
-path $HOME/.cargo/bin
+# path $HOME/.cargo/bin
 
 # brew
 if [[ -d /opt/homebrew/bin ]]; then
@@ -21,5 +22,7 @@ fi
 # nvm
 if [[ -d $HOME/.nvm ]]; then
     NVM_DIR="$HOME/.nvm"
-    [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh" # This loads nvm
+    [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"                                       # This loads nvm
+    [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
 fi
+

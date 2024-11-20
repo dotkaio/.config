@@ -2,9 +2,8 @@ export CONFIG="$HOME/.config"
 
 export TERMINAL="$CONFIG/terminal"
 
-export HISTFILE="$CONFIG/.histfile"
+export HISTFILE="$CONFIG/histfile"
 export HISTSIZE=10000
-export SAVEHIST=$HISTSIZE
 
 source $TERMINAL/alias.zsh
 source $TERMINAL/suggestion.zsh
@@ -28,18 +27,4 @@ prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
 
 GITHUB_USER="dotkaio"
 
-# CONDA
-__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.bash' 'hook' 2>/dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-        . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
-    else
-        export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-
-rm $HOME/.zcompdump* 2>/dev/null
-compinit
+conda init "$(basename "${SHELL}")"

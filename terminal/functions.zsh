@@ -423,3 +423,72 @@ yt() {
 td() {
     mkdir -p $(date +%m-%d%Y)
 }
+
+chunk() {
+    local file="$1"
+    local custom_chunk_size="$2"
+
+    if [[ ! -f "$file" ]]; then
+        echo "File not found: $file"
+        return 1
+    fi
+
+    # Count the number of lines in the file
+    local total_lines=$(wc -l <"$file")
+
+    # Determine the chunk size
+    local chunk_size
+    if [[ -z "$custom_chunk_size" ]]; then
+        # Calculate the chunk size as the square root of the total lines, rounded up
+        chunk_size=$(echo "scale=0; sqrt($total_lines) + 0.5" | bc | awk '{print int($1)}')
+    else
+        # Use the provided custom chunk size
+        chunk_size="$custom_chunk_size"
+    fi
+
+    # Get the directory and base name of the file
+    local dir=$(dirname "$file")
+    local base=$(basename "$file")
+
+    # Split the file into chunks with the same base name and numbered suffix
+    split -l "$chunk_size" "$file" "$dir/${base}_"
+
+    echo "File has been split into chunks of approximately $chunk_size lines each, named as ${base}_1, ${base}_2, etc., in the same directory."
+}
+
+function rmip() {
+    #!/bin/bash
+
+    # Define the input file and output file paths
+    INPUT_FILE="$1"
+    OUTPUT_FILE="$2"
+
+    # Check if the input file exists
+    if [ ! -f "$INPUT_FILE" ]; then
+        echo "Error: Input file does not exist."
+        exit 1
+    fi
+
+    # Use sed to remove all IPv4 addresses from the file and save to the output file
+    sed -E 's/\b([0-9]{1,3}\.){3}[0-9]{1,3}\b/[REDACTED]/g' "$INPUT_FILE" >"$OUTPUT_FILE"
+
+    # Confirm completion
+    echo "done!"
+
+}
+
+function download() {
+    if [[ -$2 ]]
+    if [ "$(command -v wget)" ]; then
+        echo "command \"wget\" exists on system"
+        echo "skipping donwload"
+        wget --mirror --convert-links \
+            --adjust-extension --page-requisites \
+            --no-parent --span-hosts \
+            --exclude-domains=google.com, \
+            --user-agent="Mozilla/5.0 (Android 2.2; Windows; U; Windows NT 6.1; en-US) AppleWebKit/533.19.4 (KHTML, like Gecko) Version/5.0.3 Safari/533.19.4" \
+            --https-only
+        --domains=$1,cdn.prod.website-files.com $1
+    fi
+
+}

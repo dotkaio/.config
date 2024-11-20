@@ -1,6 +1,3 @@
-autoload -Uz compinit
-
-compinit
 compdef '_santactl' santa
 compdef '_tcpdump' dump
 compdef '_brew uninstall' uninstall
@@ -15,3 +12,5 @@ compdef '_mdfind' finder
 compdef '_conda activate' activate
 compdef '_git clone' clone
 compdef '_git push' push
+
+autoload -Uz compinit

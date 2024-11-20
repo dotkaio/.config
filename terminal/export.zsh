@@ -1,5 +1,5 @@
 #PATH="$PATH:$JAVA_HOME/bin"
-export CHROME_EXECUTABLE=~/Applications/Chromium.app/Contents/MacOS/Chromium
+export CHROME_EXECUTABLE=/Applications/Chromium.app/Contents/MacOS/Chromium
 export HOMEBREW_NO_ENV_HINTS=           # Disable Homebrew's "please do not report this issue to Homebrew/cask/*" message
 export HOMEBREW_CASK_OPTS=--require-sha # Require SHA checksums for Casks
 export HOMEBREW_NO_ANALYTICS=           # Disable Homebrew's analytics
