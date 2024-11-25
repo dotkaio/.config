@@ -26,5 +26,3 @@ prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
 → '
 
 GITHUB_USER="dotkaio"
-
-conda init "$(basename "${SHELL}")"
