@@ -1,7 +1,5 @@
 export CONFIG="$HOME/.config"
-
 export TERMINAL="$CONFIG/terminal"
-
 export HISTFILE="$CONFIG/histfile"
 export HISTSIZE=10000
 
@@ -22,7 +20,7 @@ FPATH=$TERMINAL/completions:$FPATH
 # prompt='%F{cyan}%h %F{redz}% k∆iØ %F{green}%B%~%F{red}%b $(branch_name)%f
 # >_ '
 
+GITHUB_USER="dotkaio"
+
 prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
 → '
-
-GITHUB_USER="dotkaio"
