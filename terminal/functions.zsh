@@ -123,7 +123,7 @@ wifi() {
 }
 
 finder() {
-    /usr/bin/mdfind $@ 2> >(grep --invert-match ' \[UserQueryParser\] ' >&2) | grep $@ --color=auto
+    /usr/bin/mdfind $@ 2> >(grep --invert-match ' \[UserQueryParser\] ' >&2) | grep -i $@ --color=auto
 }
 
 plist() {
@@ -477,18 +477,26 @@ function rmip() {
 
 }
 
-function download() {
-    if [[ -$2 ]]
-    if [ "$(command -v wget)" ]; then
-        echo "command \"wget\" exists on system"
-        echo "skipping donwload"
-        wget --mirror --convert-links \
-            --adjust-extension --page-requisites \
-            --no-parent --span-hosts \
-            --exclude-domains=google.com, \
-            --user-agent="Mozilla/5.0 (Android 2.2; Windows; U; Windows NT 6.1; en-US) AppleWebKit/533.19.4 (KHTML, like Gecko) Version/5.0.3 Safari/533.19.4" \
-            --https-only
-        --domains=$1,cdn.prod.website-files.com $1
-    fi
+conda() {
+    if [ "$(command -v conda)" ]; then
+        if [[ $1 == "init" ]]; then
 
+            # >>> conda initialize >>>
+            # !! Contents within this block are managed by 'conda init' !!
+            __conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.bash' 'hook' 2>/dev/null)"
+            if [ $? -eq 0 ]; then
+                eval "$__conda_setup"
+            else
+                if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+                    . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+                else
+                    export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+                fi
+            fi
+            unset __conda_setup
+            # <<< conda initialize <<<
+        else
+            conda $@
+        fi
+    fi
 }
