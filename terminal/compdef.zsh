@@ -14,3 +14,5 @@ compdef '_git clone' clone
 compdef '_git push' push
 
 autoload -Uz compinit
+
+rm ~/.zcompdump 2> /dev/null && compinit
