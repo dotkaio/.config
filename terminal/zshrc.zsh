@@ -1,12 +1,13 @@
 #!/usr/bin/env zsh
 
 # Environment variables
-export CONFIG="$HOME/.config"
-export TERMINAL="$CONFIG/terminal"
-export HISTFILE="$CONFIG/histfile"
+export CONFIG=$HOME/.config
+export TERMINAL=$CONFIG/terminal
+export HISTFILE=$CONFIG/.histfile
 export HISTSIZE=10000
 export CHROME_EXECUTABLE=/Applications/Chromium.app/Contents/MacOS/Chromium
 export HOMEBREW_NO_ENV_HINTS=
+export HOMEBREW_NO_INSTALL_CLEANUP=
 export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_NO_ANALYTICS=
 export HOMEBREW_NO_AUTO_UPDATE=
@@ -14,6 +15,12 @@ export HOMEBREW_NO_INSECURE_REDIRECT=
 export HOMEBREW_NO_INSTALL_CLEANUP=
 export PATH=$GEM_HOME/bin:$PATH
 export PATH=$GEM_HOME/gems/bin:$PATH
+
+if [ "$(command -v nvm)" ]; then
+	export NVM_DIR="$HOME/.nvm"
+	[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"                                       # This loads nvm
+	[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
+fi
 
 # Define path function first
 path() {
@@ -30,6 +37,7 @@ path /usr/sbin
 path /usr/local/bin
 path /usr/local/sbin
 path /opt/homebrew/bin
+path $HOME/.lmstudio/bin
 
 # Functions
 to_number() {
@@ -204,8 +212,10 @@ icloud() {
 	cd ~/Library/Mobile\ Documents/com\~apple\~CloudDocs
 }
 clone() {
+	# check if Developer directory exists
 	if [ -d "$HOME/Developer" ]; then
 		cd $HOME/Developer
+		# check if the argument is a URL
 		if [[ $1 =~ ^https?:// ]]; then
 			git clone $1
 			echo "$@" | cut -d '/' -f 5 | pbcopy
@@ -215,10 +225,21 @@ clone() {
 			git clone https://github.com/$@
 			echo "$@" | cut -d '/' -f 2 | pbcopy
 		fi
+	# if Developer directory doesn't exist
 	else
 		mkdir -p $HOME/Developer
+		if [[ $1 =~ ^https?:// ]]; then
+			git clone $1
+			echo "$@" | cut -d '/' -f 5 | pbcopy
+			cd $(pbpaste)
+			echo "done!"
+		else
+			git clone https://github.com/$@
+			echo "$@" | cut -d '/' -f 2 | pbcopy
+		fi
 	fi
 }
+
 intel() {
 	exec arch -x86_64 $SHELL
 }
@@ -416,6 +437,7 @@ autoload -Uz zargs
 autoload -Uz zcalc
 autoload -Uz zmv
 autoload -Uz compinit
+rm $HOME/.zcom* 2>/dev/null
 compinit
 
 # compdef
@@ -435,19 +457,12 @@ compdef '_git clone' clone
 compdef '_git push' push
 
 # Source extras
-# source $TERMINAL/alias.zsh
 source $TERMINAL/suggestion.zsh
-# source $TERMINAL/setopt.zsh
-# source $TERMINAL/functions.zsh
-# source $TERMINAL/paths.zsh
-# source $TERMINAL/export.zsh
-# source $TERMINAL/bindkey.zsh
-# source $TERMINAL/autoload.zsh
-# source $TERMINAL/zstyle.zsh
 source $TERMINAL/highlight/init.zsh
-# source $TERMINAL/compdef.zsh
-
 FPATH=$TERMINAL/completions:$FPATH
 
 prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
 → '
+
+
+# indentify new zsh functions!
