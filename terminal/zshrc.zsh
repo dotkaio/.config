@@ -16,11 +16,9 @@ export HOMEBREW_NO_INSTALL_CLEANUP=
 export PATH=$GEM_HOME/bin:$PATH
 export PATH=$GEM_HOME/gems/bin:$PATH
 
-if [ "$(command -v nvm)" ]; then
-	export NVM_DIR="$HOME/.nvm"
-	[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"                                       # This loads nvm
-	[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
-fi
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"                                       # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
 
 # Define path function first
 path() {
@@ -437,8 +435,6 @@ autoload -Uz zargs
 autoload -Uz zcalc
 autoload -Uz zmv
 autoload -Uz compinit
-rm $HOME/.zcom* 2>/dev/null
-compinit
 
 # compdef
 compdef '_santactl' santa
@@ -464,5 +460,5 @@ FPATH=$TERMINAL/completions:$FPATH
 prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
 → '
 
-
 # indentify new zsh functions!
+rm $HOME/.zcompdump 2>/dev/null && compinit

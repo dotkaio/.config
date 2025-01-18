@@ -1,5 +1,4 @@
 {
     "Alt-/": "lua:comment.comment",
-    "CtrlUnderscore": "lua:comment.comment",
-    "AltShitD": "lua:editor.duplicateLine"
+    "CtrlUnderscore": "lua:comment.comment"
 }
