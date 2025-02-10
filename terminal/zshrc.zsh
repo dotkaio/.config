@@ -15,6 +15,16 @@ for p in /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin /opt/homeb
 done
 
 # Functions
+download() {
+	# get the url and remove .com
+	local url
+	url=$(echo "$1" | sed 's/\.com//g')
+	python $CONFIG/scripts/python/download_website.py \
+	--url "https://$1" \
+	--download-dir "$HOME/Downloads/$url" \
+	--nextjs-dir "$HOME/Developer/$url"
+}
+
 to_number() {
 	tr 'Aa' '4' | tr 'Ee' '3' | tr 'Ii' '1' | tr 'Oo' '0' | tr 'Ss' '5' | tr 'Tt' '7'
 }
@@ -51,7 +61,7 @@ push() {
 
 t() {
 	if command -v tree >/dev/null; then
-		tree --sort=name -L laC 1 "$1"
+		tree --sort=name -LlaC 1 $1
 	else
 		l "$1"
 	fi
@@ -461,6 +471,13 @@ compinit -d "$TERMINAL/completions"
 promptinit
 vcs_info
 
+# Set history file and options
+HISTFILE="$HOME/.history"
+HISTSIZE=10000
+SAVEHIST=10000
+setopt APPEND_HISTORY
+setopt SHARE_HISTORY
+
 # Completion definitions
 compdef '_brew uninstall' remove
 compdef '_brew install' install
@@ -485,3 +502,22 @@ FPATH="$TERMINAL/completions:$FPATH"
 # Prompt configuration
 prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
 → '
+
+# Load conda
+__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
+if [ $? -eq 0 ]; then
+	eval "$__conda_setup"
+else
+	if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+		. "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+	else
+		export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+	fi
+fi
+unset __conda_setup
+
+# Load nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"                                       # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
+# >>> conda initialize >>>
