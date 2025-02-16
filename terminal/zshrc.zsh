@@ -10,19 +10,26 @@ path() {
 }
 
 # Add essential paths
-for p in /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin /opt/homebrew/bin "$HOME/.lmstudio/bin"; do
+for p in /bin \
+	/sbin \
+	/usr/bin \
+	/usr/sbin \
+	/usr/local/bin \
+	/usr/local/sbin \
+	/opt/homebrew/bin \
+	"$HOME/.lmstudio/bin" \
+	"$HOME/.cargo/bin"; do
 	path "$p"
 done
 
 # Functions
-download() {
-	# get the url and remove .com
-	local url
-	url=$(echo "$1" | sed 's/\.com//g')
-	python $CONFIG/scripts/python/download_website.py \
-	--url "https://$1" \
-	--download-dir "$HOME/Downloads/$url" \
-	--nextjs-dir "$HOME/Developer/$url"
+
+backup() {
+	$CONFIG/scripts/shell/./backup.sh "$1"
+}
+
+convert_nextjs() {
+	/opt/homebrew/Caskroom/miniconda/base/bin/python /Users/sysadm/.config/scripts/python/convert_to_nextjs.py
 }
 
 to_number() {
@@ -55,7 +62,7 @@ replace() {
 
 push() {
 	git add .
-	git commit -m "$*"
+	git commit -m "duh"
 	git push
 }
 
@@ -227,8 +234,9 @@ icloud() {
 }
 
 clone() {
-	mkdir -p "$HOME/Developer"
-	cd "$HOME/Developer" || return
+	# check if folder inside Documents/dev exists
+	[[ ! -d "$HOME/Documents/dev" ]] && mkdir -p "$HOME/Documents/dev"
+	cd "$HOME/Documents/dev" || return
 	if [[ "$1" =~ ^https?:// ]]; then
 		git clone "$1"
 		local repo_name
@@ -337,6 +345,10 @@ battery() {
 	pmset -g batt | egrep "([0-9]+\%).*" -o --colour=auto | cut -f1 -d';'
 }
 
+# download webflow websites
+download() {
+}
+
 pf() {
 	case "$1" in
 	"up") sudo pfctl -e -f "$CONFIG/firewall/pf.rules" ;;
@@ -383,14 +395,23 @@ chunk() {
 	echo "File has been split into chunks of approx $chunk_size lines each."
 }
 
+# openai voice api
 tts() {
-	curl --request POST --url https://api.fish.audio/model \
-		--header 'Authorization: Bearer aca83cec37dc437c8d37a761c098c80a' \
-		--header 'Content-Type: multipart/form-data' \
-		--form visibility=private --form type=tts --form title=bsdiufhsiduhf --form description=hjasdbfksjgndhm \
-		--form "train_mode=fast" --form voices=voice1.mp3,voice2.mp3 \
-		--form 'texts="lorem ipsum dolor amet"' --form 'tags="asdfsgdf"' \
-		--form enhance_audio_quality=false
+	if [[ -z "$1" ]]; then
+		echo "Usage: tts <text>"
+		return 1
+	fi
+	curl https://api.openai.com/v1/audio/speech \
+		-H "Authorization: Bearer $OPENAI_API_KEY" \
+		-H "Content-Type: application/json" \
+		-d "{
+	\"model\": \"tts-1\",
+	\"input\": \"$1\",
+	\"voice\": \"ash\"
+  }" \
+		--output speech.mp3
+	afplay speech.mp3
+	rm speech.mp3
 }
 
 extract() {
@@ -406,25 +427,20 @@ extract() {
 	esac
 }
 
-yt() {
-	local current_dir
-	current_dir=$(pwd)
-	cd /tmp || return
-	yt-dlp --restrict-filenames --no-overwrites --no-call-home --force-ipv4 --no-part "$1"
-	mv *.mp4 "$HOME/Movies/TV/Movies/Action"
-	echo "done"
-	cd "$current_dir" || return
-}
-
 td() {
 	mkdir -p "$(date +%m-%d%Y)"
 }
+
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' list-prompt '%SAt %p: Hit TAB for more, or the character to insert%s'
 
 # Aliases
 alias ....="cd ../../.."
 alias ...="cd ../.."
 alias ..="cd .."
 alias .="open ."
+
 alias copy="pbcopy"
 alias diff="colordiff"
 alias doctor="brew doctor"
@@ -463,20 +479,13 @@ alias z="source ~/.zshrc"
 alias halt="sudo halt"
 
 # Set options
-setopt AUTOCD NOBEEP CORRECT ALWAYSTOEND PROMPT_SUBST COMPLETEINWORD
+setopt AUTOCD NOBEEP CORRECT ALWAYSTOEND PROMPT_SUBST APPEND_HISTORY SHARE_HISTORY COMPLETE_IN_WORD
 
 autoload -U colors find-command history-search-end promptinit vcs_info zargs zcalc zmv compinit
 
-compinit -d "$TERMINAL/completions"
+compinit
 promptinit
 vcs_info
-
-# Set history file and options
-HISTFILE="$HOME/.history"
-HISTSIZE=10000
-SAVEHIST=10000
-setopt APPEND_HISTORY
-setopt SHARE_HISTORY
 
 # Completion definitions
 compdef '_brew uninstall' remove
@@ -499,11 +508,26 @@ source "$TERMINAL/suggestion.zsh"
 source "$TERMINAL/highlight/init.zsh"
 FPATH="$TERMINAL/completions:$FPATH"
 
+# Set history file and options
+HISTFILE="$HOME/.history"
+HISTSIZE=10000
+SAVEHIST=10000
+
 # Prompt configuration
 prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
 → '
 
-# Load conda
+# Development configuration
+export PATH="$HOME/.lmstudio/bin:$PATH"
+
+# pnpm
+export PNPM_HOME="/Users/sysadm/Library/pnpm"
+case ":$PATH:" in
+*":$PNPM_HOME:"*) ;;
+*) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
+# conda
 __conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
 if [ $? -eq 0 ]; then
 	eval "$__conda_setup"
@@ -520,4 +544,3 @@ unset __conda_setup
 export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"                                       # This loads nvm
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
-# >>> conda initialize >>>
