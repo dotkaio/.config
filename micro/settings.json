@@ -1,4 +1,0 @@
-{
-  "colorscheme": "one-dark",
-  "plugins": ["micro-autopair", "micro-highlight", "micro-solarized", "micro-surround", "micro-themes", "micro-toggle", "filemanager"]
-}
