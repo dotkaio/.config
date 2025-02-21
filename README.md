@@ -60,10 +60,40 @@ It will generate a random password with 26 characters and copy it to the clipboa
 rand pass
 ```
 
+### get the hash of a file
+
+```bash
+shasum file
+```
+
 ### get all the hash of the plist files
 
 This command will create a file called <b>plist_shasum.txt</b> with all the hash of the plist files within LaunchAgents and LaunchDaemons directories and save it to the <b>~/.config</b> directory. later you can run "plist verify" to verify if the plist files were changed
 
 ```bash
 plist get
+```
+
+### verify if the plist files were changed
+
+This command will verify if the plist files were changed. if the hash of the files are different from the hash saved in the <b>plist_shasum.txt</b> file it will show a message with the file that was changed
+
+```bash
+plist verify
+```
+
+### update the plist files
+
+This command will update the plist files in the <b>LaunchAgents</b> and <b>LaunchDaemons</b> directories
+
+```bash
+plist update
+```
+
+### update the plist files
+
+This command will update the plist files in the <b>LaunchAgents</b> and <b>LaunchDaemons</b> directories
+
+```bash
+plist update
 ```

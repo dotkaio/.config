@@ -1,20 +1,20 @@
 #!/usr/bin/env zsh
 
-# Environment variables
+# ENVIRONMENT VARIABLES
 export CONFIG="$HOME/.config"
 export TERMINAL="$CONFIG/terminal"
 export HOMEBREW_NO_AUTO_UPDATE
 export HOMEBREW_NO_ANALYTICS
-# export HOMEBREW_NO_GITHUB_API
+export HOMEBREW_NO_GITHUB_API
 export HOMEBREW_NO_EMOJI
 export HOMEBREW_NO_INSECURE_REDIRECT
 
-# Prepend a directory to PATH if it exists
+# PREPEND A DIRECTORY TO PATH IF IT EXISTS
 function path {
 	[[ -d "$1" ]] && export PATH="$1:$PATH"
 }
 
-# Add essential paths
+# ADD ESSENTIAL PATHS
 for p in /bin \
 	/sbin \
 	/usr/bin \
@@ -27,7 +27,7 @@ for p in /bin \
 	path "$p"
 done
 
-# Functions
+# FUNCTIONS
 
 function backup {
 	$CONFIG/scripts/shell/./backup.sh "$1"
@@ -123,8 +123,13 @@ function install {
 		else
 			/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 		fi
+	elif [[ $1 == 'node' ]]; then
+		curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+		nvm install node
+	elif [[ $1 == 'flutter' ]]; then
+		#
 	else
-		brew install $@
+		brew install "$@"
 	fi
 }
 
@@ -235,7 +240,7 @@ function icloud {
 }
 
 function clone {
-	# check if folder inside Documents/dev exists
+	# CHECK IF FOLDER INSIDE DOCUMENTS/DEV EXISTS
 	[[ ! -d "$HOME/Documents/dev" ]] && mkdir -p "$HOME/Documents/dev"
 	cd "$HOME/Documents/dev" || return
 	if [[ "$1" =~ ^https?:// ]]; then
@@ -404,7 +409,7 @@ function chunk {
 	echo "File has been split into chunks of approx $chunk_size lines each."
 }
 
-# openai voice api
+# OPENAI VOICE API
 function tts {
 	if [[ -z "$1" ]]; then
 		echo "Usage: tts <text>"
@@ -444,7 +449,7 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt '%SAt %p: Hit TAB for more, or the character to insert%s'
 
-# Aliases
+# ALIASES
 alias ....="cd ../../.."
 alias ...="cd ../.."
 alias ..="cd .."
@@ -487,7 +492,7 @@ alias wrap="tput smam"
 alias z="source ~/.zshrc"
 alias halt="sudo halt"
 
-# Set options
+# SET OPTIONS
 setopt AUTOCD NOBEEP CORRECT ALWAYSTOEND PROMPT_SUBST APPEND_HISTORY SHARE_HISTORY COMPLETE_IN_WORD
 
 autoload -U colors find-command history-search-end promptinit vcs_info zargs zcalc zmv compinit
@@ -497,7 +502,7 @@ compinit
 promptinit
 vcs_info
 
-# Completion definitions
+# COMPLETION DEFINITIONS
 compdef '_brew uninstall' remove
 compdef '_brew install' install
 compdef '_brew search' search
@@ -513,24 +518,24 @@ compdef '_conda activate' activate
 compdef '_git clone' clone
 compdef '_git push' push
 
-# Source extras
+# SOURCE EXTRAS
 source "$TERMINAL/suggestion.zsh"
 source "$TERMINAL/highlight/init.zsh"
 FPATH="$TERMINAL/completions:$FPATH"
 
-# Set history file and options
+# SET HISTORY FILE AND OPTIONS
 HISTFILE="$HOME/.history"
 HISTSIZE=10000
 SAVEHIST=10000
 
-# Prompt configuration
+# PROMPT CONFIGURATION
 prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
 → '
 
-# Development configuration
+# DEVELOPMENT CONFIGURATION
 export PATH="$HOME/.lmstudio/bin:$PATH"
 
-# pnpm
+# PNPM
 if [ -d "/Users/sysadm/.pnpm" ]; then
 	export PATH="/Users/sysadm/.pnpm:$PATH"
 	case ":$PATH:" in
@@ -539,7 +544,7 @@ if [ -d "/Users/sysadm/.pnpm" ]; then
 	esac
 fi
 
-# conda
+# CONDA
 if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
 	__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
 	if [ $? -eq 0 ]; then
@@ -554,14 +559,14 @@ if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
 	unset __conda_setup
 fi
 
-# Load nvm
+# LOAD NVM
 if [ -d "$HOME/.nvm" ]; then
 	export NVM_DIR="$HOME/.nvm"
 	[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
 	[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
 fi
 
-# lmstudio
+# LMSTUDIO
 if [ -d "/Users/sysadm/.lmstudio" ]; then
 	export PATH="$PATH:/Users/sysadm/.lmstudio/bin"
 fi
