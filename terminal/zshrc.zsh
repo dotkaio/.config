@@ -1,20 +1,31 @@
 #!/usr/bin/env zsh
 
-# ENVIRONMENT VARIABLES
+#environment variables
 export CONFIG="$HOME/.config"
 export TERMINAL="$CONFIG/terminal"
+export CHROME_EXECUTABLE="/Applications/Chromium.app/Contents/MacOS/Chromium"
+
 export HOMEBREW_NO_AUTO_UPDATE
 export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_GITHUB_API
 export HOMEBREW_NO_EMOJI
 export HOMEBREW_NO_INSECURE_REDIRECT
+export HOMEBREW_NO_ENV_HINTS
+export HOMEBREW_NO_INSTALL_CLEANUP
+export HOMEBREW_CASK_OPTS=--require-sha
+export HOMEBREW_NO_ANALYTICS
+export HOMEBREW_NO_AUTO_UPDATE
+export HOMEBREW_NO_INSECURE_REDIRECT
 
-# PREPEND A DIRECTORY TO PATH IF IT EXISTS
+# export PATH=$GEM_HOME/bin:$PATH
+# export PATH=$GEM_HOME/gems/bin:$PATH
+
+#prepend a directory to path if it exists
 function path {
 	[[ -d "$1" ]] && export PATH="$1:$PATH"
 }
 
-# ADD ESSENTIAL PATHS
+#add essential paths
 for p in /bin \
 	/sbin \
 	/usr/bin \
@@ -27,10 +38,29 @@ for p in /bin \
 	path "$p"
 done
 
-# FUNCTIONS
+#functions
+function ip_from_url {
+	if [ -n "$1" ]; then
+		data=$(cat "$1")
+	else
+		if command -v pbpaste >/dev/null; then
+			data=$(pbpaste)
+		elif command -v xclip >/dev/null; then
+			data=$(xclip -o)
+		else
+			echo "No clipboard tool available."
+			exit 1
+		fi
+	fi
 
-function backup {
-	$CONFIG/scripts/shell/./backup.sh "$1"
+	touch blocked
+
+	while IFS= read -r host; do
+		[ -z "$host" ] && continue
+		ip=$(dig +short "$host" | head -n1)
+		# include just the ip address separeated by comma and newline
+		echo "$ip," >>blocked
+	done <<<"$data"
 }
 
 function convert_nextjs {
@@ -155,8 +185,8 @@ function finder {
 
 function plist {
 	function get_plist {
-		for path in $(mdfind -name LaunchDaemons) $(mdfind -name LaunchAgents); do
-			[[ -d "$path" ]] && for file in "$path"/*; do
+		for the_path in $(mdfind -name LaunchDaemons) $(mdfind -name LaunchAgents); do
+			[[ -d "$the_path" ]] && for file in "$the_path"/*; do
 				echo "$file"
 			done
 		done
@@ -240,7 +270,7 @@ function icloud {
 }
 
 function clone {
-	# CHECK IF FOLDER INSIDE DOCUMENTS/DEV EXISTS
+	#check if folder inside documents/dev exists
 	[[ ! -d "$HOME/Documents/dev" ]] && mkdir -p "$HOME/Documents/dev"
 	cd "$HOME/Documents/dev" || return
 	if [[ "$1" =~ ^https?:// ]]; then
@@ -409,7 +439,7 @@ function chunk {
 	echo "File has been split into chunks of approx $chunk_size lines each."
 }
 
-# OPENAI VOICE API
+#openai voice api
 function tts {
 	if [[ -z "$1" ]]; then
 		echo "Usage: tts <text>"
@@ -449,7 +479,7 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt '%SAt %p: Hit TAB for more, or the character to insert%s'
 
-# ALIASES
+#aliases
 alias ....="cd ../../.."
 alias ...="cd ../.."
 alias ..="cd .."
@@ -492,7 +522,7 @@ alias wrap="tput smam"
 alias z="source ~/.zshrc"
 alias halt="sudo halt"
 
-# SET OPTIONS
+#set options
 setopt AUTOCD NOBEEP CORRECT ALWAYSTOEND PROMPT_SUBST APPEND_HISTORY SHARE_HISTORY COMPLETE_IN_WORD
 
 autoload -U colors find-command history-search-end promptinit vcs_info zargs zcalc zmv compinit
@@ -502,7 +532,7 @@ compinit
 promptinit
 vcs_info
 
-# COMPLETION DEFINITIONS
+#completion definitions
 compdef '_brew uninstall' remove
 compdef '_brew install' install
 compdef '_brew search' search
@@ -518,24 +548,24 @@ compdef '_conda activate' activate
 compdef '_git clone' clone
 compdef '_git push' push
 
-# SOURCE EXTRAS
+#source extras
 source "$TERMINAL/suggestion.zsh"
 source "$TERMINAL/highlight/init.zsh"
 FPATH="$TERMINAL/completions:$FPATH"
 
-# SET HISTORY FILE AND OPTIONS
+#set history file and options
 HISTFILE="$HOME/.history"
 HISTSIZE=10000
 SAVEHIST=10000
 
-# PROMPT CONFIGURATION
+#prompt configuration
 prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
 → '
 
-# DEVELOPMENT CONFIGURATION
+#development configuration
 export PATH="$HOME/.lmstudio/bin:$PATH"
 
-# PNPM
+#pnpm
 if [ -d "/Users/sysadm/.pnpm" ]; then
 	export PATH="/Users/sysadm/.pnpm:$PATH"
 	case ":$PATH:" in
@@ -544,7 +574,7 @@ if [ -d "/Users/sysadm/.pnpm" ]; then
 	esac
 fi
 
-# CONDA
+#conda
 if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
 	__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
 	if [ $? -eq 0 ]; then
@@ -559,14 +589,14 @@ if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
 	unset __conda_setup
 fi
 
-# LOAD NVM
+#load nvm
 if [ -d "$HOME/.nvm" ]; then
 	export NVM_DIR="$HOME/.nvm"
 	[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
 	[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
 fi
 
-# LMSTUDIO
+#lmstudio
 if [ -d "/Users/sysadm/.lmstudio" ]; then
 	export PATH="$PATH:/Users/sysadm/.lmstudio/bin"
 fi

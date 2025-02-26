@@ -32,9 +32,7 @@ defaults write com.apple.finder ShowStatusBar -bool true
 defaults write com.apple.dock autohide -bool true
 
 #  dont create .DS_Store files
-defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+# defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 
 # system preferences > dock > minimize windows into application icon
 defaults write com.apple.dock minimize-to-application -bool true
-
-# system preferences > dock > animate opening applications
