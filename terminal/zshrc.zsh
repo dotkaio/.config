@@ -258,8 +258,11 @@ function list {
 
 function search {
 	if [[ "$1" == "web" ]]; then
-		open -a Safari "https://google.com/search?q=$2" &
-		open -a Chrome "https://google.com/search?q=$2" &
+		if [[ -e /Applications/Chromium.app ]]; then
+			open -a Chromium "https://google.com/search?q=$2" || return
+		else
+			open -a Safari "https://google.com/search?q=$2" || return
+		fi
 	else
 		brew search "$@"
 	fi
@@ -271,8 +274,8 @@ function icloud {
 
 function clone {
 	#check if folder inside documents/dev exists
-	[[ ! -d "$HOME/Documents/dev" ]] && mkdir -p "$HOME/Documents/dev"
-	cd "$HOME/Documents/dev" || return
+	[[ ! -d "$HOME/Developer" ]] && mkdir -p "$HOME/Developer"
+	cd "$HOME/Developer" || return
 	if [[ "$1" =~ ^https?:// ]]; then
 		git clone "$1"
 		local repo_name
