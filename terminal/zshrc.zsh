@@ -39,6 +39,8 @@ for p in /bin \
 done
 
 #functions
+# download youtube videos best quality using yt-dlp
+
 function ip_from_url {
 	if [ -n "$1" ]; then
 		data=$(cat "$1")
@@ -478,9 +480,11 @@ function td {
 	mkdir -p "$(date +%m-%d%Y)"
 }
 
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-zstyle ':completion:*' list-colors ''
-zstyle ':completion:*' list-prompt '%SAt %p: Hit TAB for more, or the character to insert%s'
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'                          # case-insensitive completion
+zstyle ':completion:*' menu select=2                                               # select completion with arrow keys
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s # completion prompt
+zstyle ':completion:*' list-colors ' =*=0=*=32'                                    # color completion
+zstyle ':completion:*' list-colors ' =*=>1=*=32'                                   # color completion
 
 #aliases
 alias ....="cd ../../.."
@@ -526,7 +530,22 @@ alias z="source ~/.zshrc"
 alias halt="sudo halt"
 
 #set options
-setopt AUTOCD NOBEEP CORRECT ALWAYSTOEND PROMPT_SUBST APPEND_HISTORY SHARE_HISTORY COMPLETE_IN_WORD
+setopt \
+	AUTOCD \
+	NOBEEP \
+	CORRECT \
+	ALWAYSTOEND \
+	PROMPT_SUBST \
+	APPEND_HISTORY \SHARE_HISTORY \
+	COMPLETE_IN_WORD \
+	HIST_IGNORE_ALL_DUPS \
+	HIST_IGNORE_SPACE \
+	HIST_REDUCE_BLANKS \
+	HIST_VERIFY \
+	HIST_EXPIRE_DUPS_FIRST \
+	HIST_FIND_NO_DUPS \
+	HIST_SAVE_NO_DUPS \
+	HIST_IGNORE_DUPS
 
 autoload -U colors find-command history-search-end promptinit vcs_info zargs zcalc zmv compinit
 rm $HOME/.zcompdump 2>/dev/null
@@ -603,3 +622,14 @@ fi
 if [ -d "/Users/sysadm/.lmstudio" ]; then
 	export PATH="$PATH:/Users/sysadm/.lmstudio/bin"
 fi
+
+# if file .zshrc_history exists run mdfindn -name zshrc and delete the file
+if [ -f "$HOME/.zshrc_history" ]; then
+	mdfind -name zshrc | xargs rm
+fi
+
+
+alias yt='yt-dlp'
+
+
+export TWENTY_FIRST_API_KEY="ee7a08bdef13ce0c1e0dd1ee6ce09b95f2a0a75bed9126e6fadfd56700e983a0"

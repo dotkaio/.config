@@ -35,10 +35,10 @@ tell application curApp
 			set usableHeight to (displayHeight - menubarSize)
 			set y1 to menubarSize + usableHeight / 2
 			set y2 to displayHeight
-
+			
 			if curApp ends with ":Finder.app:" then
-    			-- account for status bar in the Finder
-                set y1 to y1 + 22
+				-- account for status bar in the Finder
+				set y1 to y1 + 22
 				-- account for TotalFinder
 				tell application "Finder"
 					if (exists "mac:Applications:TotalFinder.app") then
