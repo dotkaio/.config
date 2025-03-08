@@ -485,13 +485,17 @@ zstyle ':completion:*' menu select=2                                            
 zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s # completion prompt
 zstyle ':completion:*' list-colors ' =*=0=*=32'                                    # color completion
 zstyle ':completion:*' list-colors ' =*=>1=*=32'                                   # color completion
+zstyle ':completion:*' list-colors ' =*<=1=*=32'                                   # color completion
+zstyle ':completion:*' list-colors ' =*[^=]*=0=*=32'                               # color completion
+zstyle ':completion:*' list-colors ' =*[^=]*=1=*=32'                               # color completion
+zstyle ':completion:*' list-colors ' =*[^=]*=2=*=32'                               # color completion
+zstyle ':completion:*' list-colors ' =*[^=]*=3=*=32'                               # color completion
 
-#aliases
+#alias
 alias ....="cd ../../.."
 alias ...="cd ../.."
 alias ..="cd .."
 alias .="open ."
-
 alias copy="pbcopy"
 alias diff="colordiff"
 alias doctor="brew doctor"
@@ -503,6 +507,7 @@ alias flr="flutter run"
 alias ga="git add ."
 alias gm="git commit -m"
 alias grep="grep --text --color"
+alias halt="sudo halt"
 alias hide='chflags hidden'
 alias json="jq -r '.choices[0].message.content'"
 alias lines="wc -l"
@@ -526,8 +531,8 @@ alias unwrap="tput rmam"
 alias upper="tr '[:lower:]' '[:upper:]'"
 alias words="wc -w"
 alias wrap="tput smam"
+alias yt='yt-dlp'
 alias z="source ~/.zshrc"
-alias halt="sudo halt"
 
 #set options
 setopt \
@@ -627,9 +632,5 @@ fi
 if [ -f "$HOME/.zshrc_history" ]; then
 	mdfind -name zshrc | xargs rm
 fi
-
-
-alias yt='yt-dlp'
-
 
 export TWENTY_FIRST_API_KEY="ee7a08bdef13ce0c1e0dd1ee6ce09b95f2a0a75bed9126e6fadfd56700e983a0"
