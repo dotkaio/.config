@@ -33,6 +33,8 @@ for p in /bin \
 	/usr/local/bin \
 	/usr/local/sbin \
 	/opt/homebrew/bin \
+	/Library/Developer/CommandLineTools/usr/bin \
+	/Library/Developer/CommandLineTools/usr/lib \
 	"$HOME/.lmstudio/bin" \
 	"$HOME/.cargo/bin"; do
 	path "$p"
@@ -480,6 +482,10 @@ function td {
 	mkdir -p "$(date +%m-%d%Y)"
 }
 
+function halt {
+	sudo halt
+}
+
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'                          # case-insensitive completion
 zstyle ':completion:*' menu select=2                                               # select completion with arrow keys
 zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s # completion prompt
@@ -507,7 +513,7 @@ alias flr="flutter run"
 alias ga="git add ."
 alias gm="git commit -m"
 alias grep="grep --text --color"
-alias halt="sudo halt"
+#alias halt="sudo halt"
 alias hide='chflags hidden'
 alias json="jq -r '.choices[0].message.content'"
 alias lines="wc -l"
