@@ -35,8 +35,9 @@ for p in /bin \
 	/opt/homebrew/bin \
 	/Library/Developer/CommandLineTools/usr/bin \
 	/Library/Developer/CommandLineTools/usr/lib \
-	"$HOME/.lmstudio/bin" \
-	"$HOME/.cargo/bin"; do
+	$HOME/.bun/bin \
+	$HOME/.lmstudio/bin \
+	$HOME/.cargo/bin; do
 	path "$p"
 done
 

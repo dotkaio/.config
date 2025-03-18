@@ -1,7 +1,3 @@
-47431af955071a1ca228bcb820c8d8a70c0a7f066280687f7215a2f2db536ba4  /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/Platforms/watchos/Library/LaunchDaemons/com.apple.CoreSimulator.bridge.plist
-47431af955071a1ca228bcb820c8d8a70c0a7f066280687f7215a2f2db536ba4  /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/Platforms/iphoneos/Library/LaunchDaemons/com.apple.CoreSimulator.bridge.plist
-47431af955071a1ca228bcb820c8d8a70c0a7f066280687f7215a2f2db536ba4  /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/Platforms/appletvos/Library/LaunchDaemons/com.apple.CoreSimulator.bridge.plist
-47431af955071a1ca228bcb820c8d8a70c0a7f066280687f7215a2f2db536ba4  /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/Platforms/xros/Library/LaunchDaemons/com.apple.CoreSimulator.bridge.plist
 79a341c9bfeccfd9de63fc2ba524634edb5d18e714a412cfe2e0cbf6fc06ac85  /Library/Apple/System/Library/LaunchDaemons/com.apple.MRTd.plist
 4edb8237092ea04fb6e9a920299018ea493eff682bde1c8eb5384d6ab368adf2  /Library/Apple/System/Library/LaunchDaemons/com.apple.XProtect.daemon.scan.plist
 3ffd5718d19dc34d8eaec54ed5f2dc5c2f7d30072415dd64bc9fe1080d6c3fb8  /Library/Apple/System/Library/LaunchDaemons/com.apple.XProtect.daemon.scan.startup.plist
