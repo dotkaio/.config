@@ -1,9 +1,16 @@
 #!/usr/bin/env zsh
 
+# if [ -f "$HOME/.zshrc" ]; then
+# 	source $HOME/.zshrc
+# else
+# 	echo 'source $HOME/.config/terminal/zshrc.zsh' > $HOME/.zshrc
+#     touch .hushlogin && source $HOME/.zshrc
+# fi
+
 #environment variables
 export CONFIG="$HOME/.config"
 export TERMINAL="$CONFIG/terminal"
-export CHROME_EXECUTABLE="/Applications/Chromium.app/Contents/MacOS/Chromium"
+#export CHROME_EXECUTABLE="/Applications/Chromium.app/Contents/MacOS/Chromium"
 
 export HOMEBREW_NO_AUTO_UPDATE
 export HOMEBREW_NO_ANALYTICS
@@ -16,7 +23,6 @@ export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_AUTO_UPDATE
 export HOMEBREW_NO_INSECURE_REDIRECT
-
 # export PATH=$GEM_HOME/bin:$PATH
 # export PATH=$GEM_HOME/gems/bin:$PATH
 
@@ -34,15 +40,34 @@ for p in /bin \
 	/usr/local/sbin \
 	/opt/homebrew/bin \
 	/Library/Developer/CommandLineTools/usr/bin \
-	/Library/Developer/CommandLineTools/usr/lib \
-	$HOME/.bun/bin \
-	$HOME/.lmstudio/bin \
-	$HOME/.cargo/bin; do
+	/Library/Developer/CommandLineTools/usr/lib; do
 	path "$p"
 done
 
-#functions
-# download youtube videos best quality using yt-dlp
+# functions
+function yt {
+    local foo = $(PWD)
+    cd $HOME/Movies/TV/Media.localized/.Media
+    yt-dlp -f bestvideo+bestaudio --merge-output-format mp4 "$1"
+    cd $foo
+        
+}
+
+function activate {
+	if [[ -z "$1" ]]; then
+		echo "Usage: activate <environment>"
+		return 1
+	fi
+	conda activate "$1"
+}
+
+function wrap {
+	tput smam
+}
+
+function unwrap {
+	tput rmam
+}
 
 function ip_from_url {
 	if [ -n "$1" ]; then
@@ -640,4 +665,12 @@ if [ -f "$HOME/.zshrc_history" ]; then
 	mdfind -name zshrc | xargs rm
 fi
 
-export TWENTY_FIRST_API_KEY="ee7a08bdef13ce0c1e0dd1ee6ce09b95f2a0a75bed9126e6fadfd56700e983a0"
+if [ "$(command -v bun)" ]; then
+	# bun completions
+	[ -s "/Users/sysadm/.bun/_bun" ] && source "/Users/sysadm/.bun/_bun"
+
+	# bun
+	export BUN_INSTALL="$HOME/.bun"
+	export PATH="$BUN_INSTALL/bin:$PATH"
+
+fi
