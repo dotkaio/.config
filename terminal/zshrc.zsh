@@ -46,11 +46,11 @@ done
 
 # functions
 function yt {
-    local foo = $(PWD)
-    cd $HOME/Movies/TV/Media.localized/.Media
-    yt-dlp -f bestvideo+bestaudio --merge-output-format mp4 "$1"
-    cd $foo
-        
+	local foo = $(PWD)
+	cd $HOME/Movies/TV/Media.localized/.Media
+	yt-dlp -f bestvideo+bestaudio --merge-output-format mp4 "$1"
+	cd $foo
+
 }
 
 function activate {
@@ -139,6 +139,7 @@ function t {
 	fi
 }
 
+# ensure to call this when santactl is installed
 function block {
 	if command -v santactl >/dev/null; then
 		sudo santactl rule --silent-block --path "$@"
@@ -362,11 +363,11 @@ function dump {
 	esac
 }
 
-function ip {
+function shwip {
 	curl -sq4 "https://icanhazip.com/"
 }
 
-function history {
+function shwhistory {
 	if [[ "$1" == "top" ]]; then
 		history 1 | awk '{CMD[$2]++;count++} END { for (a in CMD) printf "%d %0.2f%% %s\n", CMD[a], CMD[a]/count*100, a }' | sort -nr | nl | head -n25
 	elif [[ "$1" == "clear" || "$1" == "clean" ]]; then
@@ -379,28 +380,28 @@ function rand {
 		local username
 		username=$(openssl rand -base64 64 | tr -d "=+/1-9" | cut -c-20 | tr '[:upper:]' '[:lower:]')
 		echo "$username" | pbcopy
-		echo "$username"
 	}
 	function newPass {
 		local password
 		password=$(openssl rand -base64 300 | tr -d "=+/" | cut -c12-20 | tr '\n' '-' | cut -b -26)
 		echo "$password" | pbcopy
-		echo "$password"
 	}
 	function changeId {
 		local computerName hostName localHostName
 		computerName=$(newUser)
 		hostName="$(newUser).local"
 		localHostName="$(newUser)_machine"
+
 		sudo scutil --set ComputerName "$computerName"
 		sudo scutil --set HostName "$hostName"
 		sudo scutil --set LocalHostName "$localHostName"
 		sudo dscacheutil -flushcache
-		sudo macchanger -r en0
+
 		networksetup -setairportnetwork en2 DG_link_5GHz Dg_Serrano2016
 	}
 	case "$1" in
 	"user") newUser ;;
+	"-u") newUser ;;
 	"pass") newPass ;;
 	"mac") changeId ;;
 	"line")
@@ -414,7 +415,7 @@ function battery {
 	pmset -g batt | egrep "([0-9]+\%).*" -o --colour=auto | cut -f1 -d';'
 }
 
-function download {
+function ftchw {
 	if [ "$(command -v wget)" ]; then
 		wget --mirror --convert-links \
 			--adjust-extension --page-requisites \
