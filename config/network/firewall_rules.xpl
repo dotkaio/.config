@@ -1,4 +1,4 @@
-¬{
+{
   "bundleVersion": 6273,
   "codeRequirements": {
     "/Applications/Vectornator.app/Contents/MacOS/Vectornator": {
@@ -31192,7 +31192,7 @@
         "detailLevelPortAndProtocol": 1,
         "dontShowDenyConsequencesAgain": [],
         "geoViewMyLocationLatitude": 50,
-        "GeoViewMyLocationLatitude": 37.320656194981559,
+        "GeoViewMyLocationLatitude": 37.32065619498156,
         "geoViewMyLocationLongitude": -34,
         "GeoViewMyLocationLongitude": -121.94870748535901,
         "monitorHotKey": "6400@46",

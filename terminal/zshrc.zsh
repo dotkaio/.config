@@ -1,16 +1,9 @@
-#!/usr/bin/env zsh
+# !/usr/bin/env zsh
 
-# if [ -f "$HOME/.zshrc" ]; then
-# 	source $HOME/.zshrc
-# else
-# 	echo 'source $HOME/.config/terminal/zshrc.zsh' > $HOME/.zshrc
-#     touch .hushlogin && source $HOME/.zshrc
-# fi
-
-#environment variables
+# environment variables
 export CONFIG="$HOME/.config"
 export TERMINAL="$CONFIG/terminal"
-#export CHROME_EXECUTABLE="/Applications/Chromium.app/Contents/MacOS/Chromium"
+export CHROME_EXECUTABLE="/Applications/Chromium.app/Contents/MacOS/Chromium"
 
 export HOMEBREW_NO_AUTO_UPDATE
 export HOMEBREW_NO_ANALYTICS
@@ -26,12 +19,17 @@ export HOMEBREW_NO_INSECURE_REDIRECT
 # export PATH=$GEM_HOME/bin:$PATH
 # export PATH=$GEM_HOME/gems/bin:$PATH
 
-#prepend a directory to path if it exists
+# functions
+function yt {
+	cd $HOME/Library/Mobile\ Documents/com~apple~QuickTimePlayerX/Documents &&
+		/usr/local/bin/yt-dlp -f bestvideo+bestaudio --merge-output-format mp4 "$1"
+}
+
 function path {
 	[[ -d "$1" ]] && export PATH="$1:$PATH"
 }
 
-#add essential paths
+# add essential paths
 for p in /bin \
 	/sbin \
 	/usr/bin \
@@ -40,11 +38,11 @@ for p in /bin \
 	/usr/local/sbin \
 	/opt/homebrew/bin \
 	/Library/Developer/CommandLineTools/usr/bin \
+	/Users/sysadm/.local/bin \
 	/Library/Developer/CommandLineTools/usr/lib; do
 	path "$p"
 done
 
-# functions
 function yt {
 	local foo = $(PWD)
 	cd $HOME/Movies/TV/Media.localized/.Media
@@ -304,7 +302,7 @@ function icloud {
 }
 
 function clone {
-	#check if folder inside documents/dev exists
+	# check if folder inside documents/dev exists
 	[[ ! -d "$HOME/Developer" ]] && mkdir -p "$HOME/Developer"
 	cd "$HOME/Developer" || return
 	if [[ "$1" =~ ^https?:// ]]; then
@@ -473,7 +471,7 @@ function chunk {
 	echo "File has been split into chunks of approx $chunk_size lines each."
 }
 
-#openai voice api
+# openai voice api
 function tts {
 	if [[ -z "$1" ]]; then
 		echo "Usage: tts <text>"
@@ -509,22 +507,45 @@ function td {
 	mkdir -p "$(date +%m-%d%Y)"
 }
 
-function halt {
-	sudo halt
+function dev {
+	# pnpm
+	if [ -d "/Users/sysadm/.pnpm" ]; then
+		export PATH="/Users/sysadm/.pnpm:$PATH"
+		case ":$PATH:" in
+		*":$PNPM_HOME:"*) ;;
+		*) export PATH="$PNPM_HOME:$PATH" ;;
+		esac
+	fi
+
+	# conda
+	if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
+		__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
+		if [ $? -eq 0 ]; then
+			eval "$__conda_setup"
+		else
+			if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+				. "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+			else
+				export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+			fi
+		fi
+		unset __conda_setup
+	fi
+
+	# load nvm
+	if [ -d "$HOME/.nvm" ]; then
+		export NVM_DIR="$HOME/.nvm"
+		[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
+		[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+	fi
 }
 
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'                          # case-insensitive completion
-zstyle ':completion:*' menu select=2                                               # select completion with arrow keys
-zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s # completion prompt
-zstyle ':completion:*' list-colors ' =*=0=*=32'                                    # color completion
-zstyle ':completion:*' list-colors ' =*=>1=*=32'                                   # color completion
-zstyle ':completion:*' list-colors ' =*<=1=*=32'                                   # color completion
-zstyle ':completion:*' list-colors ' =*[^=]*=0=*=32'                               # color completion
-zstyle ':completion:*' list-colors ' =*[^=]*=1=*=32'                               # color completion
-zstyle ':completion:*' list-colors ' =*[^=]*=2=*=32'                               # color completion
-zstyle ':completion:*' list-colors ' =*[^=]*=3=*=32'                               # color completion
+zstyle ':completion:*' menu select=1                                               # select completion with arrow keys
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s # completion
+zstyle ':completion:*:history-search-end' list-suffixes true
 
-#alias
+# alias
 alias ....="cd ../../.."
 alias ...="cd ../.."
 alias ..="cd .."
@@ -540,7 +561,7 @@ alias flr="flutter run"
 alias ga="git add ."
 alias gm="git commit -m"
 alias grep="grep --text --color"
-#alias halt="sudo halt"
+# alias halt="sudo halt"
 alias hide='chflags hidden'
 alias json="jq -r '.choices[0].message.content'"
 alias lines="wc -l"
@@ -566,8 +587,9 @@ alias words="wc -w"
 alias wrap="tput smam"
 alias yt='yt-dlp'
 alias z="source ~/.zshrc"
+alias llm="ollama"
 
-#set options
+# set options
 setopt \
 	AUTOCD \
 	NOBEEP \
@@ -586,92 +608,46 @@ setopt \
 	HIST_IGNORE_DUPS
 
 autoload -U colors find-command history-search-end promptinit vcs_info zargs zcalc zmv compinit
-rm $HOME/.zcompdump 2>/dev/null
-compinit
-
+# rm $HOME/.zcompdump 2>/dev/null && compinit
 promptinit
 vcs_info
 
-#completion definitions
+zmodload zsh/zutil
+# completion definitions
+compinit -C -u # -C for case-insensitive completion, -u to update the cache
 compdef '_brew uninstall' remove
 compdef '_brew install' install
+compdef '_brew info' info
+compdef '_brew doctor' doctor
+compdef '_brew cleanup' cleanup
+compdef '_brew autoremove' autoremove
+compdef '_brew upgrade' upgrade
+compdef '_brew cask install' cask-install
 compdef '_brew search' search
 compdef '_brew update' update
 compdef '_santactl' santa
 compdef '_tcpdump' dump
 compdef '_brew list' list
 compdef '_tree' t
+compdef '_ls' ll
 compdef '_mdfind' finder
 compdef '_youtube-dl' yt
 compdef '_flutter' fl
 compdef '_conda activate' activate
 compdef '_git clone' clone
 compdef '_git push' push
+compdef '_ollama' llm
 
-#source extras
+# source extras
 source "$TERMINAL/suggestion.zsh"
 source "$TERMINAL/highlight/init.zsh"
 FPATH="$TERMINAL/completions:$FPATH"
 
-#set history file and options
+# set history file and options
 HISTFILE="$HOME/.history"
 HISTSIZE=10000
 SAVEHIST=10000
 
-#prompt configuration
+# prompt configuration
 prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
 → '
-
-#development configuration
-export PATH="$HOME/.lmstudio/bin:$PATH"
-
-#pnpm
-if [ -d "/Users/sysadm/.pnpm" ]; then
-	export PATH="/Users/sysadm/.pnpm:$PATH"
-	case ":$PATH:" in
-	*":$PNPM_HOME:"*) ;;
-	*) export PATH="$PNPM_HOME:$PATH" ;;
-	esac
-fi
-
-#conda
-if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
-	__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
-	if [ $? -eq 0 ]; then
-		eval "$__conda_setup"
-	else
-		if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-			. "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
-		else
-			export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
-		fi
-	fi
-	unset __conda_setup
-fi
-
-#load nvm
-if [ -d "$HOME/.nvm" ]; then
-	export NVM_DIR="$HOME/.nvm"
-	[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
-	[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
-fi
-
-#lmstudio
-if [ -d "/Users/sysadm/.lmstudio" ]; then
-	export PATH="$PATH:/Users/sysadm/.lmstudio/bin"
-fi
-
-# if file .zshrc_history exists run mdfindn -name zshrc and delete the file
-if [ -f "$HOME/.zshrc_history" ]; then
-	mdfind -name zshrc | xargs rm
-fi
-
-if [ "$(command -v bun)" ]; then
-	# bun completions
-	[ -s "/Users/sysadm/.bun/_bun" ] && source "/Users/sysadm/.bun/_bun"
-
-	# bun
-	export BUN_INSTALL="$HOME/.bun"
-	export PATH="$BUN_INSTALL/bin:$PATH"
-
-fi
