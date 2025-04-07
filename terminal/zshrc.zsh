@@ -1,8 +1,7 @@
 # !/usr/bin/env zsh
 
-# environment variables
+#environment variables
 export CONFIG="$HOME/.config"
-export TERMINAL="$CONFIG/terminal"
 export CHROME_EXECUTABLE="/Applications/Chromium.app/Contents/MacOS/Chromium"
 
 export HOMEBREW_NO_AUTO_UPDATE
@@ -19,17 +18,17 @@ export HOMEBREW_NO_INSECURE_REDIRECT
 # export PATH=$GEM_HOME/bin:$PATH
 # export PATH=$GEM_HOME/gems/bin:$PATH
 
-# functions
-function yt {
+#functions
+yt() {
 	cd $HOME/Library/Mobile\ Documents/com~apple~QuickTimePlayerX/Documents &&
-		/usr/local/bin/yt-dlp -f bestvideo+bestaudio --merge-output-format mp4 "$1"
+		/opt/homebrew/bin/yt-dlp -f bestvideo+bestaudio --merge-output-format mp4 "$1"
 }
 
-function path {
+path() {
 	[[ -d "$1" ]] && export PATH="$1:$PATH"
 }
 
-# add essential paths
+#add essential paths
 for p in /bin \
 	/sbin \
 	/usr/bin \
@@ -43,7 +42,7 @@ for p in /bin \
 	path "$p"
 done
 
-function yt {
+yt() {
 	local foo = $(PWD)
 	cd $HOME/Movies/TV/Media.localized/.Media
 	yt-dlp -f bestvideo+bestaudio --merge-output-format mp4 "$1"
@@ -51,7 +50,7 @@ function yt {
 
 }
 
-function activate {
+activate() {
 	if [[ -z "$1" ]]; then
 		echo "Usage: activate <environment>"
 		return 1
@@ -59,15 +58,15 @@ function activate {
 	conda activate "$1"
 }
 
-function wrap {
+wrap() {
 	tput smam
 }
 
-function unwrap {
+unwrap() {
 	tput rmam
 }
 
-function ip_from_url {
+ip_from_url() {
 	if [ -n "$1" ]; then
 		data=$(cat "$1")
 	else
@@ -91,19 +90,19 @@ function ip_from_url {
 	done <<<"$data"
 }
 
-function convert_nextjs {
+convert_nextjs() {
 	/opt/homebrew/Caskroom/miniconda/base/bin/python /Users/sysadm/.config/scripts/python/convert_to_nextjs.py
 }
 
-function to_number {
+to_number() {
 	tr 'Aa' '4' | tr 'Ee' '3' | tr 'Ii' '1' | tr 'Oo' '0' | tr 'Ss' '5' | tr 'Tt' '7'
 }
 
-function dmg2iso {
+dmg2iso() {
 	hdiutil convert "$1" -format UDTO -o "$2" && mv "$2.cdr" "$2.iso"
 }
 
-function zshrc {
+zshrc() {
 	if command -v code >/dev/null; then
 		[[ -n "$1" ]] && code "$TERMINAL/$1" || code "$HOME/.config"
 	else
@@ -111,11 +110,11 @@ function zshrc {
 	fi
 }
 
-function xcode {
+xcode() {
 	[[ -e "$1" ]] && open -a Xcode "$1" || open -a Xcode
 }
 
-function replace {
+replace() {
 	if [[ -z "$1" || -z "$2" || -z "$3" ]]; then
 		echo "Usage: replace <file> <old_string> <new_string>"
 		return 1
@@ -123,13 +122,13 @@ function replace {
 	sed -i '' "s/$2/$3/g" "$1"
 }
 
-function push {
+push() {
 	git add .
 	git commit -m "duh"
 	git push
 }
 
-function t {
+t() {
 	if command -v tree >/dev/null; then
 		tree --sort=name -LlaC 1 --dirsfirst "$@"
 	else
@@ -138,7 +137,7 @@ function t {
 }
 
 # ensure to call this when santactl is installed
-function block {
+block() {
 	if command -v santactl >/dev/null; then
 		sudo santactl rule --silent-block --path "$@"
 	else
@@ -146,11 +145,11 @@ function block {
 	fi
 }
 
-function unblock {
+unblock() {
 	sudo santactl rule --remove --path "$@"
 }
 
-function unblockall {
+unblockall() {
 	for app in "Messages.app" "FaceTime.app" "Mail.app" "System Settings.app" "Chromium.app"; do
 		if [[ "$app" == "Chromium.app" ]]; then
 			sudo santactl rule --remove --path "/Applications/$app"
@@ -160,7 +159,7 @@ function unblockall {
 	done
 }
 
-function proxy {
+proxy() {
 	local current_dir
 	current_dir=$(pwd)
 	for url in \
@@ -173,7 +172,7 @@ function proxy {
 	cd "$current_dir" || return
 }
 
-function install {
+install() {
 	if [[ $1 == 'brew' ]]; then
 		if [[ $2 == 'local' ]]; then
 			cd $CONFIG
@@ -192,11 +191,11 @@ function install {
 	fi
 }
 
-function reinstall {
+reinstall() {
 	brew reinstall "$@"
 }
 
-function wifi {
+wifi() {
 	if [[ "$1" == "down" || "$1" == "off" ]]; then
 		sudo ifconfig en0 down
 	elif [[ "$1" == "up" || "$1" == "on" ]]; then
@@ -208,19 +207,19 @@ function wifi {
 	fi
 }
 
-function finder {
+finder() {
 	/usr/bin/mdfind "$@" 2> >(grep --invert-match ' \[UserQueryParser\] ' >&2) | grep -i "$@" --color=auto
 }
 
-function plist {
-	function get_plist {
+plist() {
+	get_plist() {
 		for the_path in $(mdfind -name LaunchDaemons) $(mdfind -name LaunchAgents); do
 			[[ -d "$the_path" ]] && for file in "$the_path"/*; do
 				echo "$file"
 			done
 		done
 	}
-	function get_shasum {
+	get_shasum() {
 		get_plist | while read -r file; do
 			shasum -a 256 "$file"
 		done
@@ -235,7 +234,7 @@ function plist {
 	fi
 }
 
-function remove {
+remove() {
 	if [[ "$1" == "brew" ]]; then
 		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
 		if [[ -d "$CONFIG/homebrew" ]]; then
@@ -250,7 +249,7 @@ function remove {
 	fi
 }
 
-function generate_ip {
+generate_ip() {
 	for a in {1..254}; do
 		echo "$a.1.1.1"
 		for b in {1..254}; do
@@ -265,7 +264,7 @@ function generate_ip {
 	done
 }
 
-function dmg {
+dmg() {
 	if [[ "$1" == "crypt" ]]; then
 		hdiutil create "$2.dmg" -encryption -size "$3" -volname "$2" -fs JHFS+
 	else
@@ -273,19 +272,19 @@ function dmg {
 	fi
 }
 
-function update {
+update() {
 	brew update && brew upgrade && brew cleanup && brew autoremove
 }
 
-function info {
+info() {
 	brew info "$@"
 }
 
-function list {
+list() {
 	brew list
 }
 
-function search {
+search() {
 	if [[ "$1" == "web" ]]; then
 		if [[ -e /Applications/Chromium.app ]]; then
 			open -a Chromium "https://google.com/search?q=$2" || return
@@ -297,11 +296,11 @@ function search {
 	fi
 }
 
-function icloud {
+icloud() {
 	cd ~/Library/Mobile\ Documents/com\~apple\~CloudDocs || return
 }
 
-function clone {
+clone() {
 	# check if folder inside documents/dev exists
 	[[ ! -d "$HOME/Developer" ]] && mkdir -p "$HOME/Developer"
 	cd "$HOME/Developer" || return
@@ -320,23 +319,23 @@ function clone {
 	fi
 }
 
-function intel {
+intel() {
 	exec arch -x86_64 "$SHELL"
 }
 
-function arm64 {
+arm64() {
 	exec arch -arm64 "$SHELL"
 }
 
-function grep_line {
+grep_line() {
 	grep -n "$1" "$2"
 }
 
-function get_ip {
+get_ip() {
 	dig +short "$1"
 }
 
-function dump {
+dump() {
 	local now
 	now=$(date +%s)
 	case "$1" in
@@ -361,11 +360,11 @@ function dump {
 	esac
 }
 
-function shwip {
+shwip() {
 	curl -sq4 "https://icanhazip.com/"
 }
 
-function shwhistory {
+shwhistory() {
 	if [[ "$1" == "top" ]]; then
 		history 1 | awk '{CMD[$2]++;count++} END { for (a in CMD) printf "%d %0.2f%% %s\n", CMD[a], CMD[a]/count*100, a }' | sort -nr | nl | head -n25
 	elif [[ "$1" == "clear" || "$1" == "clean" ]]; then
@@ -373,18 +372,18 @@ function shwhistory {
 	fi
 }
 
-function rand {
-	function newUser {
+rand() {
+	newUser() {
 		local username
 		username=$(openssl rand -base64 64 | tr -d "=+/1-9" | cut -c-20 | tr '[:upper:]' '[:lower:]')
 		echo "$username" | pbcopy
 	}
-	function newPass {
+	newPass() {
 		local password
 		password=$(openssl rand -base64 300 | tr -d "=+/" | cut -c12-20 | tr '\n' '-' | cut -b -26)
 		echo "$password" | pbcopy
 	}
-	function changeId {
+	changeId() {
 		local computerName hostName localHostName
 		computerName=$(newUser)
 		hostName="$(newUser).local"
@@ -409,11 +408,11 @@ function rand {
 	esac
 }
 
-function battery {
+battery() {
 	pmset -g batt | egrep "([0-9]+\%).*" -o --colour=auto | cut -f1 -d';'
 }
 
-function ftchw {
+ftchw() {
 	if [ "$(command -v wget)" ]; then
 		wget --mirror --convert-links \
 			--adjust-extension --page-requisites \
@@ -425,7 +424,7 @@ function ftchw {
 	fi
 }
 
-function pf {
+pf() {
 	case "$1" in
 	"up") sudo pfctl -e -f "$CONFIG/firewall/pf.rules" ;;
 	"down") sudo pfctl -d ;;
@@ -438,20 +437,20 @@ function pf {
 	esac
 }
 
-function branch_name {
+branch_name() {
 	git branch 2>/dev/null | sed -n -e 's/^\* \(.*\)/(\1) /p'
 }
 
-function len {
+len() {
 	echo -n "$1" | wc -c
 }
 
-function rmip {
+rmip() {
 	sed -E 's/\b([0-9]{1,3}\.){3}[0-9]{1,3}\b/[REDACTED]/g' "$1" >"$2"
 	echo "done!"
 }
 
-function chunk {
+chunk() {
 	local file="$1"
 	local custom_chunk_size="$2"
 	if [[ ! -f "$file" ]]; then
@@ -472,7 +471,7 @@ function chunk {
 }
 
 # openai voice api
-function tts {
+tts() {
 	if [[ -z "$1" ]]; then
 		echo "Usage: tts <text>"
 		return 1
@@ -490,7 +489,7 @@ function tts {
 	rm speech.mp3
 }
 
-function extract {
+extract() {
 	case "$1" in
 	"zip") unzip "$2" ;;
 	"tar") tar -xvf "$2" ;;
@@ -503,41 +502,8 @@ function extract {
 	esac
 }
 
-function td {
+td() {
 	mkdir -p "$(date +%m-%d%Y)"
-}
-
-function dev {
-	# pnpm
-	if [ -d "/Users/sysadm/.pnpm" ]; then
-		export PATH="/Users/sysadm/.pnpm:$PATH"
-		case ":$PATH:" in
-		*":$PNPM_HOME:"*) ;;
-		*) export PATH="$PNPM_HOME:$PATH" ;;
-		esac
-	fi
-
-	# conda
-	if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
-		__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
-		if [ $? -eq 0 ]; then
-			eval "$__conda_setup"
-		else
-			if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-				. "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
-			else
-				export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
-			fi
-		fi
-		unset __conda_setup
-	fi
-
-	# load nvm
-	if [ -d "$HOME/.nvm" ]; then
-		export NVM_DIR="$HOME/.nvm"
-		[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
-		[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
-	fi
 }
 
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'                          # case-insensitive completion
@@ -545,7 +511,7 @@ zstyle ':completion:*' menu select=1                                            
 zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s # completion
 zstyle ':completion:*:history-search-end' list-suffixes true
 
-# alias
+#alias
 alias ....="cd ../../.."
 alias ...="cd ../.."
 alias ..="cd .."
@@ -581,15 +547,15 @@ alias speed="unwrap && networkQuality && wrap"
 alias status="git status"
 alias time="date -u +%T"
 alias today="date +%m-%d-%Y | pbcopy"
-alias unwrap="tput rmam"
+# alias unwrap="tput rmam"
 alias upper="tr '[:lower:]' '[:upper:]'"
 alias words="wc -w"
-alias wrap="tput smam"
-alias yt='yt-dlp'
-alias z="source ~/.zshrc"
-alias llm="ollama"
+# alias wrap="tput smam"
+# alias yt='yt-dlp'
+alias z="zsh"
+# alias llm="ollama"
 
-# set options
+#set options
 setopt \
 	AUTOCD \
 	NOBEEP \
@@ -607,13 +573,23 @@ setopt \
 	HIST_SAVE_NO_DUPS \
 	HIST_IGNORE_DUPS
 
-autoload -U colors find-command history-search-end promptinit vcs_info zargs zcalc zmv compinit
-# rm $HOME/.zcompdump 2>/dev/null && compinit
+autoload -U \
+	colors \
+	find-command \
+	history-search-end \
+	promptinit \
+	vcs_info \
+	zargs \
+	zcalc \
+	zmv \
+	compinit
+
 promptinit
 vcs_info
 
 zmodload zsh/zutil
-# completion definitions
+
+#completion
 compinit -C -u # -C for case-insensitive completion, -u to update the cache
 compdef '_brew uninstall' remove
 compdef '_brew install' install
@@ -636,14 +612,17 @@ compdef '_flutter' fl
 compdef '_conda activate' activate
 compdef '_git clone' clone
 compdef '_git push' push
-compdef '_ollama' llm
+# compdef '_ollama' llm
 
-# source extras
-source "$TERMINAL/suggestion.zsh"
-source "$TERMINAL/highlight/init.zsh"
-FPATH="$TERMINAL/completions:$FPATH"
+rm $HOME/.zcompdump 2>/dev/null && compinit
 
-# set history file and options
+#source extras
+source $CONFIG/terminal/suggestion.zsh
+source $CONFIG/terminal/highlight/init.zsh
+
+FPATH="$CONFIG/terminal/completions:$FPATH"
+
+#set history file and options
 HISTFILE="$HOME/.history"
 HISTSIZE=10000
 SAVEHIST=10000
@@ -651,3 +630,34 @@ SAVEHIST=10000
 # prompt configuration
 prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
 → '
+
+#development
+# pnpm
+if [ -d "/Users/sysadm/.pnpm" ]; then
+	export PATH="/Users/sysadm/.pnpm:$PATH"
+	case ":$PATH:" in
+	*":$PNPM_HOME:"*) ;;
+	*) export PATH="$PNPM_HOME:$PATH" ;;
+	esac
+fi
+
+if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
+	__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
+	if [ $? -eq 0 ]; then
+		eval "$__conda_setup"
+	else
+		if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+			. "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+		else
+			export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+		fi
+	fi
+	unset __conda_setup
+fi
+
+# load nvm
+if [ -d "$HOME/.nvm" ]; then
+	export NVM_DIR="$HOME/.nvm"
+	[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
+	[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+fi
