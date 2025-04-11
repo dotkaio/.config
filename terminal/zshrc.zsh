@@ -503,7 +503,8 @@ extract() {
 }
 
 td() {
-	mkdir -p "$(date +%m-%d%Y)"
+	mkdir -p "$(date +%m-%d-%Y)" &&
+		cd "$(date +%m-%d-%Y)" || return
 }
 
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'                          # case-insensitive completion
