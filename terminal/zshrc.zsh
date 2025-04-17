@@ -1,27 +1,25 @@
 # !/usr/bin/env zsh
 
 #environment variables
+# export HOMEBREW_NO_GITHUB_API
+# export HOMEBREW_NO_INSTALL_CLEANUP
+# export HOMEBREW_NO_INSECURE_REDIRECT
+# export PATH=$GEM_HOME/bin:$PATH
+# export PATH=$GEM_HOME/gems/bin:$PATH
 export CONFIG="$HOME/.config"
 export CHROME_EXECUTABLE="/Applications/Chromium.app/Contents/MacOS/Chromium"
-
 export HOMEBREW_NO_AUTO_UPDATE
 export HOMEBREW_NO_ANALYTICS
-export HOMEBREW_NO_GITHUB_API
 export HOMEBREW_NO_EMOJI
 export HOMEBREW_NO_INSECURE_REDIRECT
 export HOMEBREW_NO_ENV_HINTS
-export HOMEBREW_NO_INSTALL_CLEANUP
 export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_AUTO_UPDATE
-export HOMEBREW_NO_INSECURE_REDIRECT
-# export PATH=$GEM_HOME/bin:$PATH
-# export PATH=$GEM_HOME/gems/bin:$PATH
 
 #functions
 function yt {
-	cd $HOME/Library/Mobile\ Documents/com~apple~QuickTimePlayerX/Documents &&
-		/opt/homebrew/bin/yt-dlp -f bestvideo+bestaudio --merge-output-format mp4 "$1"
+	cd $HOME/Library/Mobile\ Documents/com~apple~QuickTimePlayerX/Documents && /opt/homebrew/bin/yt-dlp -f bestvideo+bestaudio --merge-output-format mp4 $@
 }
 
 function path {
@@ -503,7 +501,7 @@ function extract {
 }
 
 function td {
-	mkdir -p "$(date +%m-%d-%Y)" &&
+	mkdir -p "$(date +%m-%d-%y)" &&
 		cd "$(date +%m-%d-%Y)" || return
 }
 
