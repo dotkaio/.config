@@ -8,6 +8,7 @@
 # export PATH=$GEM_HOME/gems/bin:$PATH
 export CONFIG="$HOME/.config"
 export CHROME_EXECUTABLE="/Applications/Chromium.app/Contents/MacOS/Chromium"
+
 export HOMEBREW_NO_AUTO_UPDATE
 export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_EMOJI
@@ -613,10 +614,9 @@ compdef '_git clone' clone
 compdef '_git push' push
 # compdef '_ollama' llm
 
-rm $HOME/.zcompdump 2>/dev/null && compinit
-
 #source extras
-source $CONFIG/terminal/suggestion.zsh
+# source $CONFIG/terminal/suggestion.zsh
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $CONFIG/terminal/highlight/init.zsh
 
 FPATH="$CONFIG/terminal/completions:$FPATH"
@@ -631,6 +631,7 @@ prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
 → '
 
 #development
+
 # pnpm
 if [ -d "/Users/sysadm/.pnpm" ]; then
 	export PATH="/Users/sysadm/.pnpm:$PATH"
@@ -640,6 +641,12 @@ if [ -d "/Users/sysadm/.pnpm" ]; then
 	esac
 fi
 
+# eval brew
+if [ -d "/opt/homebrew/bin" ]; then
+	eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# load conda
 if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
 	__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
 	if [ $? -eq 0 ]; then
@@ -660,3 +667,5 @@ if [ -d "$HOME/.nvm" ]; then
 	[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
 	[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
 fi
+
+rm $HOME/.zcompdump 2>/dev/null && compinit
