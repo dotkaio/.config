@@ -20,7 +20,21 @@ export HOMEBREW_NO_AUTO_UPDATE
 
 #functions
 function yt {
-	cd $HOME/Library/Mobile\ Documents/com~apple~QuickTimePlayerX/Documents && /opt/homebrew/bin/yt-dlp -f bestvideo+bestaudio --merge-output-format mp4 $@
+	if [ "$(command -v yt-dlp)" ]; then # check if yt-dlp is installed
+		if [ -z "$1" ]; then
+			/opt/homebrew/bin/yt-dlp
+		fi
+	else # if yt-dlp is not installed
+		echo "bro, you need yt-dlp to run this command. do you wanna install?"
+		read -p "y/n: " answer
+		if [[ "$answer" == "y" ]]; then
+			brew install yt-dlp
+		else
+			echo "bitch"
+			return 1
+		fi
+	fi
+
 }
 
 function path {
@@ -41,16 +55,8 @@ for p in /bin \
 	path "$p"
 done
 
-function yt {
-	local foo = $(PWD)
-	cd $HOME/Movies/TV/Media.localized/.Media
-	yt-dlp -f bestvideo+bestaudio --merge-output-format mp4 "$1"
-	cd $foo
-
-}
-
 function activate {
-	if [[ -z "$1" ]]; then
+	if [[ -z "$1" ]]; then # check if argument is empty
 		echo "Usage: activate <environment>"
 		return 1
 	fi
@@ -411,7 +417,7 @@ function battery {
 	pmset -g batt | egrep "([0-9]+\%).*" -o --colour=auto | cut -f1 -d';'
 }
 
-function ftchw {
+function download {
 	if [ "$(command -v wget)" ]; then
 		wget --mirror --convert-links \
 			--adjust-extension --page-requisites \
@@ -615,8 +621,7 @@ compdef '_git push' push
 # compdef '_ollama' llm
 
 #source extras
-# source $CONFIG/terminal/suggestion.zsh
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $CONFIG/terminal/suggestion.zsh
 source $CONFIG/terminal/highlight/init.zsh
 
 FPATH="$CONFIG/terminal/completions:$FPATH"
