@@ -12,8 +12,8 @@ export CHROME_EXECUTABLE="/Applications/Chromium.app/Contents/MacOS/Chromium"
 export HOMEBREW_NO_AUTO_UPDATE
 export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_EMOJI
-export HOMEBREW_NO_INSECURE_REDIRECT
-export HOMEBREW_NO_ENV_HINTS
+export HOMEBREW_NO_INSECURE_REDIRECT=1
+export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_AUTO_UPDATE
@@ -310,17 +310,16 @@ function clone {
 	[[ ! -d "$HOME/Developer" ]] && mkdir -p "$HOME/Developer"
 	cd "$HOME/Developer" || return
 	if [[ "$1" =~ ^https?:// ]]; then
-		git clone "$1"
+		# check if there is querry parameter on the url. if so remove it!
+		local url
+		url=$(echo "$1" | cut -d '?' -f 1)
+		git clone "$url"
 		local repo_name
-		repo_name=$(echo "$1" | cut -d '/' -f 5)
 		echo "$repo_name" | pbcopy
 		cd "$repo_name" || return
 		echo "done!"
 	else
-		git clone "https://github.com/$@"
-		local repo_name
-		repo_name=$(echo "$@" | cut -d '/' -f 2)
-		echo "$repo_name" | pbcopy
+		echo "foo"
 	fi
 }
 
