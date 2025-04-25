@@ -19,6 +19,14 @@ export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_AUTO_UPDATE
 
 #functions
+function cleanup() {
+	brew cleanup
+}
+
+function autoremove() {
+	brew autoremove
+}
+
 function yt {
 	if [ "$(command -v yt-dlp)" ]; then # check if yt-dlp is installed
 		if [ -z "$1" ]; then
@@ -186,7 +194,7 @@ function install {
 		else
 			/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 		fi
-	elif [[ $1 == 'node' ]]; then
+	elif [[ $1 == 'node' || $1 == 'nvm' ]]; then
 		curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 		nvm install node
 	elif [[ $1 == 'flutter' ]]; then
