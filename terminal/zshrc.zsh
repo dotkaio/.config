@@ -19,6 +19,11 @@ export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_AUTO_UPDATE
 
 #functions
+
+function gemini {
+	#implement
+}
+
 function cleanup() {
 	brew cleanup
 }
@@ -630,7 +635,6 @@ compdef '_git push' push
 #source extras
 source $CONFIG/terminal/suggestion.zsh
 source $CONFIG/terminal/highlight/init.zsh
-
 FPATH="$CONFIG/terminal/completions:$FPATH"
 
 #set history file and options
@@ -676,8 +680,8 @@ fi
 # load nvm
 if [ -d "$HOME/.nvm" ]; then
 	export NVM_DIR="$HOME/.nvm"
-	[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
-	[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
+	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 fi
 
 rm $HOME/.zcompdump 2>/dev/null && compinit
