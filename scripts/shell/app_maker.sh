@@ -12,7 +12,7 @@ WEBSITE_URL=$1
 APP_NAME=$2
 
 # Define template and output directories
-TEMPLATE_DIR="/Users/sysadm/Developer/make-app/MyWebAppTemplate"  # Your base Xcode template directory
+TEMPLATE_DIR="/Users/sysadm/Developer/make-app/MyWebAppTemplate" # Your base Xcode template directory
 DESKTOP_DIR="$HOME/Desktop"
 NEW_APP_DIR="${DESKTOP_DIR}/${APP_NAME}_App"
 

@@ -6,6 +6,7 @@
 # export HOMEBREW_NO_INSECURE_REDIRECT
 # export PATH=$GEM_HOME/bin:$PATH
 # export PATH=$GEM_HOME/gems/bin:$PATH
+
 export CONFIG="$HOME/.config"
 export CHROME_EXECUTABLE="/Applications/Chromium.app/Contents/MacOS/Chromium"
 
@@ -19,6 +20,13 @@ export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_AUTO_UPDATE
 
 #functions
+function fetch {
+	if [ "$(command -v wget)" ]; then
+		/Users/dotkaio/.config/scripts/shell/download_webflow.sh "$@"
+	else
+		echo "wget is not installed. Please install wget first."
+	fi
+}
 
 function gemini {
 	#implement
@@ -61,10 +69,8 @@ for p in /bin \
 	/usr/sbin \
 	/usr/local/bin \
 	/usr/local/sbin \
-	/opt/homebrew/bin \
-	/Library/Developer/CommandLineTools/usr/bin \
-	/Users/sysadm/.local/bin \
-	/Library/Developer/CommandLineTools/usr/lib; do
+	/opt/homebrew/bin; do
+	# /Users/sysadm/.local/bin \
 	path "$p"
 done
 
@@ -685,3 +691,12 @@ if [ -d "$HOME/.nvm" ]; then
 fi
 
 rm $HOME/.zcompdump 2>/dev/null && compinit
+
+# pnpm
+case ":$PATH:" in
+*":$PNPM_HOME:"*) ;;
+*) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+export PNPM_HOME="/Users/sysadm/Library/pnpm"

@@ -1,2 +1,5 @@
 .DS_Store
 .git
+.env
+iterm2/
+gh-copilot/
