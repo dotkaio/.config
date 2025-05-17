@@ -97,3 +97,6 @@ This command will update the plist files in the <b>LaunchAgents</b> and <b>Launc
 ```bash
 plist update
 ```
+
+
+Yo Danny
