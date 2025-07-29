@@ -32,7 +32,7 @@ Cmnd_Alias NP = \
         /bin/ls, \
         /bin/cat, \
         /bin/ps, \
-        /bin/killall, \
+        /bin/killall
 
 root            ALL = (ALL) ALL
 %admin          ALL = ALL

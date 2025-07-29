@@ -130,7 +130,7 @@ function zshrc {
 	if command -v code >/dev/null; then
 		[[ -n "$1" ]] && code "$TERMINAL/$1" || code "$HOME/.config"
 	else
-		[[ -n "$1" ]] && open -a TextEdit "$HOME/.config/terminal/$1" || echo "missing argument"
+		sudo ln -sf "System/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" /usr/local/bin/codes
 	fi
 }
 
@@ -639,9 +639,11 @@ compdef '_git push' push
 # compdef '_ollama' llm
 
 #source extras
-source $CONFIG/terminal/suggestion.zsh
-source $CONFIG/terminal/highlight/init.zsh
+source "$CONFIG/terminal/suggestion.zsh"
+source "$CONFIG/terminal/highlight/init.zsh"
+source "$HOME/Library/Mobile Documents/com~apple~CloudDocs/.env"
 FPATH="$CONFIG/terminal/completions:$FPATH"
+TERMINAL="$HOME/.config/terminal"
 
 #set history file and options
 HISTFILE="$HOME/.history"
