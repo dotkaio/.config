@@ -90,37 +90,179 @@ echo "→ Current directory after wget: $(pwd)"
 echo "→ Restructuring assets..."
 if [ -d "./$BASE_DOMAIN" ]; then
     echo "   • Moving primary site content from \"./$BASE_DOMAIN\"/ to root..."
-    shopt -s dotglob
+    setopt dotglob
     mv -n "./$BASE_DOMAIN"/* . 2>/dev/null
-    shopt -u dotglob
+    unsetopt dotglob
 fi
 
-echo "   • Creating target asset directories: css/, js/, images/, videos/, fonts/"
-mkdir -p ./css ./js ./images ./videos ./fonts
+echo "   • Creating target asset directories: src/css/, src/js/, src/img/, src/videos/, src/fonts/, src/static/"
+mkdir -p ./src/css ./src/js ./src/img ./src/videos ./src/fonts ./src/static
 
-asset_find_exclude_paths="-path ./css -o -path ./js -o -path ./images -o -path ./videos -o -path ./fonts"
+asset_find_exclude_paths="-name src -o -name resources -o -name system"
 
-echo "   • Moving .css files to ./css/"
-find . -type d \( $asset_find_exclude_paths \) -prune -o -type f -name "*.css" -print -exec mv -n {} ./css/ \;
-echo "   • Moving .js files to ./js/"
-find . -type d \( $asset_find_exclude_paths \) -prune -o -type f -name "*.js" -print -exec mv -n {} ./js/ \;
-echo "   • Moving image files to ./images/"
-find . -type d \( $asset_find_exclude_paths \) -prune -o -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.gif" -o -iname "*.svg" -o -iname "*.webp" -o -iname "*.ico" \) -print -exec mv -n {} ./images/ \;
-echo "   • Moving video files to ./videos/"
-find . -type d \( $asset_find_exclude_paths \) -prune -o -type f \( -iname "*.mp4" -o -iname "*.webm" -o -iname "*.ogv" -o -iname "*.mov" \) -print -exec mv -n {} ./videos/ \;
-echo "   • Moving font files to ./fonts/"
-find . -type d \( $asset_find_exclude_paths \) -prune -o -type f \( -iname "*.woff" -o -iname "*.woff2" -o -iname "*.ttf" -o -iname "*.eot" -o -iname "*.otf" \) -print -exec mv -n {} ./fonts/ \;
+echo "   • Moving .css files to ./src/css/"
+find . -type d \( $asset_find_exclude_paths \) -prune -o -type f -name "*.css" -print0 | while IFS= read -r -d '' file; do
+    if [ -f "$file" ]; then
+        basename_file=$(basename "$file")
+        target="./src/css/$basename_file"
+        counter=1
+        # Handle naming conflicts by adding numbers
+        while [ -f "$target" ]; do
+            name_without_ext="${basename_file%.*}"
+            ext="${basename_file##*.}"
+            target="./src/css/${name_without_ext}_${counter}.${ext}"
+            counter=$((counter + 1))
+        done
+        mv "$file" "$target" && echo "     Moved: $file -> $target"
+    fi
+done
+
+echo "   • Moving .js files to ./src/js/"
+find . -type d \( $asset_find_exclude_paths \) -prune -o -type f -name "*.js" -print0 | while IFS= read -r -d '' file; do
+    if [ -f "$file" ]; then
+        basename_file=$(basename "$file")
+        target="./src/js/$basename_file"
+        counter=1
+        while [ -f "$target" ]; do
+            name_without_ext="${basename_file%.*}"
+            ext="${basename_file##*.}"
+            target="./src/js/${name_without_ext}_${counter}.${ext}"
+            counter=$((counter + 1))
+        done
+        mv "$file" "$target" && echo "     Moved: $file -> $target"
+    fi
+done
+
+echo "   • Moving image files to ./src/img/"
+find . -type d \( $asset_find_exclude_paths \) -prune -o -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.gif" -o -iname "*.svg" -o -iname "*.webp" -o -iname "*.ico" -o -iname "*.avif" \) -print0 | while IFS= read -r -d '' file; do
+    if [ -f "$file" ]; then
+        # Keep directory structure for images
+        rel_path="${file#./}"
+        rel_dir=$(dirname "$rel_path")
+        basename_file=$(basename "$file")
+        
+        # Create the directory structure inside src/img
+        if [ "$rel_dir" != "." ]; then
+            mkdir -p "./src/img/$rel_dir"
+            target="./src/img/$rel_path"
+        else
+            target="./src/img/$basename_file"
+        fi
+        
+        counter=1
+        original_target="$target"
+        while [ -f "$target" ]; do
+            dir_part=$(dirname "$original_target")
+            name_without_ext="${basename_file%.*}"
+            ext="${basename_file##*.}"
+            if [ "$ext" = "$basename_file" ]; then
+                target="$dir_part/${basename_file}_${counter}"
+            else
+                target="$dir_part/${name_without_ext}_${counter}.${ext}"
+            fi
+            counter=$((counter + 1))
+        done
+        mv "$file" "$target" && echo "     Moved: $file -> $target"
+    fi
+done
+
+echo "   • Moving video files to ./src/videos/"
+find . -type d \( $asset_find_exclude_paths \) -prune -o -type f \( -iname "*.mp4" -o -iname "*.webm" -o -iname "*.ogv" -o -iname "*.mov" \) -print0 | while IFS= read -r -d '' file; do
+    if [ -f "$file" ]; then
+        basename_file=$(basename "$file")
+        target="./src/videos/$basename_file"
+        counter=1
+        while [ -f "$target" ]; do
+            name_without_ext="${basename_file%.*}"
+            ext="${basename_file##*.}"
+            if [ "$ext" = "$basename_file" ]; then
+                target="./src/videos/${basename_file}_${counter}"
+            else
+                target="./src/videos/${name_without_ext}_${counter}.${ext}"
+            fi
+            counter=$((counter + 1))
+        done
+        mv "$file" "$target" && echo "     Moved: $file -> $target"
+    fi
+done
+
+echo "   • Moving font files to ./src/fonts/"
+find . -type d \( $asset_find_exclude_paths \) -prune -o -type f \( -iname "*.woff" -o -iname "*.woff2" -o -iname "*.ttf" -o -iname "*.eot" -o -iname "*.otf" \) -print0 | while IFS= read -r -d '' file; do
+    if [ -f "$file" ]; then
+        basename_file=$(basename "$file")
+        target="./src/fonts/$basename_file"
+        counter=1
+        while [ -f "$target" ]; do
+            name_without_ext="${basename_file%.*}"
+            ext="${basename_file##*.}"
+            if [ "$ext" = "$basename_file" ]; then
+                target="./src/fonts/${basename_file}_${counter}"
+            else
+                target="./src/fonts/${name_without_ext}_${counter}.${ext}"
+            fi
+            counter=$((counter + 1))
+        done
+        mv "$file" "$target" && echo "     Moved: $file -> $target"
+    fi
+done
+
+echo "   • Moving other static files to ./src/static/"
+find . -type d \( $asset_find_exclude_paths \) -prune -o -type f \( -iname "*.xml" -o -iname "*.json" -o -iname "*.txt" -o -iname "*.pdf" \) -print0 | while IFS= read -r -d '' file; do
+    if [ -f "$file" ]; then
+        basename_file=$(basename "$file")
+        target="./src/static/$basename_file"
+        counter=1
+        while [ -f "$target" ]; do
+            name_without_ext="${basename_file%.*}"
+            ext="${basename_file##*.}"
+            if [ "$ext" = "$basename_file" ]; then
+                target="./src/static/${basename_file}_${counter}"
+            else
+                target="./src/static/${name_without_ext}_${counter}.${ext}"
+            fi
+            counter=$((counter + 1))
+        done
+        mv "$file" "$target" && echo "     Moved: $file -> $target"
+    fi
+done
+
+echo "   • Verifying asset moves..."
+css_count=$(find ./src/css -name "*.css" 2>/dev/null | wc -l)
+js_count=$(find ./src/js -name "*.js" 2>/dev/null | wc -l)
+img_count=$(find ./src/img -type f 2>/dev/null | wc -l)
+video_count=$(find ./src/videos -type f 2>/dev/null | wc -l)
+font_count=$(find ./src/fonts -type f 2>/dev/null | wc -l)
+static_count=$(find ./src/static -type f 2>/dev/null | wc -l)
+
+echo "     - Moved assets: $css_count CSS, $js_count JS, $img_count images, $video_count videos, $font_count fonts, $static_count static files"
+
+# Check for any remaining assets that didn't get moved
+remaining_css=$(find . -type d \( $asset_find_exclude_paths \) -prune -o -type f -name "*.css" -print | wc -l)
+remaining_js=$(find . -type d \( $asset_find_exclude_paths \) -prune -o -type f -name "*.js" -print | wc -l)
+remaining_img=$(find . -type d \( $asset_find_exclude_paths \) -prune -o -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.gif" -o -iname "*.svg" -o -iname "*.webp" -o -iname "*.ico" \) -print | wc -l)
+
+if [ "$remaining_css" -gt 0 ] || [ "$remaining_js" -gt 0 ] || [ "$remaining_img" -gt 0 ]; then
+    echo "     - WARNING: Some assets were not moved: $remaining_css CSS, $remaining_js JS, $remaining_img images"
+    echo "       Check these files manually before proceeding with cleanup"
+fi
 
 echo "   • Cleaning up known source directories (e.g., from CDNs)..."
 for src_dir in "${POTENTIAL_SOURCE_DIRS[@]}"; do
     if [ -d "./$src_dir" ]; then
-        if [[ "$src_dir" != "css" && "$src_dir" != "js" && "$src_dir" != "images" && "$src_dir" != "videos" && "$src_dir" != "fonts" ]]; then
-            if [ "$(ls -A "./$src_dir" 2>/dev/null)" ]; then
-                echo "     - Attempting to remove non-empty \"./$src_dir\"..."
+        if [[ "$src_dir" != "src" && "$src_dir" != "resources" && "$src_dir" != "system" ]]; then
+            # Check if directory still contains any assets before deleting
+            remaining_assets=$(find "./$src_dir" -type f \( -name "*.css" -o -name "*.js" -o -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.gif" -o -name "*.svg" -o -name "*.webp" -o -name "*.ico" -o -name "*.mp4" -o -name "*.webm" -o -name "*.woff" -o -name "*.woff2" -o -name "*.ttf" \) 2>/dev/null | wc -l)
+            if [ "$remaining_assets" -gt 0 ]; then
+                echo "     - WARNING: Directory \"./$src_dir\" still contains $remaining_assets asset files. Not deleting."
+                echo "       Run this to see what's left: find \"./$src_dir\" -type f"
             else
-                echo "     - Removing empty \"./$src_dir\"..."
+                if [ "$(ls -A "./$src_dir" 2>/dev/null)" ]; then
+                    echo "     - Attempting to remove non-empty \"./$src_dir\"..."
+                else
+                    echo "     - Removing empty \"./$src_dir\"..."
+                fi
+                rm -rf "./$src_dir"
             fi
-            rm -rf "./$src_dir"
         fi
     fi
 done
@@ -130,7 +272,7 @@ echo "→ Asset restructure complete."
 
 # --- 7. Update asset paths within CSS files ---
 echo "→ Updating asset paths within CSS files..."
-find ./css -name "*.css" -type f -print0 | while IFS= read -r -d '' css_file; do
+find ./src/css -name "*.css" -type f -print0 | while IFS= read -r -d '' css_file; do
     echo "   • Processing CSS file: \"$css_file\""
     perl -i.bak -p0777e '
         use File::Basename;
@@ -151,12 +293,22 @@ find ./css -name "*.css" -type f -print0 | while IFS= read -r -d '' css_file; do
             my $basename = get_asset_basename_css($original_path);
 
             if (length $basename > 0) {
-                if ($basename =~ /\.(?:png|jpe?g|gif|svg|webp|ico)$/i && -e "../images/$basename") {
-                    "url(" . $quote . "../images/" . $basename . $quote . ")";
-                } elsif ($basename =~ /\.(?:woff2?|ttf|eot|otf|svg)$/i && -e "../fonts/$basename") {
+                # Try to preserve directory structure for images first
+                if ($basename =~ /\.(?:png|jpe?g|gif|svg|webp|ico|avif)$/i) {
+                    my $cleaned_path = $original_path;
+                    $cleaned_path =~ s/^\.\.?\///;  # Remove leading ../
+                    $cleaned_path =~ s/^.*?\/(?=\w)//;  # Remove domain part, keep directory structure
+                    
+                    if (-e "../img/$cleaned_path") {
+                        "url(" . $quote . "../img/" . $cleaned_path . $quote . ")";
+                    } elsif (-e "../img/$basename") {
+                        "url(" . $quote . "../img/" . $basename . $quote . ")";
+                    } else {
+                        $full_match;
+                    }
+                } elsif ($basename =~ /\.(?:woff2?|ttf|eot|otf)$/i && -e "../fonts/$basename") {
                     "url(" . $quote . "../fonts/" . $basename . $quote . ")";
                 } else {
-                    # warn "CSS url() not rewritten (not found or unhandled type): $original_path in $ARGV\n";
                     $full_match;
                 }
             } else {
@@ -208,11 +360,11 @@ find . -name "*.html" -type f -print0 | while IFS= read -r -d '' html_file; do
         }
 
         # Define absolute paths to target directories (relative to script CWD)
-        my $css_dir_abs = "./css";
-        my $js_dir_abs = "./js";
-        my $img_dir_abs = "./images";
-        my $vid_dir_abs = "./videos";
-        my $font_dir_abs = "./fonts"; # Though fonts usually linked via CSS
+        my $css_dir_abs = "./src/css";
+        my $js_dir_abs = "./src/js";
+        my $img_dir_abs = "./src/img";
+        my $vid_dir_abs = "./src/videos";
+        my $font_dir_abs = "./src/fonts"; # Though fonts usually linked via CSS
 
         # Calculate relative path prefixes FROM the current HTML file TO the asset dirs
         my $css_rel_prefix = calculate_relative_path_html($css_dir_abs);
@@ -233,14 +385,47 @@ find . -name "*.html" -type f -print0 | while IFS= read -r -d '' html_file; do
         # --- <link href="..."> ---
         s{<link[^>]*?href=(["'"'"'])(.*?)\1}{
             my $quote = $1; my $original_path = $2; my $tag = $&;
-            my $basename = get_asset_basename_html($original_path);
-            if (length $basename > 0 && $basename =~ /\.css$/i && -e "$css_dir_abs/$basename") {
-                my $new_path = $css_rel_prefix . $basename; $tag =~ s/\Q$original_path\E/$new_path/; $tag;
-            } elsif (length $basename > 0 && $basename =~ /\.(?:png|jpe?g|gif|svg|webp|ico)$/i && -e "$img_dir_abs/$basename") { # favicons
-                my $new_path = $img_rel_prefix . $basename; $tag =~ s/\Q$original_path\E/$new_path/; $tag;
-            } elsif (length $basename > 0 && $basename =~ /\.(?:woff2?|ttf|eot|otf)$/i && -e "$font_dir_abs/$basename") { # Unlikely but possible
-                my $new_path = $font_rel_prefix . $basename; $tag =~ s/\Q$original_path\E/$new_path/; $tag;
-            } else { $&; }
+            
+            # Check for CSS files
+            if ($original_path =~ /\.css$/i) {
+                my $basename = get_asset_basename_html($original_path);
+                if (length $basename > 0 && -e "$css_dir_abs/$basename") {
+                    my $new_path = $css_rel_prefix . $basename; 
+                    $tag =~ s/\Q$original_path\E/$new_path/; 
+                    $tag;
+                } else { $&; }
+            }
+            # Check for images (favicons, etc.) - preserve directory structure
+            elsif ($original_path =~ /\.(?:png|jpe?g|gif|svg|webp|ico)$/i) {
+                # Try to find the file in src/img with its directory structure
+                my $cleaned_path = $original_path;
+                $cleaned_path =~ s/^\.\.?\///;  # Remove leading ../
+                $cleaned_path =~ s/^.*?\/(?=\w)//;  # Remove domain part, keep directory structure
+                
+                if (-e "$img_dir_abs/$cleaned_path") {
+                    my $new_path = $img_rel_prefix . $cleaned_path;
+                    $tag =~ s/\Q$original_path\E/$new_path/; 
+                    $tag;
+                } else {
+                    # Fallback to basename only
+                    my $basename = get_asset_basename_html($original_path);
+                    if (length $basename > 0 && -e "$img_dir_abs/$basename") {
+                        my $new_path = $img_rel_prefix . $basename; 
+                        $tag =~ s/\Q$original_path\E/$new_path/; 
+                        $tag;
+                    } else { $&; }
+                }
+            }
+            # Check for fonts
+            elsif ($original_path =~ /\.(?:woff2?|ttf|eot|otf)$/i) {
+                my $basename = get_asset_basename_html($original_path);
+                if (length $basename > 0 && -e "$font_dir_abs/$basename") {
+                    my $new_path = $font_rel_prefix . $basename; 
+                    $tag =~ s/\Q$original_path\E/$new_path/; 
+                    $tag;
+                } else { $&; }
+            }
+            else { $&; }
         }gei;
 
         # --- <script src="..."> ---
@@ -281,10 +466,27 @@ find . -name "*.html" -type f -print0 | while IFS= read -r -d '' html_file; do
         # --- <img>, <source src="..."> for images, <a href="..."> to images ---
         s{<(img|source|a)\s[^>]*?(?:src|href)=(["'"'"'])([^"'"'"'>]+?)\2}{
             my ($tag_name, $quote, $original_path) = ($1, $2, $3); my $tag = $&;
-            my $basename = get_asset_basename_html($original_path);
-            if (length $basename > 0 && $basename =~ /\.(?:png|jpe?g|gif|svg|webp|ico)$/i && -e "$img_dir_abs/$basename") {
-                 my $new_path = $img_rel_prefix . $basename; $tag =~ s/\Q$original_path\E/$new_path/; $tag;
-             } else { $&; }
+            
+            if ($original_path =~ /\.(?:png|jpe?g|gif|svg|webp|ico|avif)$/i) {
+                # Try to preserve directory structure first
+                my $cleaned_path = $original_path;
+                $cleaned_path =~ s/^\.\.?\///;  # Remove leading ../
+                $cleaned_path =~ s/^.*?\/(?=\w)//;  # Remove domain part, keep directory structure
+                
+                if (-e "$img_dir_abs/$cleaned_path") {
+                    my $new_path = $img_rel_prefix . $cleaned_path;
+                    $tag =~ s/\Q$original_path\E/$new_path/; 
+                    $tag;
+                } else {
+                    # Fallback to basename only
+                    my $basename = get_asset_basename_html($original_path);
+                    if (length $basename > 0 && -e "$img_dir_abs/$basename") {
+                        my $new_path = $img_rel_prefix . $basename; 
+                        $tag =~ s/\Q$original_path\E/$new_path/; 
+                        $tag;
+                    } else { $&; }
+                }
+            } else { $&; }
         }gei;
 
         # --- <img srcset="...">, <source srcset="..."> ---
@@ -293,10 +495,20 @@ find . -name "*.html" -type f -print0 | while IFS= read -r -d '' html_file; do
             my @new_sources;
             foreach my $source_item (split /\s*,\s*/, $srcset_content) {
                  my ($url, $descriptor) = ($source_item =~ m/^(\S+)(?:\s+(\S+))?$/);
-                 if (defined $url) {
-                     my $basename = get_asset_basename_html($url);
-                     if (length $basename > 0 && $basename =~ /\.(?:png|jpe?g|gif|svg|webp|ico)$/i && -e "$img_dir_abs/$basename") {
-                         $url = $img_rel_prefix . $basename;
+                 if (defined $url && $url =~ /\.(?:png|jpe?g|gif|svg|webp|ico|avif)$/i) {
+                     # Try to preserve directory structure first
+                     my $cleaned_path = $url;
+                     $cleaned_path =~ s/^\.\.?\///;  # Remove leading ../
+                     $cleaned_path =~ s/^.*?\/(?=\w)//;  # Remove domain part, keep directory structure
+                     
+                     if (-e "$img_dir_abs/$cleaned_path") {
+                         $url = $img_rel_prefix . $cleaned_path;
+                     } else {
+                         # Fallback to basename only
+                         my $basename = get_asset_basename_html($url);
+                         if (length $basename > 0 && -e "$img_dir_abs/$basename") {
+                             $url = $img_rel_prefix . $basename;
+                         }
                      }
                  }
                  push @new_sources, (defined $descriptor ? "$url $descriptor" : $url);
