@@ -2,18 +2,18 @@
 
 # --- 1. Argument check ---
 if [ -z "$1" ]; then
-    echo "ERROR: No SITE_URL provided."
-    echo "Usage: $0 <SITE_URL>"
-    exit 1
+	echo "ERROR: No SITE_URL provided."
+	echo "Usage: $0 <SITE_URL>"
+	exit 1
 fi
 SITE_URL_INPUT="$1"
 
 if [[ ! "$SITE_URL_INPUT" =~ ^https?:// ]]; then
-    SITE_URL_FOR_PARSING="https://$SITE_URL_INPUT"
-    SITE_URL_FOR_WGET="https://$SITE_URL_INPUT"
+	SITE_URL_FOR_PARSING="https://$SITE_URL_INPUT"
+	SITE_URL_FOR_WGET="https://$SITE_URL_INPUT"
 else
-    SITE_URL_FOR_PARSING="$SITE_URL_INPUT"
-    SITE_URL_FOR_WGET="$SITE_URL_INPUT"
+	SITE_URL_FOR_PARSING="$SITE_URL_INPUT"
+	SITE_URL_FOR_WGET="$SITE_URL_INPUT"
 fi
 SITE_URL_FOR_WGET=${SITE_URL_FOR_WGET%/}
 echo "→ SITE_URL for Wget: \"$SITE_URL_FOR_WGET\""
@@ -21,18 +21,18 @@ echo "→ SITE_URL for Wget: \"$SITE_URL_FOR_WGET\""
 # --- 2. Output directory setup ---
 OUTPUT_DIR_NAME=$(echo "$SITE_URL_FOR_PARSING" | awk -F/ '{print $3}')
 if [ -z "$OUTPUT_DIR_NAME" ]; then
-    echo "ERROR: Could not extract a valid domain name from '$SITE_URL_INPUT'." >&2
-    exit 1
+	echo "ERROR: Could not extract a valid domain name from '$SITE_URL_INPUT'." >&2
+	exit 1
 fi
 OUTPUT_DIR="./$OUTPUT_DIR_NAME"
 echo "→ Creating output directory: \"$OUTPUT_DIR\""
 if [ -d "$OUTPUT_DIR" ]; then
-    echo "→ Output directory '$OUTPUT_DIR' already exists. Removing it before download."
-    rm -rf "$OUTPUT_DIR"
-    if [ $? -ne 0 ]; then
-        echo "ERROR: Failed to remove existing directory '$OUTPUT_DIR'." >&2
-        exit 1
-    fi
+	echo "→ Output directory '$OUTPUT_DIR' already exists. Removing it before download."
+	rm -rf "$OUTPUT_DIR"
+	if [ $? -ne 0 ]; then
+		echo "ERROR: Failed to remove existing directory '$OUTPUT_DIR'." >&2
+		exit 1
+	fi
 fi
 mkdir -p "$OUTPUT_DIR"
 OUTPUT_DIR_ABSOLUTE=$(cd "$OUTPUT_DIR" && pwd)
@@ -54,33 +54,33 @@ echo "→ Wget log file: \"$WGET_LOG_FILE\""
 
 # --- 5. Download with Wget ---
 cd "$OUTPUT_DIR_ABSOLUTE" || {
-    echo "ERROR: Cannot cd to \"$OUTPUT_DIR_ABSOLUTE\"" >&2
-    exit 1
+	echo "ERROR: Cannot cd to \"$OUTPUT_DIR_ABSOLUTE\"" >&2
+	exit 1
 }
 echo "→ Starting download into \"$OUTPUT_DIR_ABSOLUTE\" ..."
 wget \
-    --recursive \
-    --page-requisites \
-    --adjust-extension \
-    --convert-links \
-    --restrict-file-names=windows \
-    --domains "$ALLOWED_DOMAINS" \
-    --no-parent \
-    --level=inf \
-    --timestamping \
-    --user-agent="$USER_AGENT" \
-    --span-hosts \
-    --execute robots=off \
-    --wait=0.5 --random-wait \
-    -nv \
-    -o "$WGET_LOG_FILE" \
-    "$SITE_URL_FOR_WGET"
+	--recursive \
+	--page-requisites \
+	--adjust-extension \
+	--convert-links \
+	--restrict-file-names=windows \
+	--domains "$ALLOWED_DOMAINS" \
+	--no-parent \
+	--level=inf \
+	--timestamping \
+	--user-agent="$USER_AGENT" \
+	--span-hosts \
+	--execute robots=off \
+	--wait=0.5 --random-wait \
+	-nv \
+	-o "$WGET_LOG_FILE" \
+	"$SITE_URL_FOR_WGET"
 WGET_EXIT_CODE=$?
 echo "→ Wget exit code: $WGET_EXIT_CODE"
 if [ $WGET_EXIT_CODE -ne 0 ] && [ $WGET_EXIT_CODE -ne 8 ]; then
-    echo "WARNING: Wget completed with code $WGET_EXIT_CODE (check \"$WGET_LOG_FILE\"). Some assets might be missing."
+	echo "WARNING: Wget completed with code $WGET_EXIT_CODE (check \"$WGET_LOG_FILE\"). Some assets might be missing."
 else
-    echo "→ Download completed (or partially completed with recoverable errors)."
+	echo "→ Download completed (or partially completed with recoverable errors)."
 fi
 echo "→ Current directory after wget: $(pwd)"
 
@@ -89,10 +89,10 @@ echo "→ Current directory after wget: $(pwd)"
 # --- 6. Restructure assets ---
 echo "→ Restructuring assets..."
 if [ -d "./$BASE_DOMAIN" ]; then
-    echo "   • Moving primary site content from \"./$BASE_DOMAIN\"/ to root..."
-    setopt dotglob
-    mv -n "./$BASE_DOMAIN"/* . 2>/dev/null
-    unsetopt dotglob
+	echo "   • Moving primary site content from \"./$BASE_DOMAIN\"/ to root..."
+	setopt dotglob
+	mv -n "./$BASE_DOMAIN"/* . 2>/dev/null
+	unsetopt dotglob
 fi
 
 echo "   • Creating target asset directories: src/css/, src/js/, src/img/, src/videos/, src/fonts/, src/static/"
@@ -102,128 +102,128 @@ asset_find_exclude_paths="-name src -o -name resources -o -name system"
 
 echo "   • Moving .css files to ./src/css/"
 find . -type d \( $asset_find_exclude_paths \) -prune -o -type f -name "*.css" -print0 | while IFS= read -r -d '' file; do
-    if [ -f "$file" ]; then
-        basename_file=$(basename "$file")
-        target="./src/css/$basename_file"
-        counter=1
-        # Handle naming conflicts by adding numbers
-        while [ -f "$target" ]; do
-            name_without_ext="${basename_file%.*}"
-            ext="${basename_file##*.}"
-            target="./src/css/${name_without_ext}_${counter}.${ext}"
-            counter=$((counter + 1))
-        done
-        mv "$file" "$target" && echo "     Moved: $file -> $target"
-    fi
+	if [ -f "$file" ]; then
+		basename_file=$(basename "$file")
+		target="./src/css/$basename_file"
+		counter=1
+		# Handle naming conflicts by adding numbers
+		while [ -f "$target" ]; do
+			name_without_ext="${basename_file%.*}"
+			ext="${basename_file##*.}"
+			target="./src/css/${name_without_ext}_${counter}.${ext}"
+			counter=$((counter + 1))
+		done
+		mv "$file" "$target" && echo "     Moved: $file -> $target"
+	fi
 done
 
 echo "   • Moving .js files to ./src/js/"
 find . -type d \( $asset_find_exclude_paths \) -prune -o -type f -name "*.js" -print0 | while IFS= read -r -d '' file; do
-    if [ -f "$file" ]; then
-        basename_file=$(basename "$file")
-        target="./src/js/$basename_file"
-        counter=1
-        while [ -f "$target" ]; do
-            name_without_ext="${basename_file%.*}"
-            ext="${basename_file##*.}"
-            target="./src/js/${name_without_ext}_${counter}.${ext}"
-            counter=$((counter + 1))
-        done
-        mv "$file" "$target" && echo "     Moved: $file -> $target"
-    fi
+	if [ -f "$file" ]; then
+		basename_file=$(basename "$file")
+		target="./src/js/$basename_file"
+		counter=1
+		while [ -f "$target" ]; do
+			name_without_ext="${basename_file%.*}"
+			ext="${basename_file##*.}"
+			target="./src/js/${name_without_ext}_${counter}.${ext}"
+			counter=$((counter + 1))
+		done
+		mv "$file" "$target" && echo "     Moved: $file -> $target"
+	fi
 done
 
 echo "   • Moving image files to ./src/img/"
 find . -type d \( $asset_find_exclude_paths \) -prune -o -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.gif" -o -iname "*.svg" -o -iname "*.webp" -o -iname "*.ico" -o -iname "*.avif" \) -print0 | while IFS= read -r -d '' file; do
-    if [ -f "$file" ]; then
-        # Keep directory structure for images
-        rel_path="${file#./}"
-        rel_dir=$(dirname "$rel_path")
-        basename_file=$(basename "$file")
-        
-        # Create the directory structure inside src/img
-        if [ "$rel_dir" != "." ]; then
-            mkdir -p "./src/img/$rel_dir"
-            target="./src/img/$rel_path"
-        else
-            target="./src/img/$basename_file"
-        fi
-        
-        counter=1
-        original_target="$target"
-        while [ -f "$target" ]; do
-            dir_part=$(dirname "$original_target")
-            name_without_ext="${basename_file%.*}"
-            ext="${basename_file##*.}"
-            if [ "$ext" = "$basename_file" ]; then
-                target="$dir_part/${basename_file}_${counter}"
-            else
-                target="$dir_part/${name_without_ext}_${counter}.${ext}"
-            fi
-            counter=$((counter + 1))
-        done
-        mv "$file" "$target" && echo "     Moved: $file -> $target"
-    fi
+	if [ -f "$file" ]; then
+		# Keep directory structure for images
+		rel_path="${file#./}"
+		rel_dir=$(dirname "$rel_path")
+		basename_file=$(basename "$file")
+
+		# Create the directory structure inside src/img
+		if [ "$rel_dir" != "." ]; then
+			mkdir -p "./src/img/$rel_dir"
+			target="./src/img/$rel_path"
+		else
+			target="./src/img/$basename_file"
+		fi
+
+		counter=1
+		original_target="$target"
+		while [ -f "$target" ]; do
+			dir_part=$(dirname "$original_target")
+			name_without_ext="${basename_file%.*}"
+			ext="${basename_file##*.}"
+			if [ "$ext" = "$basename_file" ]; then
+				target="$dir_part/${basename_file}_${counter}"
+			else
+				target="$dir_part/${name_without_ext}_${counter}.${ext}"
+			fi
+			counter=$((counter + 1))
+		done
+		mv "$file" "$target" && echo "     Moved: $file -> $target"
+	fi
 done
 
 echo "   • Moving video files to ./src/videos/"
 find . -type d \( $asset_find_exclude_paths \) -prune -o -type f \( -iname "*.mp4" -o -iname "*.webm" -o -iname "*.ogv" -o -iname "*.mov" \) -print0 | while IFS= read -r -d '' file; do
-    if [ -f "$file" ]; then
-        basename_file=$(basename "$file")
-        target="./src/videos/$basename_file"
-        counter=1
-        while [ -f "$target" ]; do
-            name_without_ext="${basename_file%.*}"
-            ext="${basename_file##*.}"
-            if [ "$ext" = "$basename_file" ]; then
-                target="./src/videos/${basename_file}_${counter}"
-            else
-                target="./src/videos/${name_without_ext}_${counter}.${ext}"
-            fi
-            counter=$((counter + 1))
-        done
-        mv "$file" "$target" && echo "     Moved: $file -> $target"
-    fi
+	if [ -f "$file" ]; then
+		basename_file=$(basename "$file")
+		target="./src/videos/$basename_file"
+		counter=1
+		while [ -f "$target" ]; do
+			name_without_ext="${basename_file%.*}"
+			ext="${basename_file##*.}"
+			if [ "$ext" = "$basename_file" ]; then
+				target="./src/videos/${basename_file}_${counter}"
+			else
+				target="./src/videos/${name_without_ext}_${counter}.${ext}"
+			fi
+			counter=$((counter + 1))
+		done
+		mv "$file" "$target" && echo "     Moved: $file -> $target"
+	fi
 done
 
 echo "   • Moving font files to ./src/fonts/"
 find . -type d \( $asset_find_exclude_paths \) -prune -o -type f \( -iname "*.woff" -o -iname "*.woff2" -o -iname "*.ttf" -o -iname "*.eot" -o -iname "*.otf" \) -print0 | while IFS= read -r -d '' file; do
-    if [ -f "$file" ]; then
-        basename_file=$(basename "$file")
-        target="./src/fonts/$basename_file"
-        counter=1
-        while [ -f "$target" ]; do
-            name_without_ext="${basename_file%.*}"
-            ext="${basename_file##*.}"
-            if [ "$ext" = "$basename_file" ]; then
-                target="./src/fonts/${basename_file}_${counter}"
-            else
-                target="./src/fonts/${name_without_ext}_${counter}.${ext}"
-            fi
-            counter=$((counter + 1))
-        done
-        mv "$file" "$target" && echo "     Moved: $file -> $target"
-    fi
+	if [ -f "$file" ]; then
+		basename_file=$(basename "$file")
+		target="./src/fonts/$basename_file"
+		counter=1
+		while [ -f "$target" ]; do
+			name_without_ext="${basename_file%.*}"
+			ext="${basename_file##*.}"
+			if [ "$ext" = "$basename_file" ]; then
+				target="./src/fonts/${basename_file}_${counter}"
+			else
+				target="./src/fonts/${name_without_ext}_${counter}.${ext}"
+			fi
+			counter=$((counter + 1))
+		done
+		mv "$file" "$target" && echo "     Moved: $file -> $target"
+	fi
 done
 
 echo "   • Moving other static files to ./src/static/"
 find . -type d \( $asset_find_exclude_paths \) -prune -o -type f \( -iname "*.xml" -o -iname "*.json" -o -iname "*.txt" -o -iname "*.pdf" \) -print0 | while IFS= read -r -d '' file; do
-    if [ -f "$file" ]; then
-        basename_file=$(basename "$file")
-        target="./src/static/$basename_file"
-        counter=1
-        while [ -f "$target" ]; do
-            name_without_ext="${basename_file%.*}"
-            ext="${basename_file##*.}"
-            if [ "$ext" = "$basename_file" ]; then
-                target="./src/static/${basename_file}_${counter}"
-            else
-                target="./src/static/${name_without_ext}_${counter}.${ext}"
-            fi
-            counter=$((counter + 1))
-        done
-        mv "$file" "$target" && echo "     Moved: $file -> $target"
-    fi
+	if [ -f "$file" ]; then
+		basename_file=$(basename "$file")
+		target="./src/static/$basename_file"
+		counter=1
+		while [ -f "$target" ]; do
+			name_without_ext="${basename_file%.*}"
+			ext="${basename_file##*.}"
+			if [ "$ext" = "$basename_file" ]; then
+				target="./src/static/${basename_file}_${counter}"
+			else
+				target="./src/static/${name_without_ext}_${counter}.${ext}"
+			fi
+			counter=$((counter + 1))
+		done
+		mv "$file" "$target" && echo "     Moved: $file -> $target"
+	fi
 done
 
 echo "   • Verifying asset moves..."
@@ -242,29 +242,29 @@ remaining_js=$(find . -type d \( $asset_find_exclude_paths \) -prune -o -type f 
 remaining_img=$(find . -type d \( $asset_find_exclude_paths \) -prune -o -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.gif" -o -iname "*.svg" -o -iname "*.webp" -o -iname "*.ico" \) -print | wc -l)
 
 if [ "$remaining_css" -gt 0 ] || [ "$remaining_js" -gt 0 ] || [ "$remaining_img" -gt 0 ]; then
-    echo "     - WARNING: Some assets were not moved: $remaining_css CSS, $remaining_js JS, $remaining_img images"
-    echo "       Check these files manually before proceeding with cleanup"
+	echo "     - WARNING: Some assets were not moved: $remaining_css CSS, $remaining_js JS, $remaining_img images"
+	echo "       Check these files manually before proceeding with cleanup"
 fi
 
 echo "   • Cleaning up known source directories (e.g., from CDNs)..."
 for src_dir in "${POTENTIAL_SOURCE_DIRS[@]}"; do
-    if [ -d "./$src_dir" ]; then
-        if [[ "$src_dir" != "src" && "$src_dir" != "resources" && "$src_dir" != "system" ]]; then
-            # Check if directory still contains any assets before deleting
-            remaining_assets=$(find "./$src_dir" -type f \( -name "*.css" -o -name "*.js" -o -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.gif" -o -name "*.svg" -o -name "*.webp" -o -name "*.ico" -o -name "*.mp4" -o -name "*.webm" -o -name "*.woff" -o -name "*.woff2" -o -name "*.ttf" \) 2>/dev/null | wc -l)
-            if [ "$remaining_assets" -gt 0 ]; then
-                echo "     - WARNING: Directory \"./$src_dir\" still contains $remaining_assets asset files. Not deleting."
-                echo "       Run this to see what's left: find \"./$src_dir\" -type f"
-            else
-                if [ "$(ls -A "./$src_dir" 2>/dev/null)" ]; then
-                    echo "     - Attempting to remove non-empty \"./$src_dir\"..."
-                else
-                    echo "     - Removing empty \"./$src_dir\"..."
-                fi
-                rm -rf "./$src_dir"
-            fi
-        fi
-    fi
+	if [ -d "./$src_dir" ]; then
+		if [[ "$src_dir" != "src" && "$src_dir" != "resources" && "$src_dir" != "system" ]]; then
+			# Check if directory still contains any assets before deleting
+			remaining_assets=$(find "./$src_dir" -type f \( -name "*.css" -o -name "*.js" -o -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.gif" -o -name "*.svg" -o -name "*.webp" -o -name "*.ico" -o -name "*.mp4" -o -name "*.webm" -o -name "*.woff" -o -name "*.woff2" -o -name "*.ttf" \) 2>/dev/null | wc -l)
+			if [ "$remaining_assets" -gt 0 ]; then
+				echo "     - WARNING: Directory \"./$src_dir\" still contains $remaining_assets asset files. Not deleting."
+				echo "       Run this to see what's left: find \"./$src_dir\" -type f"
+			else
+				if [ "$(ls -A "./$src_dir" 2>/dev/null)" ]; then
+					echo "     - Attempting to remove non-empty \"./$src_dir\"..."
+				else
+					echo "     - Removing empty \"./$src_dir\"..."
+				fi
+				rm -rf "./$src_dir"
+			fi
+		fi
+	fi
 done
 echo "   • Cleaning up remaining empty directories..."
 find . -mindepth 1 -type d -empty -delete
@@ -273,8 +273,8 @@ echo "→ Asset restructure complete."
 # --- 7. Update asset paths within CSS files ---
 echo "→ Updating asset paths within CSS files..."
 find ./src/css -name "*.css" -type f -print0 | while IFS= read -r -d '' css_file; do
-    echo "   • Processing CSS file: \"$css_file\""
-    perl -i.bak -p0777e '
+	echo "   • Processing CSS file: \"$css_file\""
+	perl -i.bak -p0777e '
         use File::Basename;
         use URI::Escape;
 
@@ -323,11 +323,11 @@ echo "→ CSS path updating complete."
 # THIS SECTION ONLY MODIFIES *.html FILES
 echo "→ Updating asset paths in HTML files..."
 find . -name "*.html" -type f -print0 | while IFS= read -r -d '' html_file; do
-    echo "   • Processing HTML file: \"$html_file\""
-    html_file_rel_path=${html_file#./}
-    export CURRENT_HTML_FILE_PATH_FOR_PERL="$html_file_rel_path" # Pass to Perl
+	echo "   • Processing HTML file: \"$html_file\""
+	html_file_rel_path=${html_file#./}
+	export CURRENT_HTML_FILE_PATH_FOR_PERL="$html_file_rel_path" # Pass to Perl
 
-    perl -i.bak -p0777e '
+	perl -i.bak -p0777e '
         use File::Spec;
         use File::Basename;
         use URI::Escape;

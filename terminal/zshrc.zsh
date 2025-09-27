@@ -20,6 +20,21 @@ export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_AUTO_UPDATE
 
 #functions
+function resolve-ins.sh {
+	awk '
+  /^<<<<<<< / { in_conflict=1; next }    # start conflict
+  /^=======/  { in_conflict_keep=0; next }  # switch to OUT side
+  /^>>>>>>>/  { in_conflict=0; next }    # end conflict
+  {
+    if (in_conflict) {
+      if (in_conflict_keep != 0) print $0   # only print the first side
+    } else {
+      print $0
+    }
+  }
+' "$1"
+}
+
 function fetch {
 	if [ "$(command -v wget)" ]; then
 		/Users/dotkaio/.config/scripts/shell/download_webflow.sh "$@"
