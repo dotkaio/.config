@@ -251,26 +251,32 @@ function finder {
 }
 
 function plist {
-	function get_plist {
-		for the_path in $(mdfind -name LaunchDaemons) $(mdfind -name LaunchAgents); do
-			[[ -d "$the_path" ]] && for file in "$the_path"/*; do
-				echo "$file"
-			done
-		done
+	local FILE="$CONFIG/config/plist_shasum.txt"
+	function get_files_path {
+		find "$HOME/Library/Preferences" -name "*.plist" -type f
 	}
 	function get_shasum {
-		get_plist | while read -r file; do
-			shasum -a 256 "$file"
-		done
+		get_files_path | xargs shasum -a 256 | sort
 	}
-	if [[ "$1" == "get" ]]; then
-		[[ -f "$CONFIG/plist_shasum.txt" ]] && rm "$CONFIG/plist_shasum.txt"
-		get_shasum >"$CONFIG/plist_shasum.txt"
-	elif [[ "$1" == "verify" ]]; then
-		colordiff <(get_shasum) <(cat "$CONFIG/plist_shasum.txt")
-	else
-		get_shasum
-	fi
+	case "$1" in
+	"check")
+		if [[ ! -f "$FILE" ]]; then
+			echo "No plist_shasum.txt file found. Creating one..."
+			get_shasum >"$FILE"
+			echo "File created at $FILE"
+		else
+			echo "Checking plist files against $FILE"
+			get_shasum | diff -u "$FILE" - || echo "No changes detected"
+		fi
+		;;
+	"update")
+		get_shasum >"$FILE"
+		echo "File updated at $FILE"
+		;;
+	*)
+		echo "Usage: plist {check|update}"
+		;;
+	esac
 }
 
 function remove {

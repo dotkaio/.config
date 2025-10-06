@@ -29,7 +29,7 @@ Scripts and clippings for use when working in [Script Debugger][f2ac73e7].
   - Insert a handler description at the beginning of the handler currently selected. The description will inserted by creating a Script Debugger clipping _dynamically_ with the handler's name and parameters.
   - Check out the demo below.
 
-    <p><img src="../imgs/sdb-dynamicdescription.gif" width="500"</p>
+    <p><img src="./imgs/sdb-dynamicdescription.gif" width="500"</p>
 
 - [Open Used Script Libraries][k9g57d35]&emsp;<kbd>⌃</kbd><kbd>⌥</kbd><kbd>O</kbd>
   - Open the script libraries that are currently in use in the front script.

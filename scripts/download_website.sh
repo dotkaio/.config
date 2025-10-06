@@ -321,7 +321,9 @@ echo "→ CSS path updating complete."
 
 # --- 8. Update asset paths in HTML files ---
 # THIS SECTION ONLY MODIFIES *.html FILES
+
 echo "→ Updating asset paths in HTML files..."
+
 find . -name "*.html" -type f -print0 | while IFS= read -r -d '' html_file; do
 	echo "   • Processing HTML file: \"$html_file\""
 	html_file_rel_path=${html_file#./}

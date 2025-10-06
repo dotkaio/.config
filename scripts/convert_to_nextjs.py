@@ -7,17 +7,21 @@ import subprocess
 from pathlib import Path
 from typing import Tuple
 
+
 def parse_html_file(file_path: Path) -> Tuple[str, str]:
     """
     Parse an HTML file to extract the <title> and <body> content.
     Returns a tuple (title, body_content).
     """
     content = file_path.read_text(encoding="utf-8")
-    title_match = re.search(r"<title>(.*?)</title>", content, re.IGNORECASE | re.DOTALL)
+    title_match = re.search(r"<title>(.*?)</title>",
+                            content, re.IGNORECASE | re.DOTALL)
     title = title_match.group(1).strip() if title_match else "Page"
-    body_match = re.search(r"<body[^>]*>(.*?)</body>", content, re.IGNORECASE | re.DOTALL)
+    body_match = re.search(
+        r"<body[^>]*>(.*?)</body>", content, re.IGNORECASE | re.DOTALL)
     body_content = body_match.group(1).strip() if body_match else content
     return title, body_content
+
 
 def remove_html_extension_links(html_content: str) -> str:
     """
@@ -27,15 +31,18 @@ def remove_html_extension_links(html_content: str) -> str:
     pattern = r'(?P<prefix>href=["\'])(?P<url>[^"\']+?)(?P<extension>\.html?)(?P<suffix>["\'])'
     return re.sub(pattern, r"\g<prefix>\g<url>\g<suffix>", html_content)
 
+
 def fix_form_configuration(html_content: str) -> str:
     """
     Fixes form configuration issues by:
       - Replacing any action attribute in <form> tags with action="#"
       - Removing Webflow-specific data attributes.
     """
-    html_content = re.sub(r'(<form[^>]*?)\s*action="[^"]*"', r'\1 action="#"', html_content)
+    html_content = re.sub(
+        r'(<form[^>]*?)\s*action="[^"]*"', r'\1 action="#"', html_content)
     html_content = re.sub(r'\sdata-wf-[^=]+="[^"]*"', "", html_content)
     return html_content
+
 
 def process_inner_html(html_content: str) -> str:
     """
@@ -45,6 +52,7 @@ def process_inner_html(html_content: str) -> str:
     processed = remove_html_extension_links(html_content)
     return fix_form_configuration(processed)
 
+
 def convert_html_to_nextjs_page(src_path: Path, dest_path: Path) -> None:
     """
     Converts an HTML file into a Next.js page (.js file).
@@ -52,7 +60,7 @@ def convert_html_to_nextjs_page(src_path: Path, dest_path: Path) -> None:
     title, body_content = parse_html_file(src_path)
     body_content = process_inner_html(body_content)
     json_body = json.dumps(body_content)
-    
+
     page_content = f"""import Head from 'next/head';
 
 export default function Page() {{
@@ -67,6 +75,7 @@ export default function Page() {{
 }}
 """
     dest_path.write_text(page_content, encoding="utf-8")
+
 
 def rewrite_css_urls(css_content: str, css_file: Path, project_root: Path) -> str:
     """
@@ -93,6 +102,7 @@ def rewrite_css_urls(css_content: str, css_file: Path, project_root: Path) -> st
 
     return pattern.sub(replacer, css_content)
 
+
 def setup_nextjs_project(output_dir: Path) -> None:
     """
     Sets up the Next.js project inside the output directory:
@@ -110,9 +120,12 @@ def setup_nextjs_project(output_dir: Path) -> None:
         "build": "next build",
         "start": "next start"
     }
-    package_json_path.write_text(json.dumps(package_data, indent=2), encoding="utf-8")
-    subprocess.run(["npm", "install", "next", "react", "react-dom"], cwd=output_dir, check=True)
+    package_json_path.write_text(json.dumps(
+        package_data, indent=2), encoding="utf-8")
+    subprocess.run(["npm", "install", "next", "react",
+                   "react-dom"], cwd=output_dir, check=True)
     print("Sir, Next.js project setup complete.")
+
 
 def main() -> None:
     current_dir = Path.cwd()
@@ -127,7 +140,8 @@ def main() -> None:
 
     # Initialize the global CSS file.
     global_css_path = styles_dir / "global.css"
-    global_css_path.write_text("/* Global CSS aggregated from downloaded project */\n\n", encoding="utf-8")
+    global_css_path.write_text(
+        "/* Global CSS aggregated from downloaded project */\n\n", encoding="utf-8")
 
     # Create a custom _app.js file that imports the global CSS.
     app_js_path = pages_dir / "_app.js"
@@ -152,7 +166,8 @@ def main() -> None:
         if suffix in {".html", ".htm"}:
             js_dest = pages_dir / rel_path.with_suffix(".js")
             js_dest.parent.mkdir(parents=True, exist_ok=True)
-            print(f"Converting: {rel_path} -> {js_dest.relative_to(current_dir)}")
+            print(
+                f"Converting: {rel_path} -> {js_dest.relative_to(current_dir)}")
             convert_html_to_nextjs_page(file_path, js_dest)
         elif suffix == ".css":
             print(f"Appending CSS from: {rel_path} to global.css")
@@ -165,11 +180,14 @@ def main() -> None:
         else:
             dest_asset = public_dir / rel_path
             dest_asset.parent.mkdir(parents=True, exist_ok=True)
-            print(f"Copying asset: {rel_path} -> {dest_asset.relative_to(current_dir)}")
+            print(
+                f"Copying asset: {rel_path} -> {dest_asset.relative_to(current_dir)}")
             shutil.copy2(str(file_path), str(dest_asset))
 
-    print(f"Sir, conversion complete. Your Next.js app is ready at: {output_dir}")
+    print(
+        f"Sir, conversion complete. Your Next.js app is ready at: {output_dir}")
     setup_nextjs_project(output_dir)
+
 
 if __name__ == "__main__":
     main()

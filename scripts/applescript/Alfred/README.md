@@ -9,7 +9,7 @@ Various scripts for Alfred use.
 - [Show Recent Files for Front App][f87hsj34]&emsp;<kbd>hyperkey</kbd><kbd>O</kbd>&emsp; :earth_americas:
     - Super useful and great when set as a keyboard shortcut, check out the demo below.
 
-    <p><img src="../imgs/alfred-recentfilesdemo.gif" width="800"</p>
+    <p><img src="./imgs/alfred-recentfilesdemo.gif" width="800"</p>
 
 - [Browse Current Workflow in Alfred][6274c240]&emsp;<kbd>⌘</kbd><kbd>R</kbd>
     - Great way to get to the files of the workflow you are looking at quickly.
