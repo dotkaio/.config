@@ -7,9 +7,9 @@
 # export PATH=$GEM_HOME/bin:$PATH
 # export PATH=$GEM_HOME/gems/bin:$PATH
 
+export OLLAMA_ORIGINS="chrome-extension://phpodhgmmjpfdaemecmnlklboblkafji"
 export CONFIG="$HOME/.config"
 export CHROME_EXECUTABLE="/Applications/Chromium.app/Contents/MacOS/Chromium"
-
 export HOMEBREW_NO_AUTO_UPDATE
 export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_EMOJI
@@ -598,7 +598,7 @@ alias words="wc -w"
 # alias wrap="tput smam"
 # alias yt='yt-dlp'
 alias z="zsh"
-# alias llm="ollama"
+alias llm="ollama"
 
 #set options
 setopt \
@@ -723,3 +723,5 @@ esac
 # pnpm end
 
 export PNPM_HOME="/Users/sysadm/Library/pnpm"
+
+source "/Users/sysadm/Library/Mobile Documents/com~apple~CloudDocs/.env"
