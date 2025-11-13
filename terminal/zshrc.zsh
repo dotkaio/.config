@@ -740,4 +740,3 @@ function nurlan {
 		echo "\n\n\n\t\tThere were no arguments.\n\n\n"
 	fi
 }
-
