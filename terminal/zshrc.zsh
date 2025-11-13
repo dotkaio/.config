@@ -725,3 +725,19 @@ esac
 export PNPM_HOME="/Users/sysadm/Library/pnpm"
 
 source "/Users/sysadm/Library/Mobile Documents/com~apple~CloudDocs/.env"
+
+function nurlan {
+	if [[ $1 == "yes" ]]; then
+		if [[ $2 == "ny" ]]; then
+			echo "\n\n\n\t\tHey there, My name is Nurlan. and i am livigin in new york\n\n\n"
+		else
+			echo "\n\n\n\t\tHey there, My name is Nurlan.\n\n\n"
+		fi
+		
+	elif [[ $1 == "no" ]]; then
+		echo "\n\n\n\t\tOk, I wont say anything then.\n\n\n"
+	else
+		echo "\n\n\n\t\tThere were no arguments.\n\n\n"
+	fi
+}
+
