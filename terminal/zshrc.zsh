@@ -18,6 +18,8 @@ export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_AUTO_UPDATE
+source "/Users/sysadm/Library/Mobile Documents/com~apple~CloudDocs/.env"
+[ -f "$HOME/.hushlogin" ] || touch "$HOME/.hushlogin"
 
 #functions
 function resolve-ins.sh {
@@ -346,22 +348,17 @@ function icloud {
 }
 
 function clone {
-	# check if folder inside documents/dev exists
-	[[ ! -d "$HOME/Developer" ]] && mkdir -p "$HOME/Developer"
-	cd "$HOME/Developer" || return
-	if [[ "$1" =~ ^https?:// ]]; then
-		# check if there is querry parameter on the url. if so remove it!
-		local url
-		url=$(echo "$1" | cut -d '?' -f 1)
-		git clone "$url"
-		local repo_name
-		echo "$repo_name" | pbcopy
-		cd "$repo_name" || return
-		echo "done!"
-	else
-		echo "foo"
+	if [[ -z "$1" ]]; then
+		echo "Usage: clone <repository_url>"
+		return 1
 	fi
+
+	git clone "$1"
+	local repo_name
+	repo_name=$(basename "$1" .git)
+	cd "$repo_name" || return
 }
+
 
 function intel {
 	exec arch -x86_64 "$SHELL"
@@ -723,20 +720,3 @@ esac
 # pnpm end
 
 export PNPM_HOME="/Users/sysadm/Library/pnpm"
-
-source "/Users/sysadm/Library/Mobile Documents/com~apple~CloudDocs/.env"
-
-function nurlan {
-	if [[ $1 == "yes" ]]; then
-		if [[ $2 == "ny" ]]; then
-			echo "\n\n\n\t\tHey there, My name is Nurlan. and i am livigin in new york\n\n\n"
-		else
-			echo "\n\n\n\t\tHey there, My name is Nurlan.\n\n\n"
-		fi
-		
-	elif [[ $1 == "no" ]]; then
-		echo "\n\n\n\t\tOk, I wont say anything then.\n\n\n"
-	else
-		echo "\n\n\n\t\tThere were no arguments.\n\n\n"
-	fi
-}
