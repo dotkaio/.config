@@ -668,9 +668,8 @@ HISTFILE="$HOME/.history"
 HISTSIZE=10000
 SAVEHIST=10000
 
-# prompt configuration
-prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
-→ '
+prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f→ '
+# prompt='%F{cyan}%h %F{red}% $(branch_name)%f→ '
 
 #development
 
