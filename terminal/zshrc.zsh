@@ -58,21 +58,14 @@ function autoremove() {
 }
 
 function yt {
-	if [ "$(command -v yt-dlp)" ]; then # check if yt-dlp is installed
-		if [ -z "$1" ]; then
-			/opt/homebrew/bin/yt-dlp
-		fi
-	else # if yt-dlp is not installed
-		echo "bro, you need yt-dlp to run this command. do you wanna install?"
-		read -p "y/n: " answer
-		if [[ "$answer" == "y" ]]; then
-			brew install yt-dlp
-		else
-			echo "bitch"
-			return 1
-		fi
+	# check if command is installed
+	if ! command -v yt-dlp >/dev/null; then
+		echo "yt-dlp is not installed. Please install yt-dlp first."
+		return 1
 	fi
-
+	cd /tmp || return
+	yt-dlp "$@"
+	mv *.mp4 '/Users/sysadm/Library/Mobile Documents/com~apple~CloudDocs/Developer/Patch'
 }
 
 function path {
