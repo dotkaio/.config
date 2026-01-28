@@ -341,6 +341,7 @@ function icloud {
 }
 
 function clone {
+	cd ~/Developer || return
 	if [[ -z "$1" ]]; then
 		echo "Usage: clone <repository_url>"
 		return 1
