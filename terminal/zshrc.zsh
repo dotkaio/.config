@@ -90,9 +90,9 @@ function activate {
 		return 1
 	fi
 	conda activate "$1"
-}
+	}
 
-function wrap {
+	function wrap {
 	tput smam
 }
 
@@ -341,18 +341,14 @@ function icloud {
 }
 
 function clone {
-	cd ~/Developer || return
 	if [[ -z "$1" ]]; then
-		echo "Usage: clone <repository_url>"
+		echo "Usage: clone <repository_link>"
 		return 1
 	fi
-
-	git clone "$1"
 	local repo_name
-	repo_name=$(basename "$1" .git)
-	cd "$repo_name" || return
+	repo_name=$(basename -s .git "$1")
+	git clone "$1" ~/Developer/"$repo_name" && cd ~/Developer/"$repo_name" || return
 }
-
 
 function intel {
 	exec arch -x86_64 "$SHELL"
@@ -552,6 +548,8 @@ alias ....="cd ../../.."
 alias ...="cd ../.."
 alias ..="cd .."
 alias .="open ."
+
+alias dev="pnpm dev"
 alias ai="ollama"
 alias copy="pbcopy"
 alias diff="colordiff"
@@ -647,7 +645,6 @@ compdef '_mdfind' finder
 compdef '_youtube-dl' yt
 compdef '_flutter' fl
 compdef '_conda activate' activate
-compdef '_git clone' clone
 compdef '_git push' push
 # compdef '_ollama' llm
 
@@ -668,34 +665,34 @@ prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f→ '
 
 #development
 
-# pnpm
-if [ -d "/Users/sysadm/.pnpm" ]; then
-	export PATH="/Users/sysadm/.pnpm:$PATH"
-	case ":$PATH:" in
-	*":$PNPM_HOME:"*) ;;
-	*) export PATH="$PNPM_HOME:$PATH" ;;
-	esac
-fi
+# # pnpm
+# if [ -d "/Users/sysadm/.pnpm" ]; then
+# 	export PATH="/Users/sysadm/.pnpm:$PATH"
+# 	case ":$PATH:" in
+# 	*":$PNPM_HOME:"*) ;;
+# 	*) export PATH="$PNPM_HOME:$PATH" ;;
+# 	esac
+# fi
 
 # eval brew
 if [ -d "/opt/homebrew/bin" ]; then
 	eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# load conda
-if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
-	__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
-	if [ $? -eq 0 ]; then
-		eval "$__conda_setup"
-	else
-		if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-			. "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
-		else
-			export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
-		fi
-	fi
-	unset __conda_setup
-fi
+# # load conda
+# if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
+# 	__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
+# 	if [ $? -eq 0 ]; then
+# 		eval "$__conda_setup"
+# 	else
+# 		if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+# 			. "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+# 		else
+# 			export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+# 		fi
+# 	fi
+# 	unset __conda_setup
+# fi
 
 # load nvm
 if [ -d "$HOME/.nvm" ]; then

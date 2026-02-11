@@ -1,1 +1,0 @@
-its addVar:"[[template:varName]]" varValue:[[template:varVal]]
