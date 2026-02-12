@@ -29,10 +29,10 @@ function resolve-ins {
 
 function fetch {
 	if [ "$(command -v wget)" ]; then
-		/Users/dotkaio/.config/scripts/shell/download_webflow.sh "$*"
+		/Users/dotkaio/.config/scripts/shell/download_webflow.sh "$@"
 	else
 		brew install wget
-		/Users/dotkaio/.config/scripts/shell/download_webflow.sh "$*"
+		/Users/dotkaio/.config/scripts/shell/download_webflow.sh "$@"
 	fi
 }
 
@@ -54,7 +54,7 @@ function yt {
 		return 1
 	fi
 	cd /tmp || return
-	yt-dlp "$*"
+	yt-dlp "$@"
 	mv *.mp4 '/Users/sysadm/Library/Mobile Documents/com~apple~CloudDocs/Developer/Patch'
 }
 
@@ -153,23 +153,23 @@ function push {
 
 function t {
 	if command -v tree >/dev/null; then
-		tree --sort=name -LlaC 1 --dirsfirst "$*"
+		tree --sort=name -LlaC 1 --dirsfirst "$@"
 	else
-		ls -Glap1 "$*"
+		ls -Glap1 "$@"
 	fi
 }
 
 # ensure to call this when santactl is installed
 function block {
 	if command -v santactl >/dev/null; then
-		sudo santactl rule --silent-block --path "$*"
+		sudo santactl rule --silent-block --path "$@"
 	else
 		echo "Santa not installed"
 	fi
 }
 
 function unblock {
-	sudo santactl rule --remove --path "$*"
+	sudo santactl rule --remove --path "$@"
 }
 
 function unblockall {
@@ -210,12 +210,12 @@ function install {
 	elif [[ $1 == 'flutter' ]]; then
 		#
 	else
-		brew install "$*"
+		brew install "$@"
 	fi
 }
 
 function reinstall {
-	brew reinstall "$*"
+	brew reinstall "$@"
 }
 
 function wifi {
@@ -231,7 +231,7 @@ function wifi {
 }
 
 function finder {
-	/usr/bin/mdfind "$*" 2> >(grep --invert-match ' \[UserQueryParser\] ' >&2) | grep -i "$*" --color=auto
+	/usr/bin/mdfind "$@" 2> >(grep --invert-match ' \[UserQueryParser\] ' >&2) | grep -i "$@" --color=auto
 }
 
 function plist {
@@ -274,7 +274,7 @@ function remove {
 			rm -rf /opt/homebrew
 		fi
 	else
-		brew uninstall "$*"
+		brew uninstall "$@"
 	fi
 }
 
@@ -306,7 +306,7 @@ function update {
 }
 
 function info {
-	brew info "$*"
+	brew info "$@"
 }
 
 function list {
@@ -321,7 +321,7 @@ function search {
 			open -a Safari "https://google.com/search?q=$2" || return
 		fi
 	else
-		brew search "$*"
+		brew search "$@"
 	fi
 }
 
@@ -414,7 +414,7 @@ function rand {
 		sudo scutil --set LocalHostName "$localHostName"
 		sudo dscacheutil -flushcache
 
-		networksetup -setairportnetwork en2 DG_link_5GHz Dg_Serrano2016
+		# networksetup -setairportnetwork en2 DG_link_5GHz Dg_Serrano2016
 	}
 	case "$1" in
 	"user") newUser ;;
@@ -501,7 +501,7 @@ function tts {
 		-H "Content-Type: application/json" \
 		-d "{
 	\"model\": \"tts-1\",
-	\"input\": \"$*\",
+	\"input\": \"$@\",
 	\"voice\": \"ash\"
   }" \
 		--output speech.mp3
@@ -531,7 +531,7 @@ function groq {
 	curl -s https://api.groq.com/openai/v1/chat/completions \
 		-H "Content-Type: application/json" \
 		-H "Authorization: Bearer ${GROQ_API_KEY}" \
-		-d "$(jq -n --arg msg "$*" '{
+		-d "$(jq -n --arg msg "$@" '{
       model: "openai/gpt-oss-120b",
       temperature: 1,
       max_completion_tokens: 8192,
@@ -669,3 +669,35 @@ prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f→ '
 # prompt='%F{cyan}%h %F{red}% $(branch_name)%f→ '
 
 rm $HOME/.zcompdump 2>/dev/null && compinit
+
+# eval brew
+# if [ -d "/opt/homebrew/bin" ]; then
+# 	eval "$(/opt/homebrew/bin/brew shellenv)"
+# fi
+
+# load conda
+if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
+	__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
+	if [ $? -eq 0 ]; then
+		eval "$__conda_setup"
+	else
+		if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+			. "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+		else
+			export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+		fi
+	fi
+	unset __conda_setup
+fi
+
+# load nvm
+if [ -d "$HOME/.nvm" ]; then
+	export NVM_DIR="$HOME/.nvm"
+	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
+	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+fi
+
+	rm $HOME/.zcompdump 2>/dev/null && compinit
+
+
+export PNPM_HOME="/Users/sysadm/Library/pnpm"
