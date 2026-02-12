@@ -243,7 +243,7 @@ function plist {
 		get_files_path | xargs shasum -a 256 | sort
 	}
 	case "$1" in
-	"verify"|"check")
+	"verify" | "check")
 		if [[ ! -f "$FILE" ]]; then
 			echo "No plist_shasum.txt file found. Creating one..."
 			get_shasum >"$FILE"
@@ -547,7 +547,7 @@ function groq {
 		jq -r '.choices[0].message.content'
 }
 
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 zstyle ':completion:*' menu select=1
 zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
 zstyle ':completion:*:history-search-end' list-suffixes true
@@ -697,7 +697,6 @@ if [ -d "$HOME/.nvm" ]; then
 	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 fi
 
-	rm $HOME/.zcompdump 2>/dev/null && compinit
-
+rm $HOME/.zcompdump 2>/dev/null && compinit
 
 export PNPM_HOME="/Users/sysadm/Library/pnpm"
