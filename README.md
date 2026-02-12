@@ -82,21 +82,8 @@ This command will verify if the plist files were changed. if the hash of the fil
 plist verify
 ```
 
-### update the plist files
-
-This command will update the plist files in the <b>LaunchAgents</b> and <b>LaunchDaemons</b> directories
+### update the hash of the plist files
 
 ```bash
 plist update
 ```
-
-### update the plist files
-
-This command will update the plist files in the <b>LaunchAgents</b> and <b>LaunchDaemons</b> directories
-
-```bash
-plist update
-```
-
-
-Yo Danny

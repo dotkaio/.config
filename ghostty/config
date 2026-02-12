@@ -1,0 +1,10 @@
+font-family = "SF Mono"
+font-size = 13
+term = xterm-256color
+working-directory = /Users/sysadm
+theme = dark:OneDark-iterm-dark,light:OneDark-iterm-light
+cursor-style = underline
+cursor-style-blink = true
+scrollback-limit = 268435456
+bold-is-bright = true
+faint-opacity = 0.5

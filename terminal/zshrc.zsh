@@ -1,15 +1,7 @@
 # !/usr/bin/env zsh
-
-#environment variables
-# export HOMEBREW_NO_GITHUB_API
-# export HOMEBREW_NO_INSTALL_CLEANUP
-# export HOMEBREW_NO_INSECURE_REDIRECT
-# export PATH=$GEM_HOME/bin:$PATH
-# export PATH=$GEM_HOME/gems/bin:$PATH
-
-export OLLAMA_ORIGINS="chrome-extension://phpodhgmmjpfdaemecmnlklboblkafji"
 export CONFIG="$HOME/.config"
 export CHROME_EXECUTABLE="/Applications/Chromium.app/Contents/MacOS/Chromium"
+export PNPM_HOME="/Users/sysadm/Library/pnpm"
 export HOMEBREW_NO_AUTO_UPDATE
 export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_EMOJI
@@ -18,11 +10,9 @@ export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_AUTO_UPDATE
-source "/Users/sysadm/Library/Mobile Documents/com~apple~CloudDocs/.env"
-[ -f "$HOME/.hushlogin" ] || touch "$HOME/.hushlogin"
 
 #functions
-function resolve-ins.sh {
+function resolve-ins {
 	awk '
   /^<<<<<<< / { in_conflict=1; next }    # start conflict
   /^=======/  { in_conflict_keep=0; next }  # switch to OUT side
@@ -39,14 +29,15 @@ function resolve-ins.sh {
 
 function fetch {
 	if [ "$(command -v wget)" ]; then
-		/Users/dotkaio/.config/scripts/shell/download_webflow.sh "$@"
+		/Users/dotkaio/.config/scripts/shell/download_webflow.sh "$*"
 	else
-		echo "wget is not installed. Please install wget first."
+		brew install wget
+		/Users/dotkaio/.config/scripts/shell/download_webflow.sh "$*"
 	fi
 }
 
 function gemini {
-	#implement
+	# implement
 }
 
 function cleanup() {
@@ -58,13 +49,12 @@ function autoremove() {
 }
 
 function yt {
-	# check if command is installed
 	if ! command -v yt-dlp >/dev/null; then
 		echo "yt-dlp is not installed. Please install yt-dlp first."
 		return 1
 	fi
 	cd /tmp || return
-	yt-dlp "$@"
+	yt-dlp "$*"
 	mv *.mp4 '/Users/sysadm/Library/Mobile Documents/com~apple~CloudDocs/Developer/Patch'
 }
 
@@ -72,7 +62,6 @@ function path {
 	[[ -d "$1" ]] && export PATH="$1:$PATH"
 }
 
-#add essential paths
 for p in /bin \
 	/sbin \
 	/usr/bin \
@@ -90,9 +79,9 @@ function activate {
 		return 1
 	fi
 	conda activate "$1"
-	}
+}
 
-	function wrap {
+function wrap {
 	tput smam
 }
 
@@ -164,23 +153,23 @@ function push {
 
 function t {
 	if command -v tree >/dev/null; then
-		tree --sort=name -LlaC 1 --dirsfirst "$@"
+		tree --sort=name -LlaC 1 --dirsfirst "$*"
 	else
-		ls -Glap1 "$@"
+		ls -Glap1 "$*"
 	fi
 }
 
 # ensure to call this when santactl is installed
 function block {
 	if command -v santactl >/dev/null; then
-		sudo santactl rule --silent-block --path "$@"
+		sudo santactl rule --silent-block --path "$*"
 	else
 		echo "Santa not installed"
 	fi
 }
 
 function unblock {
-	sudo santactl rule --remove --path "$@"
+	sudo santactl rule --remove --path "$*"
 }
 
 function unblockall {
@@ -221,12 +210,12 @@ function install {
 	elif [[ $1 == 'flutter' ]]; then
 		#
 	else
-		brew install "$@"
+		brew install "$*"
 	fi
 }
 
 function reinstall {
-	brew reinstall "$@"
+	brew reinstall "$*"
 }
 
 function wifi {
@@ -242,7 +231,7 @@ function wifi {
 }
 
 function finder {
-	/usr/bin/mdfind "$@" 2> >(grep --invert-match ' \[UserQueryParser\] ' >&2) | grep -i "$@" --color=auto
+	/usr/bin/mdfind "$*" 2> >(grep --invert-match ' \[UserQueryParser\] ' >&2) | grep -i "$*" --color=auto
 }
 
 function plist {
@@ -254,7 +243,7 @@ function plist {
 		get_files_path | xargs shasum -a 256 | sort
 	}
 	case "$1" in
-	"check")
+	"verify"|"check")
 		if [[ ! -f "$FILE" ]]; then
 			echo "No plist_shasum.txt file found. Creating one..."
 			get_shasum >"$FILE"
@@ -285,7 +274,7 @@ function remove {
 			rm -rf /opt/homebrew
 		fi
 	else
-		brew uninstall "$@"
+		brew uninstall "$*"
 	fi
 }
 
@@ -317,7 +306,7 @@ function update {
 }
 
 function info {
-	brew info "$@"
+	brew info "$*"
 }
 
 function list {
@@ -332,7 +321,7 @@ function search {
 			open -a Safari "https://google.com/search?q=$2" || return
 		fi
 	else
-		brew search "$@"
+		brew search "$*"
 	fi
 }
 
@@ -508,11 +497,11 @@ function tts {
 		return 1
 	fi
 	curl https://api.openai.com/v1/audio/speech \
-		-H "Authorization: Bearer $OPENAI_API_KEY" \
+		-H "Authorization: Bearer $OPENAI_API_KEY_APRIL" \
 		-H "Content-Type: application/json" \
 		-d "{
 	\"model\": \"tts-1\",
-	\"input\": \"$1\",
+	\"input\": \"$*\",
 	\"voice\": \"ash\"
   }" \
 		--output speech.mp3
@@ -538,9 +527,29 @@ function td {
 		cd "$(date +%m-%d-%Y)" || return
 }
 
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'                          # case-insensitive completion
-zstyle ':completion:*' menu select=1                                               # select completion with arrow keys
-zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s # completion
+function groq {
+	curl -s https://api.groq.com/openai/v1/chat/completions \
+		-H "Content-Type: application/json" \
+		-H "Authorization: Bearer ${GROQ_API_KEY}" \
+		-d "$(jq -n --arg msg "$*" '{
+      model: "openai/gpt-oss-120b",
+      temperature: 1,
+      max_completion_tokens: 8192,
+      top_p: 1,
+      stream: false,
+      reasoning_effort: "medium",
+      stop: null,
+      messages: [
+        {role:"system",content:"be concise and straight to the point. no more than 250 characters"},
+        {role:"user",content:$msg}
+      ]
+    }')" |
+		jq -r '.choices[0].message.content'
+}
+
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 
+zstyle ':completion:*' menu select=1
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
 zstyle ':completion:*:history-search-end' list-suffixes true
 
 #alias
@@ -565,9 +574,9 @@ alias grep="grep --text --color"
 # alias halt="sudo halt"
 alias hide='chflags hidden'
 alias json="jq -r '.choices[0].message.content'"
-alias lines="wc -l"
 alias ll="ls -lhAGF1"
 alias lower="tr '[:upper:]' '[:lower:]'"
+alias upper="tr '[:lower:]' '[:upper:]'"
 alias md="mkdir -p"
 alias osa="osascript -e"
 alias paste="pbpaste"
@@ -583,8 +592,6 @@ alias status="git status"
 alias time="date -u +%T"
 alias today="date +%m-%d-%Y | pbcopy"
 # alias unwrap="tput rmam"
-alias upper="tr '[:lower:]' '[:upper:]'"
-alias words="wc -w"
 # alias wrap="tput smam"
 # alias yt='yt-dlp'
 alias z="zsh"
@@ -624,8 +631,7 @@ vcs_info
 
 zmodload zsh/zutil
 
-#completion
-compinit -C -u # -C for case-insensitive completion, -u to update the cache
+compinit -C -u
 compdef '_brew uninstall' remove
 compdef '_brew install' install
 compdef '_brew info' info
@@ -646,16 +652,15 @@ compdef '_youtube-dl' yt
 compdef '_flutter' fl
 compdef '_conda activate' activate
 compdef '_git push' push
-# compdef '_ollama' llm
+compdef '_ollama' llm
 
 #source extras
-source "$CONFIG/terminal/suggestion.zsh"
+source "$CONFIG/terminal/suggestions.zsh"
 source "$CONFIG/terminal/highlight/init.zsh"
 source "$HOME/Library/Mobile Documents/com~apple~CloudDocs/.env"
+
 FPATH="$CONFIG/terminal/completions:$FPATH"
 TERMINAL="$HOME/.config/terminal"
-
-#set history file and options
 HISTFILE="$HOME/.history"
 HISTSIZE=10000
 SAVEHIST=10000
@@ -663,51 +668,4 @@ SAVEHIST=10000
 prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f→ '
 # prompt='%F{cyan}%h %F{red}% $(branch_name)%f→ '
 
-#development
-
-# # pnpm
-# if [ -d "/Users/sysadm/.pnpm" ]; then
-# 	export PATH="/Users/sysadm/.pnpm:$PATH"
-# 	case ":$PATH:" in
-# 	*":$PNPM_HOME:"*) ;;
-# 	*) export PATH="$PNPM_HOME:$PATH" ;;
-# 	esac
-# fi
-
-# eval brew
-if [ -d "/opt/homebrew/bin" ]; then
-	eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
-
-# # load conda
-# if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
-# 	__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
-# 	if [ $? -eq 0 ]; then
-# 		eval "$__conda_setup"
-# 	else
-# 		if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-# 			. "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
-# 		else
-# 			export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
-# 		fi
-# 	fi
-# 	unset __conda_setup
-# fi
-
-# load nvm
-if [ -d "$HOME/.nvm" ]; then
-	export NVM_DIR="$HOME/.nvm"
-	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
-	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
-fi
-
 rm $HOME/.zcompdump 2>/dev/null && compinit
-
-# pnpm
-case ":$PATH:" in
-*":$PNPM_HOME:"*) ;;
-*) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
-
-export PNPM_HOME="/Users/sysadm/Library/pnpm"
