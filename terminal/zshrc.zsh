@@ -12,19 +12,20 @@ export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_AUTO_UPDATE
 
 #functions
-function resolve-ins {
-	awk '
-  /^<<<<<<< / { in_conflict=1; next }    # start conflict
-  /^=======/  { in_conflict_keep=0; next }  # switch to OUT side
-  /^>>>>>>>/  { in_conflict=0; next }    # end conflict
-  {
-    if (in_conflict) {
-      if (in_conflict_keep != 0) print $0   # only print the first side
-    } else {
-      print $0
-    }
-  }
-' "$1"
+function py {
+	if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
+		__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
+		if [ $? -eq 0 ]; then
+			eval "$__conda_setup"
+		else
+			if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+				. "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+			else
+				export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+			fi
+		fi
+		unset __conda_setup
+	fi
 }
 
 function fetch {
@@ -490,25 +491,6 @@ function chunk {
 	echo "File has been split into chunks of approx $chunk_size lines each."
 }
 
-# openai voice api
-function tts {
-	if [[ -z "$1" ]]; then
-		echo "Usage: tts <text>"
-		return 1
-	fi
-	curl https://api.openai.com/v1/audio/speech \
-		-H "Authorization: Bearer $OPENAI_API_KEY_APRIL" \
-		-H "Content-Type: application/json" \
-		-d "{
-	\"model\": \"tts-1\",
-	\"input\": \"$@\",
-	\"voice\": \"ash\"
-  }" \
-		--output speech.mp3
-	afplay speech.mp3
-	rm speech.mp3
-}
-
 function extract {
 	case "$1" in
 	"zip") unzip "$2" ;;
@@ -531,7 +513,7 @@ function groq {
 	curl -s https://api.groq.com/openai/v1/chat/completions \
 		-H "Content-Type: application/json" \
 		-H "Authorization: Bearer ${GROQ_API_KEY}" \
-		-d "$(jq -n --arg msg "$@" '{
+		-d "$(jq -n --arg msg "$*" '{
       model: "openai/gpt-oss-120b",
       temperature: 1,
       max_completion_tokens: 8192,
@@ -540,7 +522,7 @@ function groq {
       reasoning_effort: "medium",
       stop: null,
       messages: [
-        {role:"system",content:"be concise and straight to the point. no more than 250 characters"},
+        {role:"system",content:"be concise and straight to the point. no more than 250 characters. answer the question without any additional information or quotes. wrapping the answer in code block is not allowed. if the question is not clear, ask for clarification."},
         {role:"user",content:$msg}
       ]
     }')" |
@@ -675,28 +657,4 @@ rm $HOME/.zcompdump 2>/dev/null && compinit
 # 	eval "$(/opt/homebrew/bin/brew shellenv)"
 # fi
 
-# load conda
-if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
-	__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
-	if [ $? -eq 0 ]; then
-		eval "$__conda_setup"
-	else
-		if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-			. "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
-		else
-			export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
-		fi
-	fi
-	unset __conda_setup
-fi
-
-# load nvm
-if [ -d "$HOME/.nvm" ]; then
-	export NVM_DIR="$HOME/.nvm"
-	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
-	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
-fi
-
 rm $HOME/.zcompdump 2>/dev/null && compinit
-
-export PNPM_HOME="/Users/sysadm/Library/pnpm"

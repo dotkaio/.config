@@ -1,4 +1,6 @@
-# -*- mode: sh; sh-indentation: 4; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
+#!/usr/bin/env zsh
+# shellcheck shell=zsh
+# -*- mode: zsh; sh-indentation: 4; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
 # Copyright (c) 2018 Sebastian Gniazdowski
 # Copyright (c) 2018, 2019 Philippe Troin (F-i-f on GitHub)
 #
@@ -12,17 +14,28 @@ setopt extendedglob typesetsilent warncreateglobal
 autoload colors; colors
 
 typeset -g FAST_WORK_DIR
-: ${FAST_WORK_DIR:=$FAST_BASE_DIR}
-FAST_WORK_DIR=${~FAST_WORK_DIR}
+if [[ -z "${FAST_WORK_DIR}" ]]; then
+    FAST_WORK_DIR=$FAST_BASE_DIR
+fi
 
-local -A map
-map=( "XDG:"    "${XDG_CONFIG_HOME:-$HOME/.config}/fsh/"
-      "LOCAL:"  "/usr/local/share/fsh/"
-      "HOME:"   "$HOME/.fsh/"
-      "OPT:"    "/opt/local/share/fsh/"
-)
+local FAST_XDG_DIR FAST_LOCAL_DIR FAST_HOME_DIR FAST_OPT_DIR
+FAST_XDG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/fsh/"
+FAST_LOCAL_DIR="/usr/local/share/fsh/"
+FAST_HOME_DIR="$HOME/.fsh/"
+FAST_OPT_DIR="/opt/local/share/fsh/"
 
-FAST_WORK_DIR=${${FAST_WORK_DIR/(#m)(#s)(XDG|LOCAL|HOME|OPT):(#c0,1)/${map[${MATCH%:}:]}}%/}
+case "$FAST_WORK_DIR" in
+    XDG:*)   FAST_WORK_DIR="${FAST_XDG_DIR}${FAST_WORK_DIR:4}" ;;
+    XDG*)    FAST_WORK_DIR="${FAST_XDG_DIR}${FAST_WORK_DIR:3}" ;;
+    LOCAL:*) FAST_WORK_DIR="${FAST_LOCAL_DIR}${FAST_WORK_DIR:6}" ;;
+    LOCAL*)  FAST_WORK_DIR="${FAST_LOCAL_DIR}${FAST_WORK_DIR:5}" ;;
+    HOME:*)  FAST_WORK_DIR="${FAST_HOME_DIR}${FAST_WORK_DIR:5}" ;;
+    HOME*)   FAST_WORK_DIR="${FAST_HOME_DIR}${FAST_WORK_DIR:4}" ;;
+    OPT:*)   FAST_WORK_DIR="${FAST_OPT_DIR}${FAST_WORK_DIR:4}" ;;
+    OPT*)    FAST_WORK_DIR="${FAST_OPT_DIR}${FAST_WORK_DIR:3}" ;;
+esac
+
+FAST_WORK_DIR="${FAST_WORK_DIR%/}"
 
 local OPT_HELP OPT_VERBOSE OPT_QUIET OPT_RESET OPT_LIST OPT_TEST OPT_SECONDARY OPT_SHOW OPT_COPY OPT_OV_RESET
 local OPT_PALETTE OPT_CDWD OPT_XCHG OPT_OV_XCHG
@@ -32,20 +45,20 @@ zparseopts -E -D -A opthash h -help v -verbose q -quiet r -reset l -list t -test
             x -xchg y -ov-xchg || \
                 { echo "Improper options given, see help (-h/--help)"; return 1; }
 
-(( ${+opthash[-h]} + ${+opthash[--help]} ))    && OPT_HELP="-h"
-(( ${+opthash[-v]} + ${+opthash[--verbose]} )) && OPT_VERBOSE="-v"
-(( ${+opthash[-q]} + ${+opthash[--quiet]} ))   && OPT_QUIET="-q"
-(( ${+opthash[-r]} + ${+opthash[--reset]} ))   && OPT_RESET="-r"
-(( ${+opthash[-l]} + ${+opthash[--list]} ))    && OPT_LIST="-l"
-(( ${+opthash[-t]} + ${+opthash[--test]} ))    && OPT_TEST="-t"
-(( ${+opthash[--secondary]} ))                 && OPT_SECONDARY="--secondary"
-(( ${+opthash[-s]} + ${+opthash[--show]} ))    && OPT_SHOW="-s"
-(( ${+opthash[--copy-shipped-theme]} ))        && OPT_COPY="${opthash[--copy-shipped-theme]}"
-(( ${+opthash[-R]} + ${+opthash[--ov-reset]} )) && OPT_OV_RESET="-R"
-(( ${+opthash[-p]} + ${+opthash[--palette]} )) && OPT_PALETTE="-p"
-(( ${+opthash[-w]} + ${+opthash[--workdir]} )) && OPT_CDWD="-w"
-(( ${+opthash[-x]} + ${+opthash[--xchg]} ))    && OPT_XCHG="-x"
-(( ${+opthash[-y]} + ${+opthash[--ov-xchg]} )) && OPT_OV_XCHG="-y"
+[[ -n ${opthash["-h"]-} || -n ${opthash["--help"]-} ]] && OPT_HELP="-h"
+[[ -n ${opthash["-v"]-} || -n ${opthash["--verbose"]-} ]] && OPT_VERBOSE="-v"
+[[ -n ${opthash["-q"]-} || -n ${opthash["--quiet"]-} ]] && OPT_QUIET="-q"
+[[ -n ${opthash["-r"]-} || -n ${opthash["--reset"]-} ]] && OPT_RESET="-r"
+[[ -n ${opthash["-l"]-} || -n ${opthash["--list"]-} ]] && OPT_LIST="-l"
+[[ -n ${opthash["-t"]-} || -n ${opthash["--test"]-} ]] && OPT_TEST="-t"
+[[ -n ${opthash["--secondary"]-} ]] && OPT_SECONDARY="--secondary"
+[[ -n ${opthash["-s"]-} || -n ${opthash["--show"]-} ]] && OPT_SHOW="-s"
+[[ -n ${opthash["--copy-shipped-theme"]-} ]] && OPT_COPY="${opthash["--copy-shipped-theme"]}"
+[[ -n ${opthash["-R"]-} || -n ${opthash["--ov-reset"]-} ]] && OPT_OV_RESET="-R"
+[[ -n ${opthash["-p"]-} || -n ${opthash["--palette"]-} ]] && OPT_PALETTE="-p"
+[[ -n ${opthash["-w"]-} || -n ${opthash["--workdir"]-} ]] && OPT_CDWD="-w"
+[[ -n ${opthash["-x"]-} || -n ${opthash["--xchg"]-} ]] && OPT_XCHG="-x"
+[[ -n ${opthash["-y"]-} || -n ${opthash["--ov-xchg"]-} ]] && OPT_OV_XCHG="-y"
 
 local -a match mbegin mend
 local MATCH; integer MBEGIN MEND

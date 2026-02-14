@@ -3,5 +3,6 @@
 .env
 iterm2/
 gh-copilot/
-.local
+local
 containers
+gh
