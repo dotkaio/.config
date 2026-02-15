@@ -63,7 +63,7 @@ function path {
 	[[ -d "$1" ]] && export PATH="$1:$PATH"
 }
 
-for p in /bin \
+for path in /bin \
 	/sbin \
 	/usr/bin \
 	/usr/sbin \
@@ -71,7 +71,7 @@ for p in /bin \
 	/usr/local/sbin \
 	/opt/homebrew/bin; do
 	# /Users/sysadm/.local/bin \
-	path "$p"
+	path "$path"
 done
 
 function activate {
@@ -90,7 +90,7 @@ function unwrap {
 	tput rmam
 }
 
-function ip_from_url {
+function get_ip {
 	if [ -n "$1" ]; then
 		data=$(cat "$1")
 	else
