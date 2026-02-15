@@ -63,7 +63,7 @@ function path {
 	[[ -d "$1" ]] && export PATH="$1:$PATH"
 }
 
-for path in /bin \
+for p in /bin \
 	/sbin \
 	/usr/bin \
 	/usr/sbin \
@@ -71,7 +71,7 @@ for path in /bin \
 	/usr/local/sbin \
 	/opt/homebrew/bin; do
 	# /Users/sysadm/.local/bin \
-	path "$path"
+	path "$p"
 done
 
 function activate {
@@ -90,7 +90,7 @@ function unwrap {
 	tput rmam
 }
 
-function get_ip {
+function ip_from_url {
 	if [ -n "$1" ]; then
 		data=$(cat "$1")
 	else
@@ -577,7 +577,15 @@ alias today="date +%m-%d-%Y | pbcopy"
 # alias wrap="tput smam"
 # alias yt='yt-dlp'
 alias z="zsh"
-alias llm="ollama"
+# alias llm="ollama"
+
+function llm {
+	if [[ -z "$1" ]]; then
+		echo "Usage: llm <model_name>"
+		return 1
+	fi
+	ollama run "$1"
+}
 
 #set options
 setopt \

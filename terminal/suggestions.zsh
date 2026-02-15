@@ -1,15 +1,13 @@
-(( ! ${+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE} )) &&
-typeset -g ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
+[[ -z "${ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE+x}" ]] && typeset -g ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 
-(( ! ${+ZSH_AUTOSUGGEST_ORIGINAL_WIDGET_PREFIX} )) &&
-typeset -g ZSH_AUTOSUGGEST_ORIGINAL_WIDGET_PREFIX=autosuggest-orig-
+[[ -z "${ZSH_AUTOSUGGEST_ORIGINAL_WIDGET_PREFIX+x}" ]] && typeset -g ZSH_AUTOSUGGEST_ORIGINAL_WIDGET_PREFIX=autosuggest-orig-
 
-(( ! ${+ZSH_AUTOSUGGEST_STRATEGY} )) && {
+[[ -z "${ZSH_AUTOSUGGEST_STRATEGY+x}" ]] && {
 	typeset -ga ZSH_AUTOSUGGEST_STRATEGY
 	ZSH_AUTOSUGGEST_STRATEGY=(history)
 }
 
-(( ! ${+ZSH_AUTOSUGGEST_CLEAR_WIDGETS} )) && {
+[[ -z "${ZSH_AUTOSUGGEST_CLEAR_WIDGETS+x}" ]] && {
 	typeset -ga ZSH_AUTOSUGGEST_CLEAR_WIDGETS
 	ZSH_AUTOSUGGEST_CLEAR_WIDGETS=(
 		history-search-forward
@@ -29,7 +27,7 @@ typeset -g ZSH_AUTOSUGGEST_ORIGINAL_WIDGET_PREFIX=autosuggest-orig-
 	)
 }
 
-(( ! ${+ZSH_AUTOSUGGEST_ACCEPT_WIDGETS} )) && {
+[[ -z "${ZSH_AUTOSUGGEST_ACCEPT_WIDGETS+x}" ]] && {
 	typeset -ga ZSH_AUTOSUGGEST_ACCEPT_WIDGETS
 	ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=(
 		forward-char
@@ -40,13 +38,13 @@ typeset -g ZSH_AUTOSUGGEST_ORIGINAL_WIDGET_PREFIX=autosuggest-orig-
 	)
 }
 
-(( ! ${+ZSH_AUTOSUGGEST_EXECUTE_WIDGETS} )) && {
+[[ -z "${ZSH_AUTOSUGGEST_EXECUTE_WIDGETS+x}" ]] && {
 	typeset -ga ZSH_AUTOSUGGEST_EXECUTE_WIDGETS
 	ZSH_AUTOSUGGEST_EXECUTE_WIDGETS=(
 	)
 }
 
-(( ! ${+ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS} )) && {
+[[ -z "${ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS+x}" ]] && {
 	typeset -ga ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS
 	ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(
 		forward-word
@@ -60,7 +58,7 @@ typeset -g ZSH_AUTOSUGGEST_ORIGINAL_WIDGET_PREFIX=autosuggest-orig-
 	)
 }
 
-(( ! ${+ZSH_AUTOSUGGEST_IGNORE_WIDGETS} )) && {
+[[ -z "${ZSH_AUTOSUGGEST_IGNORE_WIDGETS+x}" ]] && {
 	typeset -ga ZSH_AUTOSUGGEST_IGNORE_WIDGETS
 	ZSH_AUTOSUGGEST_IGNORE_WIDGETS=(
 		orig-\*
@@ -74,7 +72,7 @@ typeset -g ZSH_AUTOSUGGEST_ORIGINAL_WIDGET_PREFIX=autosuggest-orig-
 	)
 }
 
-(( ! ${+ZSH_AUTOSUGGEST_COMPLETIONS_PTY_NAME} )) &&
+[[ -z "${ZSH_AUTOSUGGEST_COMPLETIONS_PTY_NAME+x}" ]] &&
 typeset -g ZSH_AUTOSUGGEST_COMPLETIONS_PTY_NAME=zsh_autosuggest_completion_pty
 
 _zsh_autosuggest_escape_command() {
@@ -96,7 +94,7 @@ _zsh_autosuggest_bind_widget() {
 	local -i bind_count
 
 	case $widgets[$widget] in
-		user:_zsh_autosuggest_(bound|orig)_*)
+		user:_zsh_autosuggest_bound_*|user:_zsh_autosuggest_orig_*)
 			bind_count=$((_ZSH_AUTOSUGGEST_BIND_COUNTS[$widget]))
 			;;
 		
@@ -107,18 +105,24 @@ _zsh_autosuggest_bind_widget() {
 		
 		builtin)
 			_zsh_autosuggest_incr_bind_count $widget
-			eval "_zsh_autosuggest_orig_${(q)widget}() { zle .${(q)widget} }"
+			local quoted_widget
+			quoted_widget="${(q)widget}"
+			# fix most of functions that has the same name as widgets, but not all of them, for example, `accept-line` widget is implemented by `accept_line` function, so we can't just call `zle -N $prefix$bind_count-$widget $widget`
+			eval "_zsh_autosuggest_orig_${quoted_widget}() { zle .${quoted_widget} }"
 			zle -N $prefix$bind_count-$widget _zsh_autosuggest_orig_$widget
 			;;
 
 		completion:*)
 			_zsh_autosuggest_incr_bind_count $widget
-			eval "zle -C $prefix$bind_count-${(q)widget} ${${(s.:.)widgets[$widget]}[2,3]}"
+			local comp_widget_value="${widgets[$widget]}"
+			local quoted_widget="${(q)widget}"
+			eval "zle -C $prefix$bind_count-${quoted_widget} ${${(s.:.)comp_widget_value}[2,3]}"
 			;;
 	esac
 
-	eval "_zsh_autosuggest_bound_${bind_count}_${(q)widget}() {
-		_zsh_autosuggest_widget_$autosuggest_action $prefix$bind_count-${(q)widget} \$@
+	local quoted_widget="${(q)widget}"
+	eval "_zsh_autosuggest_bound_${bind_count}_${quoted_widget}() {
+		_zsh_autosuggest_widget_$autosuggest_action $prefix$bind_count-${quoted_widget} \$@
 	}"
 
 	zle -N -- $widget _zsh_autosuggest_bound_${bind_count}_$widget
@@ -160,7 +164,7 @@ _zsh_autosuggest_invoke_original_widget() {
 
 	shift
 
-	if (( ${+widgets[$original_widget_name]} )); then
+	if [[ -n "${widgets[$original_widget_name]+x}" ]]; then
 		zle $original_widget_name -- $@
 	fi
 }
@@ -199,7 +203,7 @@ _zsh_autosuggest_enable() {
 }
 
 _zsh_autosuggest_toggle() {
-	if (( ${+_ZSH_AUTOSUGGEST_DISABLED} )); then
+	if [[ -n "${_ZSH_AUTOSUGGEST_DISABLED+x}" ]]; then
 		_zsh_autosuggest_enable
 	else
 		_zsh_autosuggest_disable
@@ -233,7 +237,7 @@ _zsh_autosuggest_modify() {
 		return $retval
 	fi
 
-	if (( ${+_ZSH_AUTOSUGGEST_DISABLED} )); then
+	if [[ -n "${_ZSH_AUTOSUGGEST_DISABLED+x}" ]]; then
 		return $?
 	fi
 
@@ -247,7 +251,7 @@ _zsh_autosuggest_modify() {
 }
 
 _zsh_autosuggest_fetch() {
-	if (( ${+ZSH_AUTOSUGGEST_USE_ASYNC} )); then
+	if [[ -n "${ZSH_AUTOSUGGEST_USE_ASYNC+x}" ]]; then
 		_zsh_autosuggest_async_request "$BUFFER"
 	else
 		local suggestion
@@ -510,7 +514,7 @@ _zsh_autosuggest_async_response() {
 }
 
 _zsh_autosuggest_start() {
-	if (( ${+ZSH_AUTOSUGGEST_MANUAL_REBIND} )); then
+	if [[ -n "${ZSH_AUTOSUGGEST_MANUAL_REBIND+x}" ]]; then
 		add-zsh-hook -d precmd _zsh_autosuggest_start
 	fi
 
