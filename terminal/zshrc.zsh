@@ -1,4 +1,5 @@
 # !/usr/bin/env zsh
+export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 export CONFIG="$HOME/.config"
 export CHROME_EXECUTABLE="/Applications/Chromium.app/Contents/MacOS/Chromium"
 export PNPM_HOME="/Users/sysadm/Library/pnpm"
@@ -12,8 +13,8 @@ export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_AUTO_UPDATE
 [ -d "$HOME/.nvm" ] &&
   export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 #functions
 function py {
@@ -39,10 +40,6 @@ function fetch {
     brew install wget
     /Users/dotkaio/.config/scripts/shell/download_webflow.sh "$@"
   fi
-}
-
-function gemini {
-  # implement
 }
 
 function cleanup() {
@@ -279,7 +276,7 @@ function remove {
       rm -rf /opt/homebrew
     fi
   else
-    brew uninstall "$@"
+    brew uninstall "$@" && brew autoremove && brew cleanup
   fi
 }
 
