@@ -13,507 +13,507 @@ export HOMEBREW_NO_AUTO_UPDATE
 
 #functions
 function py {
-	if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
-		__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
-		if [ $? -eq 0 ]; then
-			eval "$__conda_setup"
-		else
-			if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-				. "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
-			else
-				export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
-			fi
-		fi
-		unset __conda_setup
-	fi
+  if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
+    __conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
+    if [ $? -eq 0 ]; then
+      eval "$__conda_setup"
+    else
+      if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+        . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+      else
+        export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+      fi
+    fi
+    unset __conda_setup
+  fi
 }
 
 function fetch {
-	if [ "$(command -v wget)" ]; then
-		/Users/dotkaio/.config/scripts/shell/download_webflow.sh "$@"
-	else
-		brew install wget
-		/Users/dotkaio/.config/scripts/shell/download_webflow.sh "$@"
-	fi
+  if [ "$(command -v wget)" ]; then
+    /Users/dotkaio/.config/scripts/shell/download_webflow.sh "$@"
+  else
+    brew install wget
+    /Users/dotkaio/.config/scripts/shell/download_webflow.sh "$@"
+  fi
 }
 
 function gemini {
-	# implement
+  # implement
 }
 
 function cleanup() {
-	brew cleanup
+  brew cleanup
 }
 
 function autoremove() {
-	brew autoremove
+  brew autoremove
 }
 
 function yt {
-	if ! command -v yt-dlp >/dev/null; then
-		echo "yt-dlp is not installed. Please install yt-dlp first."
-		return 1
-	fi
-	cd /tmp || return
-	yt-dlp "$@"
-	mv *.mp4 '/Users/sysadm/Library/Mobile Documents/com~apple~CloudDocs/Developer/Patch'
+  if ! command -v yt-dlp >/dev/null; then
+    echo "yt-dlp is not installed. Please install yt-dlp first."
+    return 1
+  fi
+  cd /tmp || return
+  yt-dlp "$@"
+  mv *.mp4 '/Users/sysadm/Library/Mobile Documents/com~apple~CloudDocs/Developer/Patch'
 }
 
 function path {
-	[[ -d "$1" ]] && export PATH="$1:$PATH"
+  [[ -d "$1" ]] && export PATH="$1:$PATH"
 }
 
 for p in /bin \
-	/sbin \
-	/usr/bin \
-	/usr/sbin \
-	/usr/local/bin \
-	/usr/local/sbin \
-	/opt/homebrew/bin; do
-	# /Users/sysadm/.local/bin \
-	path "$p"
+  /sbin \
+  /usr/bin \
+  /usr/sbin \
+  /usr/local/bin \
+  /usr/local/sbin \
+  /opt/homebrew/bin; do
+  # /Users/sysadm/.local/bin \
+  path "$p"
 done
 
 function activate {
-	if [[ -z "$1" ]]; then # check if argument is empty
-		echo "Usage: activate <environment>"
-		return 1
-	fi
-	conda activate "$1"
+  if [[ -z "$1" ]]; then # check if argument is empty
+    echo "Usage: activate <environment>"
+    return 1
+  fi
+  conda activate "$1"
 }
 
 function wrap {
-	tput smam
+  tput smam
 }
 
 function unwrap {
-	tput rmam
+  tput rmam
 }
 
 function ip_from_url {
-	if [ -n "$1" ]; then
-		data=$(cat "$1")
-	else
-		if command -v pbpaste >/dev/null; then
-			data=$(pbpaste)
-		elif command -v xclip >/dev/null; then
-			data=$(xclip -o)
-		else
-			echo "No clipboard tool available."
-			exit 1
-		fi
-	fi
+  if [ -n "$1" ]; then
+    data=$(cat "$1")
+  else
+    if command -v pbpaste >/dev/null; then
+      data=$(pbpaste)
+    elif command -v xclip >/dev/null; then
+      data=$(xclip -o)
+    else
+      echo "No clipboard tool available."
+      exit 1
+    fi
+  fi
 
-	touch blocked
+  touch blocked
 
-	while IFS= read -r host; do
-		[ -z "$host" ] && continue
-		ip=$(dig +short "$host" | head -n1)
-		# include just the ip address separeated by comma and newline
-		echo "$ip," >>blocked
-	done <<<"$data"
+  while IFS= read -r host; do
+    [ -z "$host" ] && continue
+    ip=$(dig +short "$host" | head -n1)
+    # include just the ip address separeated by comma and newline
+    echo "$ip," >>blocked
+  done <<<"$data"
 }
 
 function convert_nextjs {
-	/opt/homebrew/Caskroom/miniconda/base/bin/python /Users/sysadm/.config/scripts/python/convert_to_nextjs.py
+  /opt/homebrew/Caskroom/miniconda/base/bin/python /Users/sysadm/.config/scripts/python/convert_to_nextjs.py
 }
 
 function to_number {
-	tr 'Aa' '4' | tr 'Ee' '3' | tr 'Ii' '1' | tr 'Oo' '0' | tr 'Ss' '5' | tr 'Tt' '7'
+  tr 'Aa' '4' | tr 'Ee' '3' | tr 'Ii' '1' | tr 'Oo' '0' | tr 'Ss' '5' | tr 'Tt' '7'
 }
 
 function dmg2iso {
-	hdiutil convert "$1" -format UDTO -o "$2" && mv "$2.cdr" "$2.iso"
+  hdiutil convert "$1" -format UDTO -o "$2" && mv "$2.cdr" "$2.iso"
 }
 
 function zshrc {
-	if command -v code >/dev/null; then
-		[[ -n "$1" ]] && code "$TERMINAL/$1" || code "$HOME/.config"
-	else
-		sudo ln -sf "System/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" /usr/local/bin/codes
-	fi
+  if command -v code >/dev/null; then
+    [[ -n "$1" ]] && code "$TERMINAL/$1" || code "$HOME/.config"
+  else
+    sudo ln -sf "System/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" /usr/local/bin/codes
+  fi
 }
 
 function xcode {
-	[[ -e "$1" ]] && open -a Xcode "$1" || open -a Xcode
+  [[ -e "$1" ]] && open -a Xcode "$1" || open -a Xcode
 }
 
 function replace {
-	if [[ -z "$1" || -z "$2" || -z "$3" ]]; then
-		echo "Usage: replace <file> <old_string> <new_string>"
-		return 1
-	fi
-	sed -i '' "s/$2/$3/g" "$1"
+  if [[ -z "$1" || -z "$2" || -z "$3" ]]; then
+    echo "Usage: replace <file> <old_string> <new_string>"
+    return 1
+  fi
+  sed -i '' "s/$2/$3/g" "$1"
 }
 
 function push {
-	git add .
-	git commit -m "duh"
-	git push
+  git add .
+  git commit -m "$@"
+  git push
 }
 
 function t {
-	if command -v tree >/dev/null; then
-		tree --sort=name -LlaC 1 --dirsfirst "$@"
-	else
-		ls -Glap1 "$@"
-	fi
+  if command -v tree >/dev/null; then
+    tree --sort=name -LlaC 1 --dirsfirst "$@"
+  else
+    ls -Glap1 "$@"
+  fi
 }
 
 # ensure to call this when santactl is installed
 function block {
-	if command -v santactl >/dev/null; then
-		sudo santactl rule --silent-block --path "$@"
-	else
-		echo "Santa not installed"
-	fi
+  if command -v santactl >/dev/null; then
+    sudo santactl rule --silent-block --path "$@"
+  else
+    echo "Santa not installed"
+  fi
 }
 
 function unblock {
-	sudo santactl rule --remove --path "$@"
+  sudo santactl rule --remove --path "$@"
 }
 
 function unblockall {
-	for app in "Messages.app" "FaceTime.app" "Mail.app" "System Settings.app" "Chromium.app"; do
-		if [[ "$app" == "Chromium.app" ]]; then
-			sudo santactl rule --remove --path "/Applications/$app"
-		else
-			sudo santactl rule --remove --path "/System/Applications/$app"
-		fi
-	done
+  for app in "Messages.app" "FaceTime.app" "Mail.app" "System Settings.app" "Chromium.app"; do
+    if [[ "$app" == "Chromium.app" ]]; then
+      sudo santactl rule --remove --path "/Applications/$app"
+    else
+      sudo santactl rule --remove --path "/System/Applications/$app"
+    fi
+  done
 }
 
 function proxy {
-	local current_dir
-	current_dir=$(pwd)
-	for url in \
-		"https://raw.githubusercontent.com/TheSpeedX/SOCKS-List/master/socks5.txt" \
-		"https://raw.githubusercontent.com/TheSpeedX/SOCKS-List/master/socks4.txt" \
-		"https://raw.githubusercontent.com/TheSpeedX/SOCKS-List/master/http.txt"; do
-		curl -O "$url"
-	done
-	mv socks5.txt socks4.txt http.txt "$CONFIG/proxy"
-	cd "$current_dir" || return
+  local current_dir
+  current_dir=$(pwd)
+  for url in \
+    "https://raw.githubusercontent.com/TheSpeedX/SOCKS-List/master/socks5.txt" \
+    "https://raw.githubusercontent.com/TheSpeedX/SOCKS-List/master/socks4.txt" \
+    "https://raw.githubusercontent.com/TheSpeedX/SOCKS-List/master/http.txt"; do
+    curl -O "$url"
+  done
+  mv socks5.txt socks4.txt http.txt "$CONFIG/proxy"
+  cd "$current_dir" || return
 }
 
 function install {
-	if [[ $1 == 'brew' ]]; then
-		if [[ $2 == 'local' ]]; then
-			cd $CONFIG
-			mkdir homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C Homebrew
-			cd $HOME
-		else
-			/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-		fi
-	elif [[ $1 == 'node' || $1 == 'nvm' ]]; then
-		curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-		nvm install node
-	elif [[ $1 == 'flutter' ]]; then
-		#
-	else
-		brew install "$@"
-	fi
+  if [[ $1 == 'brew' ]]; then
+    if [[ $2 == 'local' ]]; then
+      cd $CONFIG
+      mkdir homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C Homebrew
+      cd $HOME
+    else
+      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+  elif [[ $1 == 'node' || $1 == 'nvm' ]]; then
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+    nvm install node
+  elif [[ $1 == 'flutter' ]]; then
+    #
+  else
+    brew install "$@"
+  fi
 }
 
 function reinstall {
-	brew reinstall "$@"
+  brew reinstall "$@"
 }
 
 function wifi {
-	if [[ "$1" == "down" || "$1" == "off" ]]; then
-		sudo ifconfig en0 down
-	elif [[ "$1" == "up" || "$1" == "on" ]]; then
-		sudo ifconfig en0 up
-	elif [[ "$1" == "name" ]]; then
-		networksetup -getairportnetwork en0 | awk '{print $4}'
-	else
-		echo "You haven't included any valid argument"
-	fi
+  if [[ "$1" == "down" || "$1" == "off" ]]; then
+    sudo ifconfig en0 down
+  elif [[ "$1" == "up" || "$1" == "on" ]]; then
+    sudo ifconfig en0 up
+  elif [[ "$1" == "name" ]]; then
+    networksetup -getairportnetwork en0 | awk '{print $4}'
+  else
+    echo "You haven't included any valid argument"
+  fi
 }
 
 function finder {
-	/usr/bin/mdfind "$@" 2> >(grep --invert-match ' \[UserQueryParser\] ' >&2) | grep -i "$@" --color=auto
+  /usr/bin/mdfind "$@" 2> >(grep --invert-match ' \[UserQueryParser\] ' >&2) | grep -i "$@" --color=auto
 }
 
 function plist {
-	local FILE="$CONFIG/config/plist_shasum.txt"
-	function get_files_path {
-		find "$HOME/Library/Preferences" -name "*.plist" -type f
-	}
-	function get_shasum {
-		get_files_path | xargs shasum -a 256 | sort
-	}
-	case "$1" in
-	"verify" | "check")
-		if [[ ! -f "$FILE" ]]; then
-			echo "No plist_shasum.txt file found. Creating one..."
-			get_shasum >"$FILE"
-			echo "File created at $FILE"
-		else
-			echo "Checking plist files against $FILE"
-			get_shasum | diff -u "$FILE" - || echo "No changes detected"
-		fi
-		;;
-	"update")
-		get_shasum >"$FILE"
-		echo "File updated at $FILE"
-		;;
-	*)
-		echo "Usage: plist {check|update}"
-		;;
-	esac
+  local FILE="$CONFIG/config/plist_shasum.txt"
+  function get_files_path {
+    find "$HOME/Library/Preferences" -name "*.plist" -type f
+  }
+  function get_shasum {
+    get_files_path | xargs shasum -a 256 | sort
+  }
+  case "$1" in
+  "verify" | "check")
+    if [[ ! -f "$FILE" ]]; then
+      echo "No plist_shasum.txt file found. Creating one..."
+      get_shasum >"$FILE"
+      echo "File created at $FILE"
+    else
+      echo "Checking plist files against $FILE"
+      get_shasum | diff -u "$FILE" - || echo "No changes detected"
+    fi
+    ;;
+  "update")
+    get_shasum >"$FILE"
+    echo "File updated at $FILE"
+    ;;
+  *)
+    echo "Usage: plist {check|update}"
+    ;;
+  esac
 }
 
 function remove {
-	if [[ "$1" == "brew" ]]; then
-		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
-		if [[ -d "$CONFIG/homebrew" ]]; then
-			brew cleanup
-			rm -rf "$CONFIG/homebrew"
-		elif [[ -d "/opt/homebrew" ]]; then
-			brew cleanup
-			rm -rf /opt/homebrew
-		fi
-	else
-		brew uninstall "$@"
-	fi
+  if [[ "$1" == "brew" ]]; then
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
+    if [[ -d "$CONFIG/homebrew" ]]; then
+      brew cleanup
+      rm -rf "$CONFIG/homebrew"
+    elif [[ -d "/opt/homebrew" ]]; then
+      brew cleanup
+      rm -rf /opt/homebrew
+    fi
+  else
+    brew uninstall "$@"
+  fi
 }
 
 function generate_ip {
-	for a in {1..254}; do
-		echo "$a.1.1.1"
-		for b in {1..254}; do
-			echo "$a.$b.1.1"
-			for c in {1..254}; do
-				echo "$a.$b.$c.1"
-				for d in {1..254}; do
-					echo "$a.$b.$c.$d"
-				done
-			done
-		done
-	done
+  for a in {1..254}; do
+    echo "$a.1.1.1"
+    for b in {1..254}; do
+      echo "$a.$b.1.1"
+      for c in {1..254}; do
+        echo "$a.$b.$c.1"
+        for d in {1..254}; do
+          echo "$a.$b.$c.$d"
+        done
+      done
+    done
+  done
 }
 
 function dmg {
-	if [[ "$1" == "crypt" ]]; then
-		hdiutil create "$2.dmg" -encryption -size "$3" -volname "$2" -fs JHFS+
-	else
-		hdiutil create "$1.dmg" -size "$2" -volname "$1" -fs JHFS+
-	fi
+  if [[ "$1" == "crypt" ]]; then
+    hdiutil create "$2.dmg" -encryption -size "$3" -volname "$2" -fs JHFS+
+  else
+    hdiutil create "$1.dmg" -size "$2" -volname "$1" -fs JHFS+
+  fi
 }
 
 function update {
-	brew update && brew upgrade && brew cleanup && brew autoremove
+  brew update && brew upgrade && brew cleanup && brew autoremove
 }
 
 function info {
-	brew info "$@"
+  brew info "$@"
 }
 
 function list {
-	brew list
+  brew list
 }
 
 function search {
-	if [[ "$1" == "web" ]]; then
-		if [[ -e /Applications/Chromium.app ]]; then
-			open -a Chromium "https://google.com/search?q=$2" || return
-		else
-			open -a Safari "https://google.com/search?q=$2" || return
-		fi
-	else
-		brew search "$@"
-	fi
+  if [[ "$1" == "web" ]]; then
+    if [[ -e /Applications/Chromium.app ]]; then
+      open -a Chromium "https://google.com/search?q=$2" || return
+    else
+      open -a Safari "https://google.com/search?q=$2" || return
+    fi
+  else
+    brew search "$@"
+  fi
 }
 
 function icloud {
-	cd ~/Library/Mobile\ Documents/com\~apple\~CloudDocs || return
+  cd ~/Library/Mobile\ Documents/com\~apple\~CloudDocs || return
 }
 
 function clone {
-	if [[ -z "$1" ]]; then
-		echo "Usage: clone <repository_link>"
-		return 1
-	fi
-	local repo_name
-	repo_name=$(basename -s .git "$1")
-	git clone "$1" ~/Developer/"$repo_name" && cd ~/Developer/"$repo_name" || return
+  if [[ -z "$1" ]]; then
+    echo "Usage: clone <repository_link>"
+    return 1
+  fi
+  local repo_name
+  repo_name=$(basename -s .git "$1")
+  git clone "$1" ~/Developer/"$repo_name" && cd ~/Developer/"$repo_name" || return
 }
 
 function intel {
-	exec arch -x86_64 "$SHELL"
+  exec arch -x86_64 "$SHELL"
 }
 
 function arm64 {
-	exec arch -arm64 "$SHELL"
+  exec arch -arm64 "$SHELL"
 }
 
 function grep_line {
-	grep -n "$1" "$2"
+  grep -n "$1" "$2"
 }
 
 function get_ip {
-	dig +short "$1"
+  dig +short "$1"
 }
 
 function dump {
-	local now
-	now=$(date +%s)
-	case "$1" in
-	"arp")
-		sudo tcpdump "$NETWORK" -w "arp-$now.pcap" "ether proto 0x0806"
-		;;
-	"icmp")
-		sudo tcpdump -ni "$NETWORK" -w "icmp-$now.pcap" "icmp"
-		;;
-	"pflog")
-		sudo tcpdump -ni pflog0 -w "pflog-$now.pcap" "not icmp6 and not host ff02::16 and not host ff02::d"
-		;;
-	"syn")
-		sudo tcpdump -ni "$NETWORK" -w "syn-$now.pcap" "tcp[13] & 2 != 0"
-		;;
-	"upd")
-		sudo tcpdump -ni "$NETWORK" -w "udp-$now.pcap" "udp and not port 443"
-		;;
-	*)
-		sudo tcpdump
-		;;
-	esac
+  local now
+  now=$(date +%s)
+  case "$1" in
+  "arp")
+    sudo tcpdump "$NETWORK" -w "arp-$now.pcap" "ether proto 0x0806"
+    ;;
+  "icmp")
+    sudo tcpdump -ni "$NETWORK" -w "icmp-$now.pcap" "icmp"
+    ;;
+  "pflog")
+    sudo tcpdump -ni pflog0 -w "pflog-$now.pcap" "not icmp6 and not host ff02::16 and not host ff02::d"
+    ;;
+  "syn")
+    sudo tcpdump -ni "$NETWORK" -w "syn-$now.pcap" "tcp[13] & 2 != 0"
+    ;;
+  "upd")
+    sudo tcpdump -ni "$NETWORK" -w "udp-$now.pcap" "udp and not port 443"
+    ;;
+  *)
+    sudo tcpdump
+    ;;
+  esac
 }
 
 function shwip {
-	curl -sq4 "https://icanhazip.com/"
+  curl -sq4 "https://icanhazip.com/"
 }
 
 function shwhistory {
-	if [[ "$1" == "top" ]]; then
-		history 1 | awk '{CMD[$2]++;count++} END { for (a in CMD) printf "%d %0.2f%% %s\n", CMD[a], CMD[a]/count*100, a }' | sort -nr | nl | head -n25
-	elif [[ "$1" == "clear" || "$1" == "clean" ]]; then
-		awk '!a[$0]++' "$HISTFILE" >"$HISTFILE.tmp" && mv "$HISTFILE.tmp" "$HISTFILE"
-	fi
+  if [[ "$1" == "top" ]]; then
+    history 1 | awk '{CMD[$2]++;count++} END { for (a in CMD) printf "%d %0.2f%% %s\n", CMD[a], CMD[a]/count*100, a }' | sort -nr | nl | head -n25
+  elif [[ "$1" == "clear" || "$1" == "clean" ]]; then
+    awk '!a[$0]++' "$HISTFILE" >"$HISTFILE.tmp" && mv "$HISTFILE.tmp" "$HISTFILE"
+  fi
 }
 
 function rand {
-	function newUser {
-		local username
-		username=$(openssl rand -base64 64 | tr -d "=+/1-9" | cut -c-20 | tr '[:upper:]' '[:lower:]')
-		echo "$username" | pbcopy
-	}
-	function newPass {
-		local password
-		password=$(openssl rand -base64 300 | tr -d "=+/" | cut -c12-20 | tr '\n' '-' | cut -b -26)
-		echo "$password" | pbcopy
-	}
-	function changeId {
-		local computerName hostName localHostName
-		computerName=$(newUser)
-		hostName="$(newUser).local"
-		localHostName="$(newUser)_machine"
+  function newUser {
+    local username
+    username=$(openssl rand -base64 64 | tr -d "=+/1-9" | cut -c-20 | tr '[:upper:]' '[:lower:]')
+    echo "$username" | pbcopy
+  }
+  function newPass {
+    local password
+    password=$(openssl rand -base64 300 | tr -d "=+/" | cut -c12-20 | tr '\n' '-' | cut -b -26)
+    echo "$password" | pbcopy
+  }
+  function changeId {
+    local computerName hostName localHostName
+    computerName=$(newUser)
+    hostName="$(newUser).local"
+    localHostName="$(newUser)_machine"
 
-		sudo scutil --set ComputerName "$computerName"
-		sudo scutil --set HostName "$hostName"
-		sudo scutil --set LocalHostName "$localHostName"
-		sudo dscacheutil -flushcache
+    sudo scutil --set ComputerName "$computerName"
+    sudo scutil --set HostName "$hostName"
+    sudo scutil --set LocalHostName "$localHostName"
+    sudo dscacheutil -flushcache
 
-		# networksetup -setairportnetwork en2 DG_link_5GHz Dg_Serrano2016
-	}
-	case "$1" in
-	"user") newUser ;;
-	"-u") newUser ;;
-	"pass") newPass ;;
-	"mac") changeId ;;
-	"line")
-		awk 'BEGIN{srand();}{if (rand() <= 1.0/NR) {x=$0}}END{print x}' "$2" | pbcopy
-		pbpaste
-		;;
-	esac
+    # networksetup -setairportnetwork en2 DG_link_5GHz Dg_Serrano2016
+  }
+  case "$1" in
+  "user") newUser ;;
+  "-u") newUser ;;
+  "pass") newPass ;;
+  "mac") changeId ;;
+  "line")
+    awk 'BEGIN{srand();}{if (rand() <= 1.0/NR) {x=$0}}END{print x}' "$2" | pbcopy
+    pbpaste
+    ;;
+  esac
 }
 
 function battery {
-	pmset -g batt | egrep "([0-9]+\%).*" -o --colour=auto | cut -f1 -d';'
+  pmset -g batt | egrep "([0-9]+\%).*" -o --colour=auto | cut -f1 -d';'
 }
 
 function download {
-	if [ "$(command -v wget)" ]; then
-		wget --mirror --convert-links \
-			--adjust-extension --page-requisites \
-			--no-parent --span-hosts \
-			--exclude-domains=google.com, \
-			--user-agent="Mozilla/5.0 (Android 2.2; Windows; U; Windows NT 6.1; en-US) AppleWebKit/533.19.4 (KHTML, like Gecko) Version/5.0.3 Safari/533.19.4" \
-			--https-only \
-			--domains=$1 $1
-	fi
+  if [ "$(command -v wget)" ]; then
+    wget --mirror --convert-links \
+      --adjust-extension --page-requisites \
+      --no-parent --span-hosts \
+      --exclude-domains=google.com, \
+      --user-agent="Mozilla/5.0 (Android 2.2; Windows; U; Windows NT 6.1; en-US) AppleWebKit/533.19.4 (KHTML, like Gecko) Version/5.0.3 Safari/533.19.4" \
+      --https-only \
+      --domains=$1 $1
+  fi
 }
 
 function pf {
-	case "$1" in
-	"up") sudo pfctl -e -f "$CONFIG/firewall/pf.rules" ;;
-	"down") sudo pfctl -d ;;
-	"status") sudo pfctl -s info ;;
-	"reload") sudo pfctl -f /etc/pf.conf ;;
-	"log") sudo pfctl -s nat ;;
-	"flush") sudo pfctl -F all -f /etc/pf.conf ;;
-	"show") sudo pfctl -s rules ;;
-	*) sudo pfctl ;;
-	esac
+  case "$1" in
+  "up") sudo pfctl -e -f "$CONFIG/firewall/pf.rules" ;;
+  "down") sudo pfctl -d ;;
+  "status") sudo pfctl -s info ;;
+  "reload") sudo pfctl -f /etc/pf.conf ;;
+  "log") sudo pfctl -s nat ;;
+  "flush") sudo pfctl -F all -f /etc/pf.conf ;;
+  "show") sudo pfctl -s rules ;;
+  *) sudo pfctl ;;
+  esac
 }
 
 function branch_name {
-	git branch 2>/dev/null | sed -n -e 's/^\* \(.*\)/(\1) /p'
+  git branch 2>/dev/null | sed -n -e 's/^\* \(.*\)/(\1) /p'
 }
 
 function len {
-	echo -n "$1" | wc -c
+  echo -n "$1" | wc -c
 }
 
 function rmip {
-	sed -E 's/\b([0-9]{1,3}\.){3}[0-9]{1,3}\b/[REDACTED]/g' "$1" >"$2"
-	echo "done!"
+  sed -E 's/\b([0-9]{1,3}\.){3}[0-9]{1,3}\b/[REDACTED]/g' "$1" >"$2"
+  echo "done!"
 }
 
 function chunk {
-	local file="$1"
-	local custom_chunk_size="$2"
-	if [[ ! -f "$file" ]]; then
-		echo "File not found: $file"
-		return 1
-	fi
-	local total_lines chunk_size dir base
-	total_lines=$(wc -l <"$file")
-	if [[ -z "$custom_chunk_size" ]]; then
-		chunk_size=$(echo "scale=0; sqrt($total_lines)+0.5" | bc | awk '{print int($1)}')
-	else
-		chunk_size="$custom_chunk_size"
-	fi
-	dir=$(dirname "$file")
-	base=$(basename "$file")
-	split -l "$chunk_size" "$file" "$dir/${base}_"
-	echo "File has been split into chunks of approx $chunk_size lines each."
+  local file="$1"
+  local custom_chunk_size="$2"
+  if [[ ! -f "$file" ]]; then
+    echo "File not found: $file"
+    return 1
+  fi
+  local total_lines chunk_size dir base
+  total_lines=$(wc -l <"$file")
+  if [[ -z "$custom_chunk_size" ]]; then
+    chunk_size=$(echo "scale=0; sqrt($total_lines)+0.5" | bc | awk '{print int($1)}')
+  else
+    chunk_size="$custom_chunk_size"
+  fi
+  dir=$(dirname "$file")
+  base=$(basename "$file")
+  split -l "$chunk_size" "$file" "$dir/${base}_"
+  echo "File has been split into chunks of approx $chunk_size lines each."
 }
 
 function extract {
-	case "$1" in
-	"zip") unzip "$2" ;;
-	"tar") tar -xvf "$2" ;;
-	"tar.gz") tar -xzvf "$2" ;;
-	"tar.bz2") tar -xjvf "$2" ;;
-	"tar.xz") tar -xJvf "$2" ;;
-	"rar") unrar x "$2" ;;
-	"7z") 7z x "$2" ;;
-	*) echo "You haven't included any valid arguments" ;;
-	esac
+  case "$1" in
+  "zip") unzip "$2" ;;
+  "tar") tar -xvf "$2" ;;
+  "tar.gz") tar -xzvf "$2" ;;
+  "tar.bz2") tar -xjvf "$2" ;;
+  "tar.xz") tar -xJvf "$2" ;;
+  "rar") unrar x "$2" ;;
+  "7z") 7z x "$2" ;;
+  *) echo "You haven't included any valid arguments" ;;
+  esac
 }
 
 function td {
-	mkdir -p "$(date +%m-%d-%y)" &&
-		cd "$(date +%m-%d-%Y)" || return
+  mkdir -p "$(date +%m-%d-%y)" &&
+    cd "$(date +%m-%d-%Y)" || return
 }
 
 function groq {
-	curl -s https://api.groq.com/openai/v1/chat/completions \
-		-H "Content-Type: application/json" \
-		-H "Authorization: Bearer ${GROQ_API_KEY}" \
-		-d "$(jq -n --arg msg "$*" '{
+  curl -s https://api.groq.com/openai/v1/chat/completions \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer ${GROQ_API_KEY}" \
+    -d "$(jq -n --arg msg "$*" '{
       model: "openai/gpt-oss-120b",
       temperature: 1,
       max_completion_tokens: 8192,
@@ -526,7 +526,7 @@ function groq {
         {role:"user",content:$msg}
       ]
     }')" |
-		jq -r '.choices[0].message.content'
+    jq -r '.choices[0].message.content'
 }
 
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
@@ -580,41 +580,41 @@ alias z="zsh"
 # alias llm="ollama"
 
 function llm {
-	if [[ -z "$1" ]]; then
-		echo "Usage: llm <model_name>"
-		return 1
-	fi
-	ollama run "$1"
+  if [[ -z "$1" ]]; then
+    echo "Usage: llm <model_name>"
+    return 1
+  fi
+  ollama run "$1"
 }
 
 #set options
 setopt \
-	AUTOCD \
-	NOBEEP \
-	CORRECT \
-	ALWAYSTOEND \
-	PROMPT_SUBST \
-	APPEND_HISTORY \SHARE_HISTORY \
-	COMPLETE_IN_WORD \
-	HIST_IGNORE_ALL_DUPS \
-	HIST_IGNORE_SPACE \
-	HIST_REDUCE_BLANKS \
-	HIST_VERIFY \
-	HIST_EXPIRE_DUPS_FIRST \
-	HIST_FIND_NO_DUPS \
-	HIST_SAVE_NO_DUPS \
-	HIST_IGNORE_DUPS
+  AUTOCD \
+  NOBEEP \
+  CORRECT \
+  ALWAYSTOEND \
+  PROMPT_SUBST \
+  APPEND_HISTORY \SHARE_HISTORY \
+  COMPLETE_IN_WORD \
+  HIST_IGNORE_ALL_DUPS \
+  HIST_IGNORE_SPACE \
+  HIST_REDUCE_BLANKS \
+  HIST_VERIFY \
+  HIST_EXPIRE_DUPS_FIRST \
+  HIST_FIND_NO_DUPS \
+  HIST_SAVE_NO_DUPS \
+  HIST_IGNORE_DUPS
 
 autoload -U \
-	colors \
-	find-command \
-	history-search-end \
-	promptinit \
-	vcs_info \
-	zargs \
-	zcalc \
-	zmv \
-	compinit
+  colors \
+  find-command \
+  history-search-end \
+  promptinit \
+  vcs_info \
+  zargs \
+  zcalc \
+  zmv \
+  compinit
 
 promptinit
 vcs_info
