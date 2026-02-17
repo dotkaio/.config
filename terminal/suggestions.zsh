@@ -107,7 +107,6 @@ _zsh_autosuggest_bind_widget() {
 			_zsh_autosuggest_incr_bind_count $widget
 			local quoted_widget
 			quoted_widget="${(q)widget}"
-			# fix most of functions that has the same name as widgets, but not all of them, for example, `accept-line` widget is implemented by `accept_line` function, so we can't just call `zle -N $prefix$bind_count-$widget $widget`
 			eval "_zsh_autosuggest_orig_${quoted_widget}() { zle .${quoted_widget} }"
 			zle -N $prefix$bind_count-$widget _zsh_autosuggest_orig_$widget
 			;;

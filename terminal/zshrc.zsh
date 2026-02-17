@@ -10,6 +10,10 @@ export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_AUTO_UPDATE
+[ -d "$HOME/.nvm" ] &&
+  export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
 #functions
 function py {
@@ -553,7 +557,6 @@ alias flr="flutter run"
 alias ga="git add ."
 alias gm="git commit -m"
 alias grep="grep --text --color"
-# alias halt="sudo halt"
 alias hide='chflags hidden'
 alias json="jq -r '.choices[0].message.content'"
 alias ll="ls -lhAGF1"
@@ -573,19 +576,7 @@ alias speed="unwrap && networkQuality && wrap"
 alias status="git status"
 alias time="date -u +%T"
 alias today="date +%m-%d-%Y | pbcopy"
-# alias unwrap="tput rmam"
-# alias wrap="tput smam"
-# alias yt='yt-dlp'
 alias z="zsh"
-# alias llm="ollama"
-
-function llm {
-  if [[ -z "$1" ]]; then
-    echo "Usage: llm <model_name>"
-    return 1
-  fi
-  ollama run "$1"
-}
 
 #set options
 setopt \
@@ -658,11 +649,4 @@ SAVEHIST=10000
 prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f→ '
 # prompt='%F{cyan}%h %F{red}% $(branch_name)%f→ '
 
-rm $HOME/.zcompdump 2>/dev/null && compinit
-
-# eval brew
-# if [ -d "/opt/homebrew/bin" ]; then
-# 	eval "$(/opt/homebrew/bin/brew shellenv)"
-# fi
-
-rm $HOME/.zcompdump 2>/dev/null && compinit
+rm $HOME/.zcompdump 2>/dev/null && compinit -C -u

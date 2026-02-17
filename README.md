@@ -4,13 +4,13 @@ Personal dotfiles and system configuration for macOS and Linux systems. Includes
 
 ## Features
 
-- 🚀 Custom Zsh configuration with auto-completion and syntax highlighting
-- 📦 Homebrew package management helpers
-- 🔐 Security utilities (Santa integration, plist monitoring, firewall management)
-- 🌐 Network tools (proxy management, IP utilities, tcpdump wrappers)
-- 🛠️ Development utilities (git shortcuts, file operations, text processing)
-- 🎨 iTerm2 and terminal theming
-- 📝 GitHub CLI configuration
+- Custom Zsh configuration with auto-completion and syntax highlighting
+- Homebrew package management helpers
+- Security utilities (Santa integration, plist monitoring, firewall management)
+- Network tools (proxy management, IP utilities, tcpdump wrappers)
+- Development utilities (git shortcuts, file operations, text processing)
+- iTerm2 and terminal theming
+- GitHub CLI configuration
 
 ## Getting Started
 
@@ -23,27 +23,32 @@ Personal dotfiles and system configuration for macOS and Linux systems. Includes
 ### Installation
 
 1. **Create a `.zshrc` file** if it doesn't exist:
+
 ```bash
 touch ~/.zshrc
 ```
 
 2. **Clone this repository** to `~/.config`:
+
 ```bash
 git clone https://github.com/kaiorferraz/.config ~/.config
 ```
 
 3. **Update your `.zshrc`** to source the configuration:
+
 ```bash
 echo 'export CONFIG="$HOME/.config"' >> ~/.zshrc
 echo 'source $CONFIG/terminal/zshrc.zsh' >> ~/.zshrc
 ```
 
 4. **Set Zsh as your default shell**:
+
 ```bash
 chsh -s $(which zsh)
 ```
 
 5. **Restart your terminal** or source the configuration:
+
 ```bash
 source ~/.zshrc
 ```
@@ -53,6 +58,7 @@ source ~/.zshrc
 ### Package Management
 
 #### Homebrew Installation
+
 ```bash
 # Install Homebrew locally in ~/.config
 install brew local
@@ -62,6 +68,7 @@ install brew
 ```
 
 #### Package Operations
+
 ```bash
 # Install packages
 install <package-name>
@@ -97,6 +104,7 @@ search web <query>
 ### Security & System Monitoring
 
 #### Plist File Monitoring
+
 ```bash
 # Verify plist files for changes
 plist verify
@@ -106,6 +114,7 @@ plist update
 ```
 
 #### Application Blocking (Santa)
+
 ```bash
 # Block an application
 block /path/to/app
@@ -118,6 +127,7 @@ unblockall
 ```
 
 #### Firewall Management
+
 ```bash
 # Enable firewall
 pf up
@@ -166,6 +176,7 @@ wifi name     # Get WiFi network name
 ### Development Tools
 
 #### Git Shortcuts
+
 ```bash
 # Quick commit and push
 push
@@ -175,6 +186,7 @@ clone <repository-url>
 ```
 
 #### File Operations
+
 ```bash
 # Enhanced directory listing
 t [directory]    # Tree view with colors
@@ -193,6 +205,7 @@ extract tar.gz <file.tar.gz>
 ```
 
 #### Text Processing
+
 ```bash
 # Convert text to numbers (leet speak)
 echo "hello" | to_number
