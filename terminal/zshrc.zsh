@@ -11,27 +11,32 @@ export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_AUTO_UPDATE
+
 [ -d "$HOME/.nvm" ] &&
   export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 #functions
-function py {
-  if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
-    __conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
-    if [ $? -eq 0 ]; then
-      eval "$__conda_setup"
-    else
-      if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-        . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
-      else
-        export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
-      fi
-    fi
-    unset __conda_setup
-  fi
+function dev {
+  pnpm dev $@
 }
+
+# function py {
+#   if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
+#     __conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
+#     if [ $? -eq 0 ]; then
+#       eval "$__conda_setup"
+#     else
+#       if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+#         . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+#       else
+#         export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+#       fi
+#     fi
+#     unset __conda_setup
+#   fi
+# }
 
 function fetch {
   if [ "$(command -v wget)" ]; then
@@ -541,7 +546,6 @@ alias ...="cd ../.."
 alias ..="cd .."
 alias .="open ."
 
-alias dev="pnpm dev"
 alias ai="ollama"
 alias copy="pbcopy"
 alias diff="colordiff"

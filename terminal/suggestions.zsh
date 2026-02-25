@@ -1,5 +1,8 @@
 [[ -z "${ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE+x}" ]] && typeset -g ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 
+# Max size of buffer to trigger suggestions (default unset: unlimited)
+# [[ -z "${ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE+x}" ]] && typeset -g ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+
 [[ -z "${ZSH_AUTOSUGGEST_ORIGINAL_WIDGET_PREFIX+x}" ]] && typeset -g ZSH_AUTOSUGGEST_ORIGINAL_WIDGET_PREFIX=autosuggest-orig-
 
 [[ -z "${ZSH_AUTOSUGGEST_STRATEGY+x}" ]] && {
@@ -86,6 +89,7 @@ _zsh_autosuggest_incr_bind_count() {
 }
 
 _zsh_autosuggest_bind_widget() {
+	emulate -L zsh
 	typeset -gA _ZSH_AUTOSUGGEST_BIND_COUNTS
 
 	local widget=$1
@@ -106,16 +110,19 @@ _zsh_autosuggest_bind_widget() {
 		builtin)
 			_zsh_autosuggest_incr_bind_count $widget
 			local quoted_widget
-			quoted_widget="${(q)widget}"
-			eval "_zsh_autosuggest_orig_${quoted_widget}() { zle .${quoted_widget} }"
+			# shellcheck disable=SC2016
+			printf -v quoted_widget '%q' "$widget"
+			eval "_zsh_autosuggest_orig_${quoted_widget}() { zle .\${quoted_widget} }"
 			zle -N $prefix$bind_count-$widget _zsh_autosuggest_orig_$widget
 			;;
 
 		completion:*)
 			_zsh_autosuggest_incr_bind_count $widget
 			local comp_widget_value="${widgets[$widget]}"
+			local -a comp_widget_parts
+			comp_widget_parts=("${(@s.:.)comp_widget_value}")
 			local quoted_widget="${(q)widget}"
-			eval "zle -C $prefix$bind_count-${quoted_widget} ${${(s.:.)comp_widget_value}[2,3]}"
+			eval "zle -C $prefix$bind_count-${quoted_widget} ${comp_widget_parts[2]} ${comp_widget_parts[3]}"
 			;;
 	esac
 
@@ -523,6 +530,7 @@ _zsh_autosuggest_start() {
 autoload -Uz add-zsh-hook is-at-least
 
 if is-at-least 5.0.8; then
+	# Use async suggestions by default if possible
 	typeset -g ZSH_AUTOSUGGEST_USE_ASYNC=
 fi
 
