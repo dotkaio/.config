@@ -18,25 +18,40 @@ export HOMEBREW_NO_AUTO_UPDATE
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 #functions
+function resolve_conflicts {
+  awk '
+  /^<<<<<<< / { in_conflict=1; next }    # start conflict
+  /^=======/  { in_conflict_keep=0; next }  # switch to OUT side
+  /^>>>>>>>/  { in_conflict=0; next }    # end conflict
+  {
+    if (in_conflict) {
+      if (in_conflict_keep != 0) print $0   # only print the first side
+    } else {
+      print $0
+    }
+  }
+' "$1"
+}
+
 function dev {
   pnpm dev $@
 }
 
-# function py {
-#   if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
-#     __conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
-#     if [ $? -eq 0 ]; then
-#       eval "$__conda_setup"
-#     else
-#       if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-#         . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
-#       else
-#         export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
-#       fi
-#     fi
-#     unset __conda_setup
-#   fi
-# }
+function py {
+  if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
+    __conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
+    if [ $? -eq 0 ]; then
+      eval "$__conda_setup"
+    else
+      if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+        . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+      else
+        export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+      fi
+    fi
+    unset __conda_setup
+  fi
+}
 
 function fetch {
   if [ "$(command -v wget)" ]; then

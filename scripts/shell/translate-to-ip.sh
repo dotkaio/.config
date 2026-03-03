@@ -18,25 +18,25 @@ while read -r line; do
     # Skip comments and empty lines
     [[ $line =~ ^[[:space:]]*# ]] && continue
     [[ -z $line ]] && continue
-    
+
     # Extract domain from line
     domain=$(echo "$line" | grep -v '^;' | tr -d ' ')
     if [ ! -z "$domain" ]; then
-        resolve_domain "$domain" >> "$tmp_file" &
+        resolve_domain "$domain" >>"$tmp_file" &
     fi
-done < /Users/dotkaio/.config/blocked/blocked
+done </Users/dotkaio/.config/blocked/blocked
 
 while read -r line; do
     # Skip comments and empty lines
     [[ $line =~ ^[[:space:]]*# ]] && continue
     [[ -z $line ]] && continue
-    
+
     # Extract domain from line
     domain=$(echo "$line" | grep -v '^;' | tr -d ' ')
     if [ ! -z "$domain" ]; then
-        resolve_domain "$domain" >> "$tmp_file" &
+        resolve_domain "$domain" >>"$tmp_file" &
     fi
-done < /Users/dotkaio/.config/blocked/blocked-no-ip
+done </Users/dotkaio/.config/blocked/blocked-no-ip
 
 # Wait for all background processes to complete
 wait
