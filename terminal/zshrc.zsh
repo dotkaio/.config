@@ -18,6 +18,7 @@ export HOMEBREW_NO_AUTO_UPDATE
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 #functions
+
 function resolve_conflicts {
   awk '
   /^<<<<<<< / { in_conflict=1; next }    # start conflict
@@ -191,6 +192,10 @@ function block {
 }
 
 function unblock {
+  if [[ -z "$1" ]]; then
+    echo "\n\nUnblock what? lol\n\n"
+    return 1
+  fi
   sudo santactl rule --remove --path "$@"
 }
 
