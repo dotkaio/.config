@@ -1,0 +1,18 @@
+{
+  "supply": [
+    "https://iplists.firehol.org/files/firehol_level1.netset",
+    "https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/hosts.txt",
+    "https://urlhaus.abuse.ch/downloads/hostfile/",
+    "https://github.com/Veticia/antipopads/raw/master/hosts",
+    "https://github.com/Sinfonietta/hostfiles/raw/master/gambling-hosts",
+    "https://pgl.yoyo.org/adservers/serverlist.php?hostformat=plain&mimetype=plaintext",
+    "https://raw.githubusercontent.com/AdAway/adaway.github.io/master/hosts.txt",
+    "https://github.com/anudeepND/blacklist/raw/master/adservers.txt",
+    "https://github.com/FiltersHeroes/KADhosts/raw/master/KADhosts.txt",
+    "https://small.oisd.nl/domainswild2",
+    "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/light-onlydomains.txt",
+    "https://github.com/Sinfonietta/hostfiles/raw/master/pornography-hosts",
+    "https://github.com/badmojr/1Hosts/raw/master/Lite/domains.txt",
+    "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/tif.medium-onlydomains.txt"
+  ]
+}

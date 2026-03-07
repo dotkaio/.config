@@ -11,6 +11,7 @@ export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_AUTO_UPDATE
+export OLLAMA_FLASH_ATTENTION=1
 
 [ -d "$HOME/.nvm" ] &&
   export NVM_DIR="$HOME/.nvm"
@@ -40,7 +41,7 @@ function dev {
 
 function py {
   if [ -d "/opt/homebrew/Caskroom/miniconda/base" ]; then
-    __conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
+    __conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.bash' 'hook' 2>/dev/null)"
     if [ $? -eq 0 ]; then
       eval "$__conda_setup"
     else
@@ -654,7 +655,6 @@ compdef '_youtube-dl' yt
 compdef '_flutter' fl
 compdef '_conda activate' activate
 compdef '_git push' push
-compdef '_ollama' llm
 
 #source extras
 source "$CONFIG/terminal/suggestions.zsh"
