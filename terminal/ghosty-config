@@ -1,0 +1,32 @@
+font-family = "SF Mono"
+font-size = 13
+font-feature = -calt, -liga, -dlig
+theme = light:kaio-iterm-light,dark:kaio-iterm-dark
+window-colorspace = srgb
+window-width = 90
+window-height = 28
+working-directory = "/Users/kaioferraz"
+mouse-reporting = true
+cursor-style = bar
+cursor-style-blink = true
+cursor-color = #6BADF9
+cursor-text = #1C1C1C
+faint-opacity = 0.5
+bold-color = bright
+scrollback-limit = 268435456
+macos-option-as-alt = false
+term = xterm-256color
+keybind = alt+left=esc:b
+keybind = alt+right=esc:f
+keybind = cmd+left=text:\x01
+keybind = cmd+right=text:\x05
+keybind = alt+backspace=text:\x1b\x7f
+keybind = cmd+backspace=text:\x15
+keybind = delete=text:\x04
+keybind = alt+delete=esc:d
+keybind = alt+up=scroll_page_lines:-1
+keybind = alt+down=scroll_page_lines:1
+keybind = cmd+up=scroll_page_up
+keybind = cmd+down=scroll_page_down
+keybind = cmd+shift+up=scroll_to_row:0
+keybind = cmd+shift+down=scroll_to_bottom

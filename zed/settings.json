@@ -10,34 +10,8 @@
   "agent_ui_font_size": 13.0,
   "ui_font_family": "SF Mono",
   "agent": {
-    "default_profile": "ask",
-    "default_model": {
-      "provider": "copilot_chat",
-      "model": "gpt-5.3-codex",
-      "enable_thinking": false
-    },
-    "favorite_models": [
-      {
-        "provider": "copilot_chat",
-        "model": "gpt-5.3-codex",
-        "enable_thinking": false
-      },
-      {
-        "provider": "copilot_chat",
-        "model": "gpt-5.4",
-        "enable_thinking": false
-      },
-      {
-        "provider": "ollama",
-        "model": "gpt-oss:latest",
-        "enable_thinking": false
-      },
-      {
-        "provider": "ollama",
-        "model": "qwen3-vl:latest",
-        "enable_thinking": false
-      }
-    ],
+    "favorite_models": [],
+    "default_profile": "write",
     "model_parameters": []
   },
   "agent_servers": {
