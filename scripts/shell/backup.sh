@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO: conver this to applescript
+
 echo "Starting macOS preferences restoration..."
 echo "You will be prompted before applying each category."
 

@@ -198,6 +198,7 @@ function t {
 # ensure to call this when santactl is installed
 function block {
 	if command -v santactl >/dev/null; then
+		# if the user use the "all"
 		sudo santactl rule --silent-block --path "$@"
 	else
 		echo "Santa not installed"
@@ -213,12 +214,14 @@ function unblock {
 }
 
 function unblockall {
-	for app in "Messages.app" "FaceTime.app" "Mail.app" "System Settings.app" "Chromium.app"; do
-		if [[ "$app" == "Chromium.app" ]]; then
-			sudo santactl rule --remove --path "/Applications/$app"
-		else
+	for app in "Messages.app" "FaceTime.app" "Mail.app" "System Settings.app"; do
 			sudo santactl rule --remove --path "/System/Applications/$app"
-		fi
+	done
+}
+
+function blockall {
+	for app in "Messages.app" "FaceTime.app" "Mail.app" "System Settings.app"; do
+			sudo santactl rule --silent-block --path "/System/Applications/$app"
 	done
 }
 
@@ -689,8 +692,8 @@ compdef '_conda activate' activate
 compdef '_git push' push
 
 #source extras
-source "$CONFIG/terminal/suggestions.zsh"
-source "$CONFIG/terminal/highlight/init.zsh"
+source "$CONFIG/terminal/suggestions"
+source "$CONFIG/terminal/highlight/init"
 source "$HOME/Library/Mobile Documents/com~apple~CloudDocs/.env"
 
 FPATH="$CONFIG/terminal/completions:$FPATH"

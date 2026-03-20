@@ -38,7 +38,7 @@ git clone https://github.com/kaiorferraz/.config ~/.config
 
 ```bash
 echo 'export CONFIG="$HOME/.config"' >> ~/.zshrc
-echo 'source $CONFIG/terminal/zshrc.zsh' >> ~/.zshrc
+echo 'source $CONFIG/terminal/zshrc' >> ~/.zshrc
 ```
 
 4. **Set Zsh as your default shell**:
@@ -328,7 +328,7 @@ shwhistory clear
     ├── highlight/   # Syntax highlighting
     ├── suggestions.zsh
     ├── themes/
-    └── zshrc.zsh    # Main Zsh config
+    └── zshrc    # Main Zsh config
 ```
 
 ## Aliases
@@ -344,7 +344,7 @@ Common aliases included:
 - `sha256` - SHA256 checksum
 - `today` - Get today's date
 
-See `terminal/zshrc.zsh` for the complete list.
+See `terminal/zshrc` for the complete list.
 
 ## Environment Variables
 
