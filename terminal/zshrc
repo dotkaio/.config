@@ -545,23 +545,46 @@ function td {
 }
 
 function groq {
-	curl -s https://api.groq.com/openai/v1/chat/completions \
+	if [[ -z "${GROQ_API_KEY}" ]]; then
+		echo "GROQ_API_KEY is not set." >&2
+		return 1
+	fi
+
+	local raw http_code body error content
+	raw=$(curl -sS -w $'\n%{http_code}' https://api.groq.com/openai/v1/chat/completions \
 		-H "Content-Type: application/json" \
 		-H "Authorization: Bearer ${GROQ_API_KEY}" \
 		-d "$(jq -n --arg msg "$*" '{
       model: "openai/gpt-oss-120b",
       temperature: 1,
-      max_completion_tokens: 8192,
+      max_completion_tokens: 1024,
       top_p: 1,
       stream: false,
       reasoning_effort: "medium",
-      stop: null,
       messages: [
         {role:"system",content:"be concise and straight to the point. no more than 250 characters. answer the question without any additional information or quotes. wrapping the answer in code block is not allowed. if the question is not clear, ask for clarification."},
         {role:"user",content:$msg}
       ]
-    }')" |
-		jq -r '.choices[0].message.content'
+    }')") || return 1
+
+	http_code="${raw##*$'\n'}"
+	body="${raw%$'\n'*}"
+
+	if (( http_code >= 400 )); then
+		error=$(printf '%s' "$body" | jq -r '.error.message // .message // empty' 2>/dev/null)
+		[[ -z "$error" ]] && error="$body"
+		echo "Groq API error ($http_code): $error" >&2
+		return 1
+	fi
+
+	content=$(printf '%s' "$body" | jq -r '.choices[0].message.content // empty' 2>/dev/null)
+	if [[ -z "$content" ]]; then
+		echo "Groq API returned no message content." >&2
+		printf '%s\n' "$body" >&2
+		return 1
+	fi
+
+	printf '%s\n' "$content"
 }
 
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
