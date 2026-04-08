@@ -6,12 +6,12 @@
 
 # Installation:
 # 1. Check your current fpath by executing: `echo $fpath` in your zsh shell.
-# 2. To introduce a new directory to fpath, edit your .zshrc file:
-#    Example: `fpath=($HOME/.zsh-completions $fpath)`
+# 2. To introduce a new directory to fpath, edit your rc file:
+#    Example: `fpath=($HOME/-completions $fpath)`
 # 3. Store this script file in the directory you have added to your fpath.
 # 4. For a system-wide installation on Linux:
 #    Download and deploy this script with the following command:
-#    sudo wget -O /usr/share/zsh/site-functions/_ollama https://gist.githubusercontent.com/obeone/9313811fd61a7cbb843e0001a4434c58/raw/_ollama.zsh
+#    sudo wget -O /usr/share/zsh/site-functions/_ollama https://gist.githubusercontent.com/obeone/9313811fd61a7cbb843e0001a4434c58/raw/_ollama
 
 # Contributions:
 # Principal contributions by:

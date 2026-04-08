@@ -922,7 +922,3 @@
     "when": "chatIsEnabled && inChat && chatInputHasFocus && !editorFocus && !terminalFocus"
   },
 ]
-
-
-
-

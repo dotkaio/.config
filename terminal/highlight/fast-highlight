@@ -46,8 +46,8 @@ FAST_WORK_DIR=${~FAST_WORK_DIR}
 # Define default styles. You can set this after loading the plugin in
 # Zshrc and use 256 colors via numbers, like: fg=150
 typeset -gA FAST_HIGHLIGHT_STYLES
-if [[ -e $FAST_WORK_DIR/current_theme.zsh ]]; then
-  source $FAST_WORK_DIR/current_theme.zsh
+if [[ -e $FAST_WORK_DIR/current_theme ]]; then
+  source $FAST_WORK_DIR/current_theme
 else
 # built-in theme
 zstyle :plugin:fast-syntax-highlighting theme default
@@ -111,7 +111,7 @@ zstyle :plugin:fast-syntax-highlighting theme default
 fi
 
 # This can overwrite some of *_STYLES fields
-[[ -r $FAST_WORK_DIR/theme_overlay.zsh ]] && source $FAST_WORK_DIR/theme_overlay.zsh
+[[ -r $FAST_WORK_DIR/theme_overlay ]] && source $FAST_WORK_DIR/theme_overlay
 
 typeset -gA __FAST_HIGHLIGHT_TOKEN_TYPES
 
@@ -862,7 +862,7 @@ typeset -ga ZLAST_COMMANDS
                      __idx=1
                      _mybuf=$FAST_THEME_NAME
                      FAST_THEME_NAME=${${${FAST_HIGHLIGHT_STYLES[${FAST_THEME_NAME}secondary]}:t:r}#(XDG|LOCAL|HOME|OPT):}
-                     (( ${+FAST_HIGHLIGHT_STYLES[${FAST_THEME_NAME}default]} )) || source $FAST_WORK_DIR/secondary_theme.zsh
+                     (( ${+FAST_HIGHLIGHT_STYLES[${FAST_THEME_NAME}default]} )) || source $FAST_WORK_DIR/secondary_theme
                    else
                      __idx=0
                    fi
@@ -941,7 +941,7 @@ typeset -ga ZLAST_COMMANDS
                    __idx=1
                    _mybuf=$FAST_THEME_NAME
                    FAST_THEME_NAME=${${${FAST_HIGHLIGHT_STYLES[${FAST_THEME_NAME}secondary]}:t:r}#(XDG|LOCAL|HOME|OPT):}
-                   (( ${+FAST_HIGHLIGHT_STYLES[${FAST_THEME_NAME}default]} )) || source $FAST_WORK_DIR/secondary_theme.zsh
+                   (( ${+FAST_HIGHLIGHT_STYLES[${FAST_THEME_NAME}default]} )) || source $FAST_WORK_DIR/secondary_theme
                  else
                    __idx=0
                  fi
@@ -1202,7 +1202,7 @@ typeset -ga ZLAST_COMMANDS
       __idx=1
       __tmp=$FAST_THEME_NAME
       FAST_THEME_NAME=${${${FAST_HIGHLIGHT_STYLES[${FAST_THEME_NAME}secondary]}:t:r}#(XDG|LOCAL|HOME|OPT):}
-      (( ${+FAST_HIGHLIGHT_STYLES[${FAST_THEME_NAME}default]} )) || source $FAST_WORK_DIR/secondary_theme.zsh
+      (( ${+FAST_HIGHLIGHT_STYLES[${FAST_THEME_NAME}default]} )) || source $FAST_WORK_DIR/secondary_theme
     else
       __idx=0
     fi

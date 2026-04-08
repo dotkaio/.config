@@ -569,7 +569,7 @@ https://whynot.fail/reversing/the-art-of-cracking-software/
 https://wiki.alpinelinux.org/wiki/Main_Page
 https://wiki.seeedstudio.com/xiao_pin_multiplexing_esp33c6/
 https://wiki.skullsecurity.org/index.php/Passwords
-https://wiki.zshell.dev/community/zsh_handbook
+https://wikiell.dev/community/zsh_handbook
 https://wise.com/us/blog/paypal-to-cash-app
 https://workos.com/open-source
 https://worldmonitor.app/?lat=31.5739&lon=-59.0860&zoom=1.00&view=america&timeRange=7d&layers=conflicts%2Cbases%2Chotspots%2Cnuclear%2Csanctions%2Cweather%2Ceconomic%2Cwaterways%2Coutages%2Cmilitary%2Cnatural

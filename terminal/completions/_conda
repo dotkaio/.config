@@ -16,7 +16,7 @@
 #
 #     $ git clone https://github.com/conda-incubator/conda-zsh-completion
 #
-# And then add it to your $fpath in ~/.zshrc before you call compinit:
+# And then add it to your $fpath in ~/rc before you call compinit:
 #
 #     fpath+=/path/to/where/you/installed/conda-zsh-completion
 #     compinit
@@ -27,7 +27,7 @@
 #
 #     git clone https://github.com/conda-incubator/conda-zsh-completion ${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins/conda-zsh-completion
 #
-# And add lines in `.zshrc`
+# And add lines in `rc`
 #     plugins=(… conda-zsh-completion)
 #     autoload -U compinit && compinit
 #
@@ -45,7 +45,7 @@
 # oh-my-zsh.sh.
 #
 # To activate the completion cache for packages, add the following to your
-# '.zshrc':
+# 'rc':
 #
 #     zstyle ':completion::complete:*' use-cache 1
 #
@@ -56,24 +56,24 @@
 # 'hangs' while doing so.
 #
 # To display subcommand completion in groups, please add the following to your
-# '.zshrc':
+# 'rc':
 #
 #    zstyle ":conda_zsh_completion:*" use-groups true
 #
 # To display unnamed environments and prefixes of environments, add the following
-# to your '.zshrc':
+# to your 'rc':
 #
 #    zstyle ":conda_zsh_completion:*" show-unnamed true
 #
 # To display environments autocompletion sorted in creation order add the following
-# to your '.zshrc':
+# to your 'rc':
 #
 #    zstyle ":conda_zsh_completion:*" sort-envs-by-time true
 #
 # The completion will display both global environments (envs located in conda_dir/envs and base env)
 # and local environments (located in ~/.conda/envs).
 # If enables sort-envs-by-time, it will display local environments first.
-# To display global environments first, add the following to your '.zshrc':
+# To display global environments first, add the following to your 'rc':
 #
 #    zstyle ":conda_zsh_completion:*" show-global-envs-first true
 #

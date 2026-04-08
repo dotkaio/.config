@@ -1,121 +1,387 @@
+// OLD
+// {
+//   "[csv]": {
+//     "editor.inlayHints.maximumLength": 0,
+//     "editor.wordWrap": "off"
+//   },
+//   "[dotenv]": {
+//     "editor.defaultFormatter": "lumirelle.shell-format-rev"
+//   },
+//   "[html]": {
+//     "editor.defaultFormatter": "esbenp.prettier-vscode"
+//   },
+//   "[ignore]": {
+//     "editor.defaultFormatter": "lumirelle.shell-format-rev"
+//   },
+//   "[javascript]": {
+//     "editor.wordWrapColumn": 90
+//   },
+//   "[json]": {
+//     "editor.defaultFormatter": "esbenp.prettier-vscode"
+//   },
+//   "[jsonc]": {
+//     "editor.defaultFormatter": "vscode.json-language-features"
+//   },
+//   "[jsonl]": {
+//     "editor.defaultFormatter": "esbenp.prettier-vscode"
+//   },
+//   "[markdown]": {
+//     "editor.defaultFormatter": "esbenp.prettier-vscode"
+//   },
+//   "[properties]": {
+//     "editor.defaultFormatter": "lumirelle.shell-format-rev"
+//   },
+//   "[python]": {
+//     "editor.defaultFormatter": "ms-python.autopep8"
+//   },
+//   "[shellscript]": {
+//     "editor.defaultFormatter": "lumirelle.shell-format-rev",
+//     "files.eol": "\n"
+//   },
+//   "[typescript]": {
+//     "editor.defaultFormatter": "esbenp.prettier-vscode",
+//     "editor.wordWrapColumn": 90
+//   },
+//   // "terminal.integrated.scrollback": 100000,
+//   "chat.agent.maxRequests": 10000,
+//   "chat.agent.thinkingStyle": "collapsed",
+//   "chat.checkpoints.showFileChanges": true,
+//   "chat.instructionsFilesLocations": {
+//     "~/.claude/instructions": false
+//   },
+//   "chat.mcp.gallery.enabled": true,
+//   "chat.mcp.serverSampling": {
+//     "Global in Code: firecrawl/firecrawl-mcp-server": {
+//       "allowedModels": [
+//         "copilot/gpt-5-mini",
+//         "copilot/claude-opus-4.6",
+//         "copilot/gemini-3-pro-preview",
+//         "copilot/gpt-5.3-codex"
+//       ]
+//     },
+//     "Global in Code: io.github.ChromeDevTools/chrome-devtools-mcp": {
+//       "allowedModels": [
+//         "copilot/claude-opus-4.6",
+//         "copilot/gpt-5.3-codex"
+//       ]
+//     },
+//     "Global in Code: microsoft/playwright-mcp": {
+//       "allowedModels": [
+//         "copilot/claude-opus-4.6",
+//         "copilot/gpt-5.3-codex"
+//       ]
+//     },
+//     "Global in Code: neondatabase/mcp-server-neon": {
+//       "allowedModels": [
+//         "copilot/claude-opus-4.6",
+//         "copilot/gpt-5.3-codex"
+//       ]
+//     }
+//   },
+//   "chat.requestQueuing.defaultAction": "queue",
+//   "chat.tools.edits.autoApprove": {
+//     "**/*-lock.{yaml,json}": true,
+//     "**/*.lock": true,
+//     "**/*.{code-workspace,csproj,fsproj,vbproj,vcxproj,proj,targets,props}": true,
+//     "**/.git/**": true,
+//     "**/.github/**": true,
+//     "**/.vscode/*.json": true,
+//     "**/{package.json,server.xml,build.rs,web.config,.gitattributes,.env}": true
+//   },
+//   "chat.tools.terminal.autoApprove": {
+//     "*": true,
+//     "bash": true,
+//     "cat": true,
+//     "cp": true,
+//     "curl": true,
+//     "git": true,
+//     "grep": true,
+//     "kill": true,
+//     "ls": true,
+//     "lsof": true,
+//     "mkdir": true,
+//     "mv": true,
+//     "node": true,
+//     "npm": true,
+//     "npx": true,
+//     "pip": true,
+//     "pip3": true,
+//     "pnpm": true,
+//     "python": true,
+//     "rm": true,
+//     "sh": true,
+//     "shellscript": true,
+//     "vercel": true,
+//     "wget": true,
+//     "yarn": true,
+//     "zsh": true
+//   },
+//   "chat.tools.terminal.enableAutoApprove": true,
+//   "chat.tools.urls.autoApprove": {
+//     "https://*.better-auth.com": true,
+//     "https://*.npmjs.com": true,
+//     "https://bcpa.net": true,
+//     "https://bcpa.net/DataFiles.asp": true,
+//     "https://bcpa.net/NAL.asp": true,
+//     "https://bcpa.net/TOC.asp": true,
+//     "https://github.com": true,
+//     "https://github.com/usewaypoint": true,
+//     "https://github.com/usewaypoint/email-builder-js": true
+//   },
+//   // show all chat sessions and remove the MORE(<total>) button
+//   "chat.viewSessions.enabled": true,
+//   "css.lint.unknownAtRules": "ignore",
+//   "editor.bracketPairColorization.enabled": false,
+//   "editor.colorDecoratorsActivatedOn": "click",
+//   "editor.defaultFormatter": "esbenp.prettier-vscode",
+//   "editor.find.seedSearchStringFromSelection": "selection",
+//   "editor.fontFamily": "SF Mono, Monaco, 'Courier New', monospace",
+//   "editor.formatOnPaste": true,
+//   // "editor.fontFamily": "SF Mono, Monaco, 'Courier New', monospace",
+//   // "editor.fontSize": 13,
+//   "editor.minimap.enabled": false,
+//   "editor.pasteAs.preferences": [
+//     "chat.attach.attachments"
+//   ],
+//   "editor.renderControlCharacters": false,
+//   "editor.renderWhitespace": "none",
+//   "editor.scrollBeyondLastColumn": 0,
+//   "editor.scrollBeyondLastLine": false,
+//   "editor.scrollPredominantAxis": false,
+//   "editor.scrollbar.verticalScrollbarSize": 5,
+//   "editor.stickyScroll.enabled": false,
+//   "editor.stickyScroll.scrollWithEditor": false,
+//   "editor.unicodeHighlight.ambiguousCharacters": false,
+//   "emmet.showAbbreviationSuggestions": true,
+//   "emmet.showExpandedAbbreviation": "never",
+//   "emmet.showSuggestionsAsSnippets": true,
+//   "explorer.autoReveal": "focusNoScroll",
+//   "explorer.compactFolders": false,
+//   "explorer.confirmDelete": true,
+//   "files.associations": {
+//     "*.applescript": "applescript",
+//     "*.bash": "shellscript",
+//     "*.bashrc": "shellscript",
+//     "*.csv": "csv",
+//     "*.lock": "json",
+//     "*.md": "markdown",
+//     "*.scpt": "applescript",
+//     "*.sh": "shellscript",
+//     "*.xls": "csv",
+//     "*": "shellscript",
+//     ".env": "shellscript"
+//   },
+//   "git.confirmSync": false,
+//   "git.openRepositoryInParentFolders": "never",
+//   "github.copilot.chat.agent.autoFix": true,
+//   "github.copilot.chat.copilotMemory.enabled": true,
+//   "github.copilot.chat.updated53CodexPrompt.enabled": true,
+//   "github.copilot.enable": {
+//     "*": true,
+//     "plaintext": true,
+//     "markdown": true,
+//     "scminput": true,
+//     "javascript": true,
+//     "json": true,
+//     "jsonc": true,
+//     "python": true,
+//     "shellscript": true,
+//     "typescript": true,
+//     "typescriptreact": true
+//   },
+//   "github.copilot.nextEditSuggestions.enabled": true,
+//   "github.copilot.selectedCompletionModel": "",
+//   "html.format.wrapLineLength": 0,
+//   "inlineChat.defaultModel": "GPT-5.3-Codex (copilot)",
+//   "json.schemaDownload.trustedDomains": {
+//     "https://json-schema.org/": true,
+//     "https://json.schemastore.org/": true,
+//     "https://openapi.vercel.sh": true,
+//     "https://raw.githubusercontent.com/": true,
+//     "https://schemastore.azurewebsites.net/": true,
+//     "https://ui.shadcn.com": true,
+//     "https://www.schemastore.org/": true
+//   },
+//   // "python.analysis.enableColorPicker": false,
+//   // "python.experiments.enabled": false,
+//   // "python.experiments.optOutFrom": [
+//   //   "All",
+//   //   "pythonPromptNewToolsExt",
+//   //   "pythonSurveyNotification",
+//   //   "pythonTerminalEnvVarActivation",
+//   //   "pythonTestAdapter",
+//   //   "pythonDiscoveryUsingWorkers"
+//   // ],
+//   "redhat.telemetry.enabled": false,
+//   "remote.autoForwardPorts": false,
+//   "scm.alwaysShowRepositories": true,
+//   "scm.defaultViewMode": "tree",
+//   "scss.lint.unknownAtRules": "ignore",
+//   "settingsSync.keybindingsPerPlatform": false,
+//   "shellformat.effectLanguages": [
+//     "bash",
+//     "zsh",
+//     "sh",
+//     "shellscript",
+//     "dockerfile",
+//     "dotenv",
+//     "hosts",
+//     "jvmoptions",
+//     "ignore",
+//     "gitignore",
+//     "properties"
+//   ],
+//   "shellformat.path": "/opt/homebrew/bin/shfmt",
+//   "telemetry.telemetryLevel": "off",
+//   "terminal.external.osxExec": "iTerm.app",
+//   "terminal.integrated.cursorBlinking": true,
+//   "terminal.integrated.cursorStyle": "block",
+//   "terminal.integrated.cursorStyleInactive": "block",
+//   "terminal.integrated.customGlyphs": false,
+//   "terminal.integrated.enableFileLinks": "off",
+//   "terminal.integrated.environmentChangesRelaunch": false,
+//   "terminal.integrated.inheritEnv": false,
+//   "terminal.integrated.initialHint": false,
+//   "terminal.integrated.shellIntegration.decorationsEnabled": "never",
+//   "terminal.integrated.shellIntegration.environmentReporting": true,
+//   "terminal.integrated.stickyScroll.enabled": false,
+//   "update.showReleaseNotes": false,
+//   "window.autoDetectColorScheme": true,
+//   "window.commandCenter": false,
+//   "window.newWindowDimensions": "inherit",
+//   "window.restoreWindows": "all",
+//   "window.title": "${activeEditorLong} - ${rootName}",
+//   "workbench.colorCustomizations": {
+//     "[Atom One Light]": {
+//       "focusBorder": "#3586FF",
+//       "list.focusOutline": "#3586FF",
+//       "panel.background": "#ebebec",
+//       "sideBar.border": "#e0e0e1",
+//       // "terminal.ansiBlue": "#007aff",
+//       // "terminal.ansiBrightGreen": "#6eff7f",
+//       // "terminal.ansiBrightRed": "#ff6e6e",
+//       // "terminal.ansiBrightYellow": "#ffd633",
+//       // "terminal.ansiGreen": "#4cd964",
+//       // "terminal.ansiMagenta": "#ff23fb",
+//       // "terminal.ansiRed": "#f85c5c",
+//       // "terminal.ansiYellow": "#ffcc00",
+//       "sideBySideEditor.verticalBorder": "#3586FF",
+//       "terminal.background": "#ebebec",
+//       "terminal.selectionBackground": "#a5cdff"
+//     },
+//     "[One Dark Pro Mix]": {
+//       "editorCursor.foreground": "#3586FF",
+//       "list.focusBackground": "#3586ff37",
+//       "list.focusOutline": "#3586FF",
+//       "widget.border": "#3586FF",
+//       "focusBorder": "#3586FF",
+//       "panel.background": "#21252b",
+//       "activityBar.activeBorder": "#c7ccd6",
+//       "terminal.background": "#21252b",
+//       "terminal.selectionBackground": "#a5cdff"
+//       // "sideBar.border": "#282c34",
+//       // "terminal.ansiBlue": "#007aff",
+//       // "terminal.ansiBrightGreen": "#6eff7f",
+//       // "terminal.ansiBrightRed": "#ff6e6e",
+//       // "terminal.ansiBrightYellow": "#ffd633",
+//       // "terminal.ansiGreen": "#4cd964",
+//       // "terminal.ansiMagenta": "#ff23fb",
+//       // "terminal.ansiRed": "#f85c5c",
+//       // "terminal.ansiYellow": "#ffcc00",
+//     },
+//   },
+//   "editor.useTabStops": true,
+//   "editor.insertSpaces": false,
+//   "editor.detectIndentation": true,
+//   "workbench.editor.empty.hint": "hidden",
+//   "workbench.editor.enablePreview": false,
+//   "workbench.editor.restoreEditors": false,
+//   "workbench.editor.restoreViewState": true,
+//   "workbench.editorAssociations": {
+//     "*.markdown": "default",
+//     "*.md": "default"
+//   },
+//   "workbench.enableExperiments": false,
+//   "workbench.layoutControl.enabled": false,
+//   "workbench.navigationControl.enabled": false,
+//   "workbench.preferredDarkColorTheme": "One Dark Pro Mix",
+//   "workbench.preferredLightColorTheme": "Atom One Light",
+//   "workbench.secondarySideBar.defaultVisibility": "hidden",
+//   "workbench.startupEditor": "none",
+//   "workbench.tree.enableStickyScroll": false,
+//   "chat.editing.confirmEditRequestRemoval": false,
+//   "chat.agentSkillsLocations": {
+//     "~/.agents": true,
+//     "~/.agents/skills": true,
+//     "~/.claude/skills": false,
+//     "~/.copilot/skills": false,
+//     ".claude/skills": false,
+//     ".github/skills": false
+//   },
+//   "chat.experimental.useSkillAdherencePrompt": true,
+//   "chat.autoReply": true,
+//   "editor.autoIndent": "full",
+//   "editor.foldingStrategy": "indentation",
+//   "terminal.integrated.scrollback": 1000000,
+//   "chat.useNestedAgentsMdFiles": true,
+//   "editor.wordWrap": "on",
+//   "chat.tools.terminal.outputLocation": "terminal",
+//   "claudeCode.preferredLocation": "panel",
+//   "chat.viewSessions.orientation": "stacked",
+//   // "explorer.excludeGitIgnore": true,
+// }
+
+
 {
+  "shellformat.path": "/opt/homebrew/bin/shfmt",
+  "[markdown]": {
+    "editor.wordWrap": "off",
+    "editor.rulers": [],
+  },
   "[csv]": {
     "editor.inlayHints.maximumLength": 0,
-    "editor.wordWrap": "off"
-  },
-  "[dotenv]": {
-    "editor.defaultFormatter": "lumirelle.shell-format-rev"
-  },
-  "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.wordWrap": "off",
+    "editor.rulers": [],
   },
   "[ignore]": {
-    "editor.defaultFormatter": "lumirelle.shell-format-rev"
-  },
-  "[javascript]": {
-    "editor.wordWrapColumn": 90
-  },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "foxundermoon.shell-format",
   },
   "[jsonc]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
-  },
-  "[jsonl]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[markdown]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "vscode.json-language-features",
   },
   "[properties]": {
-    "editor.defaultFormatter": "lumirelle.shell-format-rev"
-  },
-  "[python]": {
-    "editor.defaultFormatter": "ms-python.autopep8",
+    "editor.defaultFormatter": "foxundermoon.shell-format",
   },
   "[shellscript]": {
-    "editor.defaultFormatter": "lumirelle.shell-format-rev",
-    "files.eol": "\n"
+    "editor.defaultFormatter": "foxundermoon.shell-format",
+    "files.eol": "\n",
   },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.wordWrapColumn": 90
+  "accessibility.signals.terminalBell": {
+    "announcement": "off",
+    "sound": "off",
   },
-  // "terminal.integrated.scrollback": 100000,
-  "chat.agent.maxRequests": 10000,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "chat.agent.thinking.collapsedTools": "always",
+  "chat.agent.thinking.terminalTools": false,
   "chat.agent.thinkingStyle": "collapsed",
   "chat.checkpoints.showFileChanges": true,
+  "chat.editing.confirmEditRequestRemoval": false,
+  "chat.exploreAgent.defaultModel": "Claude Haiku 4.5 (copilot)",
+  "chat.checkpoints.enabled": true,
   "chat.instructionsFilesLocations": {
-    "~/.claude/instructions": false
+    ".claude/instructions": false,
+    ".github/instructions": true,
+    "~/.claude/instructions": false,
+    "~/.copilot/instructions": false,
+    "~/.claude/rules": false,
+    ".claude/rules": false,
+    "~/.agents/instructions": false
   },
   "chat.mcp.gallery.enabled": true,
-  "chat.mcp.serverSampling": {
-    "Global in Code: firecrawl/firecrawl-mcp-server": {
-      "allowedModels": [
-        "copilot/gpt-5-mini",
-        "copilot/claude-opus-4.6",
-        "copilot/gemini-3-pro-preview",
-        "copilot/gpt-5.3-codex"
-      ]
-    },
-    "Global in Code: io.github.ChromeDevTools/chrome-devtools-mcp": {
-      "allowedModels": [
-        "copilot/claude-opus-4.6",
-        "copilot/gpt-5.3-codex"
-      ]
-    },
-    "Global in Code: microsoft/playwright-mcp": {
-      "allowedModels": [
-        "copilot/claude-opus-4.6",
-        "copilot/gpt-5.3-codex"
-      ]
-    },
-    "Global in Code: neondatabase/mcp-server-neon": {
-      "allowedModels": [
-        "copilot/claude-opus-4.6",
-        "copilot/gpt-5.3-codex"
-      ]
-    }
+  "chat.planAgent.defaultModel": "GPT-5.3-Codex (copilot)",
+  "chat.promptFilesLocations": {
+    "~/.agents/prompts": true,
   },
-  "chat.requestQueuing.defaultAction": "queue",
-  "chat.tools.edits.autoApprove": {
-    "**/*-lock.{yaml,json}": true,
-    "**/*.lock": true,
-    "**/*.{code-workspace,csproj,fsproj,vbproj,vcxproj,proj,targets,props}": true,
-    "**/.git/**": true,
-    "**/.github/**": true,
-    "**/.vscode/*.json": true,
-    "**/{package.json,server.xml,build.rs,web.config,.gitattributes,.env}": true
-  },
-  "chat.tools.terminal.autoApprove": {
-    "*": true,
-    "bash": true,
-    "cat": true,
-    "cp": true,
-    "curl": true,
-    "git": true,
-    "grep": true,
-    "kill": true,
-    "ls": true,
-    "lsof": true,
-    "mkdir": true,
-    "mv": true,
-    "node": true,
-    "npm": true,
-    "npx": true,
-    "pip": true,
-    "pip3": true,
-    "pnpm": true,
-    "python": true,
-    "rm": true,
-    "sh": true,
-    "shellscript": true,
-    "vercel": true,
-    "wget": true,
-    "yarn": true,
-    "zsh": true
-  },
-  "chat.tools.terminal.enableAutoApprove": true,
   "chat.tools.urls.autoApprove": {
     "https://*.better-auth.com": true,
     "https://*.npmjs.com": true,
@@ -125,39 +391,39 @@
     "https://bcpa.net/TOC.asp": true,
     "https://github.com": true,
     "https://github.com/usewaypoint": true,
-    "https://github.com/usewaypoint/email-builder-js": true
+    "https://github.com/usewaypoint/email-builder-js": true,
+    "https://lucide.dev": true,
   },
-  // show all chat sessions and remove the MORE(<total>) button
-  "chat.viewSessions.enabled": true,
-  "css.lint.unknownAtRules": "ignore",
-  "editor.bracketPairColorization.enabled": false,
-  "editor.colorDecoratorsActivatedOn": "click",
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.find.seedSearchStringFromSelection": "selection",
-  "editor.fontFamily": "SF Mono, Monaco, 'Courier New', monospace",
-  "editor.formatOnPaste": true,
-  // "editor.fontFamily": "SF Mono, Monaco, 'Courier New', monospace",
-  // "editor.fontSize": 13,
+  "chat.useAgentSkills": true,
+  "chat.viewSessions.orientation": "stacked",
+  // "diffEditor.renderSideBySide": false,
+  "editor.find.seedSearchStringFromSelection": "always",
+  "editor.insertSpaces": false,
+  "editor.lightbulb.enabled": "off",
   "editor.minimap.enabled": false,
-  "editor.pasteAs.preferences": [
-    "chat.attach.attachments"
-  ],
   "editor.renderControlCharacters": false,
-  "editor.renderWhitespace": "none",
+  // "editor.renderLineHighlight": "all",
+  "editor.scrollbar.verticalScrollbarSize": 5,
   "editor.scrollBeyondLastColumn": 0,
   "editor.scrollBeyondLastLine": false,
   "editor.scrollPredominantAxis": false,
-  "editor.scrollbar.verticalScrollbarSize": 5,
   "editor.stickyScroll.enabled": false,
   "editor.stickyScroll.scrollWithEditor": false,
-  "editor.unicodeHighlight.ambiguousCharacters": false,
-  "emmet.showAbbreviationSuggestions": true,
-  "emmet.showExpandedAbbreviation": "never",
-  "emmet.showSuggestionsAsSnippets": true,
-  "explorer.autoReveal": "focusNoScroll",
-  "explorer.compactFolders": false,
-  "explorer.confirmDelete": true,
+  "editor.tabSize": 2,
+  "editor.unicodeHighlight.includeComments": false,
+  "editor.wordWrapColumn": 80,
+  "editor.rulers": [
+    80
+  ],
+  // "terminal.integrated.tabs.defaultIcon": "comment",
+  "editor.wrappingIndent": "deepIndent",
+  // "emmet.showAbbreviationSuggestions": true,
+  // "emmet.showExpandedAbbreviation": "never",
+  // "emmet.showSuggestionsAsSnippets": true,
+  "explorer.excludeGitIgnore": true,
+  "extensions.ignoreRecommendations": true,
   "files.associations": {
+    ".env": "shellscript",
     "*.applescript": "applescript",
     "*.bash": "shellscript",
     "*.bashrc": "shellscript",
@@ -167,31 +433,29 @@
     "*.scpt": "applescript",
     "*.sh": "shellscript",
     "*.xls": "csv",
-    "*.zsh": "shellscript",
-    ".env": "shellscript"
+    "*": "shellscript",
   },
-  "git.confirmSync": false,
-  "git.openRepositoryInParentFolders": "never",
-  "github.copilot.chat.agent.autoFix": true,
-  "github.copilot.chat.copilotMemory.enabled": true,
-  "github.copilot.chat.updated53CodexPrompt.enabled": true,
   "github.copilot.enable": {
     "*": true,
-    "plaintext": true,
-    "markdown": true,
-    "scminput": true,
     "javascript": true,
     "json": true,
     "jsonc": true,
+    "markdown": true,
+    "plaintext": true,
     "python": true,
+    "scminput": true,
     "shellscript": true,
     "typescript": true,
-    "typescriptreact": true
+    "typescriptreact": true,
   },
+  "editor.renderWhitespace": "none",
   "github.copilot.nextEditSuggestions.enabled": true,
-  "github.copilot.selectedCompletionModel": "",
+  "github.copilot.selectedCompletionModel": "copilot/gpt-5.3-codex",
   "html.format.wrapLineLength": 0,
-  "inlineChat.defaultModel": "GPT-5.3-Codex (copilot)",
+  "chat.tools.terminal.outputLocation": "terminal",
+  "inlineChat.defaultModel": "GPT-5.4 (copilot)",
+  "inlineChat.enableV2": false,
+  "js/ts.updateImportsOnFileMove.enabled": "always",
   "json.schemaDownload.trustedDomains": {
     "https://json-schema.org/": true,
     "https://json.schemastore.org/": true,
@@ -199,23 +463,10 @@
     "https://raw.githubusercontent.com/": true,
     "https://schemastore.azurewebsites.net/": true,
     "https://ui.shadcn.com": true,
-    "https://www.schemastore.org/": true
+    "https://www.schemastore.org/": true,
   },
-  // "python.analysis.enableColorPicker": false,
-  // "python.experiments.enabled": false,
-  // "python.experiments.optOutFrom": [
-  //   "All",
-  //   "pythonPromptNewToolsExt",
-  //   "pythonSurveyNotification",
-  //   "pythonTerminalEnvVarActivation",
-  //   "pythonTestAdapter",
-  //   "pythonDiscoveryUsingWorkers"
-  // ],
-  "redhat.telemetry.enabled": false,
   "remote.autoForwardPorts": false,
   "scm.alwaysShowRepositories": true,
-  "scm.defaultViewMode": "tree",
-  "scss.lint.unknownAtRules": "ignore",
   "settingsSync.keybindingsPerPlatform": false,
   "shellformat.effectLanguages": [
     "bash",
@@ -228,11 +479,10 @@
     "jvmoptions",
     "ignore",
     "gitignore",
-    "properties"
+    "properties",
   ],
-  "shellformat.path": "/opt/homebrew/bin/shfmt",
   "telemetry.telemetryLevel": "off",
-  "terminal.external.osxExec": "iTerm.app",
+  "terminal.integrated.bellDuration": 0,
   "terminal.integrated.cursorBlinking": true,
   "terminal.integrated.cursorStyle": "block",
   "terminal.integrated.cursorStyleInactive": "block",
@@ -241,91 +491,94 @@
   "terminal.integrated.environmentChangesRelaunch": false,
   "terminal.integrated.inheritEnv": false,
   "terminal.integrated.initialHint": false,
+  "terminal.integrated.scrollback": 1000000,
   "terminal.integrated.shellIntegration.decorationsEnabled": "never",
   "terminal.integrated.shellIntegration.environmentReporting": true,
   "terminal.integrated.stickyScroll.enabled": false,
   "update.showReleaseNotes": false,
   "window.autoDetectColorScheme": true,
-  "window.commandCenter": false,
+  "window.density.editorTabHeight": "compact",
   "window.newWindowDimensions": "inherit",
   "window.restoreWindows": "all",
-  "window.title": "${activeEditorLong} - ${rootName}",
+  "window.title": "${rootName}${separator}${activeEditorMedium}",
   "workbench.colorCustomizations": {
-    "[Atom One Light]": {
-      "focusBorder": "#3586FF",
-      "list.focusOutline": "#3586FF",
-      "panel.background": "#ebebec",
-      "sideBar.border": "#e0e0e1",
-      // "terminal.ansiBlue": "#007aff",
-      // "terminal.ansiBrightGreen": "#6eff7f",
-      // "terminal.ansiBrightRed": "#ff6e6e",
-      // "terminal.ansiBrightYellow": "#ffd633",
-      // "terminal.ansiGreen": "#4cd964",
-      // "terminal.ansiMagenta": "#ff23fb",
-      // "terminal.ansiRed": "#f85c5c",
-      // "terminal.ansiYellow": "#ffcc00",
-      "sideBySideEditor.verticalBorder": "#3586FF",
-      "terminal.background": "#ebebec",
-      "terminal.selectionBackground": "#a5cdff"
-    },
-    "[One Dark Pro Mix]": {
-      "editorCursor.foreground": "#3586FF",
-      "list.focusBackground": "#3586ff37",
-      "list.focusOutline": "#3586FF",
-      "widget.border": "#3586FF",
-      "focusBorder": "#3586FF",
+    "[Atom One Dark]": {
+      // make the text on the explorer more dim
+      "list.inactiveSelectionForeground": "#ffffff99",
+      "activityBar.activeBackground": "#21252b",
+      "activityBar.activeBorder": "#21252b",
       "panel.background": "#21252b",
-      "activityBar.activeBorder": "#c7ccd6",
-      "terminal.background": "#21252b",
-      "terminal.selectionBackground": "#a5cdff"
-      // "sideBar.border": "#282c34",
-      // "terminal.ansiBlue": "#007aff",
-      // "terminal.ansiBrightGreen": "#6eff7f",
-      // "terminal.ansiBrightRed": "#ff6e6e",
-      // "terminal.ansiBrightYellow": "#ffd633",
-      // "terminal.ansiGreen": "#4cd964",
-      // "terminal.ansiMagenta": "#ff23fb",
-      // "terminal.ansiRed": "#f85c5c",
-      // "terminal.ansiYellow": "#ffcc00",
+      "scrollbar.shadow": "#ffffff00",
+      "terminal.foreground": "#dbdcde",
+      "terminalCursor.foreground": "#65a0ff",
+    },
+    "[Atom One Light]": {
+      "activityBar.activeBackground": "#eaeaeb",
+      "activityBar.activeBorder": "#eaeaeb",
+      "statusBar.border": "#85858579",
+      "statusBar.foreground": "#5b5b5b",
+      "terminal.foreground": "#dbdcde",
+      "widget.shadow": "#00000000",
+      "panel.background": "#eaeaeb",
+      "scrollbar.shadow": "#ffffff00",
+      "terminalCursor.foreground": "#65a0ff",
+      "terminal.selectionBackground": "#5a96f6",
     },
   },
-  "editor.useTabStops": true,
-  "editor.insertSpaces": false,
-  "editor.detectIndentation": true,
-  "workbench.editor.empty.hint": "hidden",
+  "breadcrumbs.enabled": false,
+  "workbench.editor.doubleClickTabToToggleEditorGroupSizes": "off",
+  "workbench.editor.editorActionsLocation": "titleBar",
   "workbench.editor.enablePreview": false,
   "workbench.editor.restoreEditors": false,
   "workbench.editor.restoreViewState": true,
   "workbench.editorAssociations": {
     "*.markdown": "default",
-    "*.md": "default"
+    "*.md": "default",
   },
   "workbench.enableExperiments": false,
-  "workbench.layoutControl.enabled": false,
-  "workbench.navigationControl.enabled": false,
-  "workbench.preferredDarkColorTheme": "One Dark Pro Mix",
-  "workbench.preferredLightColorTheme": "Atom One Light",
-  "workbench.secondarySideBar.defaultVisibility": "hidden",
-  "workbench.startupEditor": "none",
+  "workbench.preferredHighContrastColorTheme": "Atom One Dark",
+  "workbench.preferredHighContrastLightColorTheme": "Atom One Light",
+  "workbench.reduceTransparency": "on",
   "workbench.tree.enableStickyScroll": false,
-  "chat.editing.confirmEditRequestRemoval": false,
-  "chat.agentSkillsLocations": {
-    "~/.agents": true,
-    "~/.agents/skills": true,
-    "~/.claude/skills": false,
-    "~/.copilot/skills": false,
-    ".claude/skills": false,
-    ".github/skills": false,
+  // "workbench.editor.tabSizing": "shrink",
+  "workbench.editor.titleScrollbarVisibility": "hidden",
+  "explorer.compactFolders": false,
+  "editor.autoClosingBrackets": "languageDefined",
+  "explorer.confirmUndo": "verbose",
+  "workbench.layoutControl.type": "menu",
+  "workbench.browser.dataStorage": "ephemeral",
+  "workbench.startupEditor": "newUntitledFile",
+  "chat.tools.terminal.autoApprove": {
+    "pnpm exec eslint": true,
+    "command": true
   },
+  "git.openRepositoryInParentFolders": "never",
+  "workbench.preferredDarkColorTheme": "Atom One Dark",
+  "workbench.preferredLightColorTheme": "Atom One Light",
+  "debug.console.wordWrap": false,
+  "workbench.editor.empty.hint": "hidden",
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "security.promptForRemoteFileProtocolHandling": false,
+  "chat.agent.maxRequests": 1000,
   "chat.experimental.useSkillAdherencePrompt": true,
-  "chat.autoReply": true,
-  "editor.autoIndent": "full",
-  "editor.foldingStrategy": "indentation",
-  "terminal.integrated.scrollback": 1000000,
-  "chat.useNestedAgentsMdFiles": true,
-  "editor.wordWrap": "on",
-  "chat.tools.terminal.outputLocation": "terminal",
-  "claudeCode.preferredLocation": "panel",
-  "chat.viewSessions.orientation": "stacked",
-  // "explorer.excludeGitIgnore": true,
+  "github.copilot.chat.getSearchViewResultsSkill.enabled": true,
+  "chat.editor.wordWrap": "on",
+  "workbench.colorTheme": "Atom One Light",
+  "editor.mouseWheelZoom": false,
+  "editor.formatOnPaste": true,
+  "editor.wrapOnEscapedLineFeeds": true,
+  "editor.wrappingStrategy": "advanced",
+  "editor.wordWrap": "wordWrapColumn",
+  "window.closeWhenEmpty": false,
+  "workbench.settings.alwaysShowAdvancedSettings": true,
+  "workbench.editor.useModal": "off",
+  "chat.sendElementsToChat.attachCSS": false,
+  "chat.unifiedAgentsBar.enabled": true,
+  "workbench.experimental.share.enabled": true,
+  "github.copilot.nextEditSuggestions.eagerness": "high",
+  "git.enableSmartCommit": true,
+  "workbench.browser.enableChatTools": true,
+  "workbench.browser.showInTitleBar": true,
 }

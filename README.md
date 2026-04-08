@@ -22,10 +22,10 @@ Personal dotfiles and system configuration for macOS and Linux systems. Includes
 
 ### Installation
 
-1. **Create a `.zshrc` file** if it doesn't exist:
+1. **Create a `rc` file** if it doesn't exist:
 
 ```bash
-touch ~/.zshrc
+touch ~/rc
 ```
 
 2. **Clone this repository** to `~/.config`:
@@ -34,11 +34,11 @@ touch ~/.zshrc
 git clone https://github.com/kaiorferraz/.config ~/.config
 ```
 
-3. **Update your `.zshrc`** to source the configuration:
+3. **Update your `rc`** to source the configuration:
 
 ```bash
-echo 'export CONFIG="$HOME/.config"' >> ~/.zshrc
-echo 'source $CONFIG/terminal/zshrc' >> ~/.zshrc
+echo 'export CONFIG="$HOME/.config"' >> ~/rc
+echo 'source $CONFIG/terminal/zshrc' >> ~/rc
 ```
 
 4. **Set Zsh as your default shell**:
@@ -50,7 +50,7 @@ chsh -s $(which zsh)
 5. **Restart your terminal** or source the configuration:
 
 ```bash
-source ~/.zshrc
+source ~/rc
 ```
 
 ## Usage
@@ -326,7 +326,7 @@ shwhistory clear
     ├── completions/ # Zsh completions
     ├── fresh/
     ├── highlight/   # Syntax highlighting
-    ├── suggestions.zsh
+    ├── suggestions
     ├── themes/
     └── zshrc    # Main Zsh config
 ```

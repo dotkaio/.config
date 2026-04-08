@@ -45,9 +45,9 @@ if [[ "$1" = "-o" || "$1" = "-oo" || "$1" = "-ooo" || "$1" = "-git" || "$1" = "-
     typeset -a input
     input=()
     if [[ "$1" = "-o" ]]; then
-        input+=( "./parse.zsh ../fast-highlight parse2.out" )
+        input+=( "./parse ../fast-highlight parse2.out" )
         input+=( "rm -f parse*.out" )
-        input+=( "./mh-parse.zsh ../fast-highlight > out" )
+        input+=( "./mh-parse ../fast-highlight > out" )
         input+=( "if [[ -o multibyte ]]; then echo multibyte is set; fi" )
         input+=( "[[ \"a\" = *[[:alpha:]_-][[:alpha:]]# ]] && echo yes" )
         input+=( 'git tag -a v0.98 -m "Syntax highlighting of the history entries"' )
@@ -207,7 +207,7 @@ elif [[ -r "$1" ]]; then
     fi
 else
     if [[ -z "$1" ]]; then
-        print -u2 "Usage: ./parse.zsh {to-parse file} [region_highlight output file]"
+        print -u2 "Usage: ./parse {to-parse file} [region_highlight output file]"
         exit 2
     else
         print -u2 "Unreadable to-parse file \`$1', aborting"
