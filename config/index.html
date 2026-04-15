@@ -5445,24 +5445,56 @@
 			metaCache: "startpage.metaCache",
 		};
 
+		// ── Storage shim: Chromium blocks localStorage on file:// URLs ──
+		const _memStore = {};
+		const _lsOK = (() => {
+			try {
+				const k = "__ls_test__";
+				localStorage.setItem(k, "1");
+				localStorage.removeItem(k);
+				return true;
+			} catch { return false; }
+		})();
+
+		function _get(key) {
+			if (_lsOK) return localStorage.getItem(key);
+			return _memStore.hasOwnProperty(key) ? _memStore[key] : null;
+		}
+		function _set(key, val) {
+			if (_lsOK) { localStorage.setItem(key, val); return; }
+			_memStore[key] = val;
+		}
+		function _del(key) {
+			if (_lsOK) { localStorage.removeItem(key); return; }
+			delete _memStore[key];
+		}
+
+		if (!_lsOK) {
+			console.warn(
+				"[startpage] localStorage unavailable (file:// origin). " +
+				"State will NOT persist across reloads. " +
+				"Serve via HTTP for persistence: python3 -m http.server 8484 -d ~/.config/config"
+			);
+		}
+
 		function getOpenInNewTab() {
-			const v = localStorage.getItem(LS.openInNewTab);
+			const v = _get(LS.openInNewTab);
 			return v === null ? true : v === "true";
 		}
 		function setOpenInNewTab(v) {
-			localStorage.setItem(LS.openInNewTab, String(!!v));
+			_set(LS.openInNewTab, String(!!v));
 		}
 
 		function getSortMode() {
-			return localStorage.getItem(LS.sortMode) || "az";
+			return _get(LS.sortMode) || "az";
 		}
 		function setSortMode(v) {
-			localStorage.setItem(LS.sortMode, v);
+			_set(LS.sortMode, v);
 		}
 
 		function getCollapsedSections() {
 			try {
-				const raw = localStorage.getItem(LS.collapsedSections);
+				const raw = _get(LS.collapsedSections);
 				if (!raw) return {};
 				const parsed = JSON.parse(raw);
 				return parsed && typeof parsed === "object" ? parsed : {};
@@ -5472,7 +5504,7 @@
 		}
 
 		function setCollapsedSections(value) {
-			localStorage.setItem(LS.collapsedSections, JSON.stringify(value));
+			_set(LS.collapsedSections, JSON.stringify(value));
 		}
 
 		function isSectionCollapsed(name) {
@@ -5487,13 +5519,13 @@
 		}
 
 		function getGrouping() {
-			const v = localStorage.getItem(LS.grouping);
+			const v = _get(LS.grouping);
 			return v === null ? true : v === "true";
 		}
-		function setGrouping(v) { localStorage.setItem(LS.grouping, String(!!v)); }
+		function setGrouping(v) { _set(LS.grouping, String(!!v)); }
 
-		function getViewMode() { return localStorage.getItem(LS.viewMode) || "cards"; }
-		function setViewMode(v) { localStorage.setItem(LS.viewMode, v); }
+		function getViewMode() { return _get(LS.viewMode) || "cards"; }
+		function setViewMode(v) { _set(LS.viewMode, v); }
 
 		// ── Meta Cache ──
 		const META_CACHE_VERSION = 1;
@@ -5501,7 +5533,7 @@
 
 		function getMetaCache() {
 			try {
-				const raw = localStorage.getItem(LS.metaCache);
+				const raw = _get(LS.metaCache);
 				if (!raw) return {};
 				const parsed = JSON.parse(raw);
 				if (!parsed || parsed._v !== META_CACHE_VERSION) return {};
@@ -5512,17 +5544,17 @@
 		function setMetaCache(cache) {
 			cache._v = META_CACHE_VERSION;
 			try {
-				localStorage.setItem(LS.metaCache, JSON.stringify(cache));
+				_set(LS.metaCache, JSON.stringify(cache));
 			} catch {
 				const keys = Object.keys(cache).filter(k => k !== "_v");
 				keys.sort((a, b) => (cache[a]?.ts || 0) - (cache[b]?.ts || 0));
 				for (let i = 0; i < Math.floor(keys.length / 2); i++) delete cache[keys[i]];
-				try { localStorage.setItem(LS.metaCache, JSON.stringify(cache)); } catch { }
+				try { _set(LS.metaCache, JSON.stringify(cache)); } catch { }
 			}
 		}
 
 		function clearMetaCache() {
-			localStorage.removeItem(LS.metaCache);
+			_del(LS.metaCache);
 			updateMetaStatus();
 		}
 
@@ -6556,7 +6588,7 @@
 		}
 
 		function loadInitialGroups() {
-			const storedRaw = localStorage.getItem(LS.rawUrls);
+			const storedRaw = _get(LS.rawUrls);
 			if (storedRaw) {
 				const urls = sanitizeUrls(storedRaw);
 				return groupsFromRawUrls(urls);
@@ -6628,7 +6660,7 @@
 			document.getElementById("apply").addEventListener("click", () => {
 				const raw = document.getElementById("raw").value;
 				const urls = sanitizeUrls(raw);
-				localStorage.setItem(LS.rawUrls, urls.join("\n"));
+				_set(LS.rawUrls, urls.join("\n"));
 				currentGroups = groupsFromRawUrls(urls);
 				closeModal();
 				render(currentGroups);

@@ -19,6 +19,13 @@ export OLLAMA_FLASH_ATTENTION=1
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 #functions
+function avis {
+	if [ -f "$HOME/Developer/avis/avis.sh" ]; then
+		$HOME/Developer/avis/avis.sh
+	else
+		echo "\nnot found\n\n"
+	fi
+}
 
 function path {
 	[[ -d "$1" ]] && export PATH="$1:$PATH"
