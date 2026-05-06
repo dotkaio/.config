@@ -1,0 +1,1 @@
+/Users/kaioferraz/.agents/agent/opencode/plugins/avis-bootstrap.js

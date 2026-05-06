@@ -1,0 +1,5 @@
+{
+	"dependencies": {
+		"@dotkaio/avis": "^0.64.1"
+	}
+}

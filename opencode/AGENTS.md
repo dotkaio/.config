@@ -1,0 +1,1 @@
+/Users/kaioferraz/.agents/agent/opencode/AGENTS.md

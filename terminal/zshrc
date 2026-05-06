@@ -13,20 +13,6 @@ export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_AUTO_UPDATE
 export OLLAMA_FLASH_ATTENTION=1
 
-[ -d "$HOME/.nvm" ] &&
-	export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-
-#functions
-function avis {
-	if [ -f "$HOME/Developer/avis/avis.sh" ]; then
-		$HOME/Developer/avis/avis.sh
-	else
-		echo "\nnot found\n\n"
-	fi
-}
-
 function path {
 	[[ -d "$1" ]] && export PATH="$1:$PATH"
 }
@@ -195,13 +181,13 @@ function unblock {
 
 function unblockall {
 	for app in "Messages.app" "FaceTime.app" "Mail.app" "System Settings.app"; do
-			sudo santactl rule --remove --path "/System/Applications/$app"
+		sudo santactl rule --remove --path "/System/Applications/$app"
 	done
 }
 
 function blockall {
 	for app in "Messages.app" "FaceTime.app" "Mail.app" "System Settings.app"; do
-			sudo santactl rule --silent-block --path "/System/Applications/$app"
+		sudo santactl rule --silent-block --path "/System/Applications/$app"
 	done
 }
 
@@ -427,12 +413,53 @@ function shwip {
 	curl -sq4 "https://icanhazip.com/"
 }
 
+# this function shows the most used commands in the history statistics
 function shwhistory {
-	if [[ "$1" == "top" ]]; then
-		history 1 | awk '{CMD[$2]++;count++} END { for (a in CMD) printf "%d %0.2f%% %s\n", CMD[a], CMD[a]/count*100, a }' | sort -nr | nl | head -n25
-	elif [[ "$1" == "clear" || "$1" == "clean" ]]; then
-		awk '!a[$0]++' "$HISTFILE" >"$HISTFILE.tmp" && mv "$HISTFILE.tmp" "$HISTFILE"
-	fi
+	local action="${1:-top}"
+	local tmp
+
+	case "$action" in
+	top)
+		builtin fc -ln 1 | awk '
+                {
+                    cmd = $1
+                    if (cmd == "" || cmd == "shwhistory") next
+                    count[cmd]++
+                    total++
+                }
+                END {
+                    if (total == 0) exit
+                    for (cmd in count) {
+                        printf "%d %.2f%% %s\n", count[cmd], (count[cmd] / total) * 100, cmd
+                    }
+                }
+            ' | sort -nr | head -n 25 | nl -w2 -s'. '
+		;;
+	clear | clean)
+		[[ -f "$HISTFILE" ]] || {
+			echo "History file not found: $HISTFILE"
+			return 1
+		}
+
+		tmp=$(mktemp "${HISTFILE}.XXXXXX") || return 1
+
+		awk '
+                { lines[NR] = $0 }
+                END {
+                    for (i = NR; i >= 1; i--) {
+                        if (!seen[lines[i]]++) out[++n] = lines[i]
+                    }
+                    for (i = n; i >= 1; i--) print out[i]
+                }
+            ' "$HISTFILE" >"$tmp" &&
+			mv "$tmp" "$HISTFILE" &&
+			echo "History file deduplicated. Restart zsh to reload it."
+		;;
+	*)
+		echo "Usage: shwhistory {top|clear|clean}"
+		return 1
+		;;
+	esac
 }
 
 function rand {
@@ -456,8 +483,6 @@ function rand {
 		sudo scutil --set HostName "$hostName"
 		sudo scutil --set LocalHostName "$localHostName"
 		sudo dscacheutil -flushcache
-
-		# networksetup -setairportnetwork en2 DG_link_5GHz Dg_Serrano2016
 	}
 	case "$1" in
 	"user") newUser ;;
@@ -557,11 +582,14 @@ function groq {
 		return 1
 	fi
 
-	local raw http_code body error content
+	local raw http_code body error content msg
+	# strip raw control characters (bare newlines, tabs, etc.) that break JSON
+	msg=$(printf '%s' "$*" | tr -d '\000-\010\013-\037')
+
 	raw=$(curl -sS -w $'\n%{http_code}' https://api.groq.com/openai/v1/chat/completions \
 		-H "Content-Type: application/json" \
 		-H "Authorization: Bearer ${GROQ_API_KEY}" \
-		-d "$(jq -n --arg msg "$*" '{
+		-d "$(jq -n --arg msg "$msg" '{
       model: "openai/gpt-oss-120b",
       temperature: 1,
       max_completion_tokens: 1024,
@@ -577,7 +605,7 @@ function groq {
 	http_code="${raw##*$'\n'}"
 	body="${raw%$'\n'*}"
 
-	if (( http_code >= 400 )); then
+	if ((http_code >= 400)); then
 		error=$(printf '%s' "$body" | jq -r '.error.message // .message // empty' 2>/dev/null)
 		[[ -z "$error" ]] && error="$body"
 		echo "Groq API error ($http_code): $error" >&2
@@ -592,6 +620,68 @@ function groq {
 	fi
 
 	printf '%s\n' "$content"
+}
+
+function lookup {
+	if [[ $# -lt 1 ]]; then
+		echo "Usage: lookup <phone-or-email-or-query>" >&2
+		return 2
+	fi
+
+	local query="$*"
+	local lookup_script="$CONFIG/scripts/enformion/enformion_lookup_to_html.py"
+	if [[ ! -f "$lookup_script" ]]; then
+		echo "Missing helper script: $lookup_script" >&2
+		return 1
+	fi
+
+	# Person Search uses galaxy-ap-name / galaxy-ap-password headers.
+	# Your env uses ENFORMION_KEY_NAME / ENFORMION_KEY_PASSWORD.
+	if [[ -z "${ENFORMION_KEY_NAME:-}" || -z "${ENFORMION_KEY_PASSWORD:-}" ]]; then
+		echo "Missing Enformion access profile credentials. Set ENFORMION_KEY_NAME and ENFORMION_KEY_PASSWORD in your .env." >&2
+		return 2
+	fi
+
+	local html_path=""
+	local json_path=""
+	local name=""
+	local phones=""
+
+	# The helper prints KEY=VALUE lines.
+	while IFS= read -r line; do
+		case "$line" in
+		HTML_PATH=*) html_path="${line#HTML_PATH=}" ;;
+		JSON_PATH=*) json_path="${line#JSON_PATH=}" ;;
+		NAME=*) name="${line#NAME=}" ;;
+		PHONES=*) phones="${line#PHONES=}" ;;
+		esac
+	done < <(python3 "$lookup_script" "$query") || return 1
+
+	if [[ -z "$html_path" || -z "$json_path" ]]; then
+		echo "Lookup failed (no output paths)." >&2
+		return 1
+	fi
+
+	echo "Created: $html_path"
+	open "$html_path" >/dev/null 2>&1 || true
+
+	printf "Add/merge phone numbers for %s into Contacts? [y/N]: " "$name"
+	local resp
+	read -r resp
+
+	case "$resp" in
+	[yY] | [yY][eE][sS])
+		local merge_script="$CONFIG/scripts/enformion/enformion_merge_contacts.py"
+		if [[ ! -f "$merge_script" ]]; then
+			echo "Missing helper script: $merge_script" >&2
+			return 1
+		fi
+		python3 "$merge_script" "$json_path"
+		;;
+	*)
+		echo "Skipped Contacts update."
+		;;
+	esac
 }
 
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
@@ -693,6 +783,7 @@ compdef '_flutter' fl
 compdef '_conda activate' activate
 compdef '_git push' push
 compdef '_ollama' llm
+compdef '_pfctl' pf
 
 #source extras
 source "$CONFIG/terminal/suggestions"
