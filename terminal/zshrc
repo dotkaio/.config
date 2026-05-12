@@ -12,6 +12,7 @@ export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_AUTO_UPDATE
 export OLLAMA_FLASH_ATTENTION=1
+export OPENCODE_DB="/Users/kaioferraz/.local/share/opencode/opencode.db"
 
 function path {
 	[[ -d "$1" ]] && export PATH="$1:$PATH"
@@ -127,12 +128,22 @@ function xcode {
 	[[ -e "$1" ]] && open -a Xcode "$1" || open -a Xcode
 }
 
+# this function replaces all occurrences of a string in a file with another string
 function replace {
 	if [[ -z "$1" || -z "$2" || -z "$3" ]]; then
 		echo "Usage: replace <file> <old_string> <new_string>"
 		return 1
 	fi
 	sed -i '' "s/$2/$3/g" "$1"
+}
+
+# build a function that replaces all occurrences of a string inside a dir recursively
+function replace_in_dir {
+	if [[ -z "$1" || -z "$2" || -z "$3" ]]; then
+		echo "Usage: replace_in_dir <dir> <old_string> <new_string>"
+		return 1
+	fi
+	find "$1" -type f -exec sed -i '' "s/$2/$3/g" {} +
 }
 
 function push {
