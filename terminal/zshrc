@@ -807,7 +807,8 @@ HISTFILE="$HOME/.history"
 HISTSIZE=10000
 SAVEHIST=10000
 
-prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f→ '
+prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
+> '
 # prompt='%F{cyan}%h %F{red}% $(branch_name)%f→ '
 
 rm $HOME/.zcompdump* 2>/dev/null && compinit
