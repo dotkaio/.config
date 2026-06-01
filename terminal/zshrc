@@ -2,31 +2,33 @@
 export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 export CONFIG="$HOME/.config"
 export CHROME_EXECUTABLE="/Applications/Chromium.app/Contents/MacOS/Chromium"
-export PNPM_HOME="/Users/sysadm/Library/pnpm"
-export HOMEBREW_NO_AUTO_UPDATE
+export PNPM_HOME="$HOME/Library/pnpm"
 export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_EMOJI
 export HOMEBREW_NO_INSECURE_REDIRECT=1
 export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_NO_ANALYTICS
-export HOMEBREW_NO_AUTO_UPDATE
 export OLLAMA_FLASH_ATTENTION=1
 export OPENCODE_DB="/Users/kaioferraz/.local/share/opencode/opencode.db"
+export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
+export CONFIG="$HOME/.config"
+export CHROME_EXECUTABLE="/Applications/Chromium.app/Contents/MacOS/Chromium"
+export PNPM_HOME="/Users/kaioferraz/Library/pnpm"
+export HOMEBREW_NO_ANALYTICS
+export HOMEBREW_NO_EMOJI
+export HOMEBREW_NO_INSECURE_REDIRECT=1
+export HOMEBREW_NO_ENV_HINTS=1
+export HOMEBREW_CASK_OPTS=--require-sha
+export HOMEBREW_NO_ANALYTICS=1
+export OLLAMA_FLASH_ATTENTION=1
 
-function path {
-	[[ -d "$1" ]] && export PATH="$1:$PATH"
-}
+export PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin:$PNPM_HOME/bin:/opt/homebrew/bin/"
 
-for p in /bin \
-	/sbin \
-	/usr/bin \
-	/usr/sbin \
-	/usr/local/bin \
-	/usr/local/sbin \
-	/opt/homebrew/bin; do
-	path "$p"
-done
+[ -d "$HOME/.nvm" ] &&
+	export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 function resolve_conflicts {
 	awk '
@@ -69,7 +71,7 @@ function yt {
 	fi
 	cd /tmp || return
 	yt-dlp "$@"
-	mv *.mp4 '/Users/sysadm/Library/Mobile Documents/com~apple~CloudDocs/Developer/Patch'
+	mv *.mp4 /tmp
 }
 
 function wrap {
@@ -105,7 +107,7 @@ function ip_from_url {
 }
 
 function convert_nextjs {
-	/opt/homebrew/Caskroom/miniconda/base/bin/python /Users/sysadm/.config/scripts/python/convert_to_nextjs.py
+	/opt/homebrew/Caskroom/miniconda/base/bin/python $HOME/.config/scripts/python/convert_to_nextjs.py
 }
 
 function to_number {
@@ -253,7 +255,7 @@ function finder {
 }
 
 function plist {
-	local FILE="$CONFIG/config/plist_shasum.txt"
+	local FILE="$CONFIG/plist_shasum.txt"
 	function get_files_path {
 		find "$HOME/Library/Preferences" -name "*.plist" -type f
 	}
@@ -705,7 +707,6 @@ alias ....="cd ../../.."
 alias ...="cd ../.."
 alias ..="cd .."
 alias .="open ."
-
 alias copy="pbcopy"
 alias diff="colordiff"
 alias doctor="brew doctor"
@@ -810,5 +811,3 @@ SAVEHIST=10000
 prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
 > '
 # prompt='%F{cyan}%h %F{red}% $(branch_name)%f→ '
-
-rm $HOME/.zcompdump* 2>/dev/null && compinit
