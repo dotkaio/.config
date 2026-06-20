@@ -10,7 +10,6 @@ export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_NO_ANALYTICS
 export OLLAMA_FLASH_ATTENTION=1
-export OPENCODE_DB="/Users/kaioferraz/.local/share/opencode/opencode.db"
 export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 export CONFIG="$HOME/.config"
 export CHROME_EXECUTABLE="/Applications/Chromium.app/Contents/MacOS/Chromium"
@@ -23,7 +22,7 @@ export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_NO_ANALYTICS=1
 export OLLAMA_FLASH_ATTENTION=1
 
-export PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin:$PNPM_HOME/bin:/opt/homebrew/bin/"
+export PATH="/opt/homebrew/opt/rustup/bin:/opt/homebrew/bin:/opt/homebrew/sbin:$PNPM_HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 [ -d "$HOME/.nvm" ] &&
 	export NVM_DIR="$HOME/.nvm"
@@ -708,6 +707,7 @@ alias ...="cd ../.."
 alias ..="cd .."
 alias .="open ."
 alias copy="pbcopy"
+# alias pi="/Users/kaioferraz/Developer/pi-mono/pi-test.sh"
 alias diff="colordiff"
 alias doctor="brew doctor"
 alias fl="flutter"
@@ -716,8 +716,8 @@ alias flpg="flutter pub get"
 alias flpgb="flutter pub get && flutter packages pub run build_runner build --delete-conflicting-outputs"
 alias flr="flutter run"
 alias ga="git add ."
-alias gm="git commit -m"
-alias grep="grep --text --color"
+alias gm="git commit"
+alias gs="git status"
 alias hide='chflags hidden'
 alias json="jq -r '.choices[0].message.content'"
 alias ll="ls -lhAGF1"

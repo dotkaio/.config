@@ -817,7 +817,6 @@ https://app.sherlockeye.io
 https://accounts.google.com
 https://sso.godaddy.com
 https://pi.dev
-https://opencode.ai
 https://dash.cloudflare.com
 https://kaio.one
 https://dribbble.com
@@ -1087,7 +1086,6 @@ https://wise.com
 https://erichartford.com
 https://www.highpointscientific.com
 https://www.bhphotovideo.com
-https://auth.opencode.ai
 https://track.useplunk.dev
 https://gaby-rollins.xterm.exe.xyz
 https://www.trychroma.com
