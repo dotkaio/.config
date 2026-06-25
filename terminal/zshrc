@@ -29,6 +29,10 @@ export PATH="/opt/homebrew/opt/rustup/bin:/opt/homebrew/bin:/opt/homebrew/sbin:$
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
+function gp {
+	git pull --rebase --autostash
+}
+
 function resolve_conflicts {
 	awk '
   /^<<<<<<< / { in_conflict=1; next }    # start conflict
@@ -145,12 +149,6 @@ function replace_in_dir {
 		return 1
 	fi
 	find "$1" -type f -exec sed -i '' "s/$2/$3/g" {} +
-}
-
-function push {
-	git add .
-	git commit -m "$@"
-	git push
 }
 
 function t {
@@ -632,6 +630,23 @@ function groq {
 	fi
 
 	printf '%s\n' "$content"
+}
+
+function push {
+	git add .
+	# generate a commit message using groq
+	local commit_message
+	commit_message=$(groq "Generate a concise git commit message for the following changes: $(git diff --cached --name-only | tr '\n' ' ')") || {
+		echo "Failed to generate commit message using Groq." >&2
+		echo -n "Enter commit message (default 'duh') within 10 seconds: "
+		if ! read -t 10 commit_message; then
+			commit_message="duh"
+			echo "$commit_message"
+		fi
+	}
+	commit_message=${commit_message:-duh}
+	git commit -m "$commit_message"
+	git push
 }
 
 function lookup {
