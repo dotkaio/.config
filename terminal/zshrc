@@ -634,7 +634,6 @@ function groq {
 
 function push {
 	git add .
-	# generate a commit message using groq
 	local commit_message
 	commit_message=$(groq "Generate a concise git commit message for the following changes: $(git diff --cached --name-only | tr '\n' ' ')") || {
 		echo "Failed to generate commit message using Groq." >&2
@@ -826,3 +825,7 @@ SAVEHIST=10000
 prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
 > '
 # prompt='%F{cyan}%h %F{red}% $(branch_name)%f→ '
+
+function paola {
+	echo "hi, my name is paola"
+}
