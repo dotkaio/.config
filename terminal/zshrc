@@ -21,6 +21,7 @@ export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_NO_ANALYTICS=1
 export OLLAMA_FLASH_ATTENTION=1
+export IMESSAGE_APPEND_SIGNATURE=false
 
 export PATH="/opt/homebrew/opt/rustup/bin:/opt/homebrew/bin:/opt/homebrew/sbin:$PNPM_HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
 
@@ -49,8 +50,39 @@ function resolve_conflicts {
 }
 
 function dev {
-	# open -a "$CHROME_EXECUTABLE" "http://localhost:3000" ; \
-	pnpm dev
+	pnpm dev "$@"
+	local dev_status=$?
+
+	if [ "$dev_status" -eq 0 ]; then
+		return 0
+	fi
+
+	if [ "$dev_status" -ge 128 ]; then
+		return "$dev_status"
+	fi
+
+	local install_log
+	install_log="$(mktemp -t pnpm-install.XXXXXX)" || return "$dev_status"
+
+	pnpm install 2>&1 | tee "$install_log"
+	local install_status=$pipestatus[1]
+
+	if [ "$install_status" -eq 0 ]; then
+		rm -f "$install_log"
+		pnpm dev "$@"
+		return $?
+	fi
+
+	if grep -q "ERR_PNPM_IGNORED_BUILDS" "$install_log"; then
+		rm -f "$install_log"
+		printf 'a\n' | pnpm approve-builds || return $?
+		pnpm install || return $?
+		pnpm dev "$@"
+		return $?
+	fi
+
+	rm -f "$install_log"
+	return "$dev_status"
 }
 
 function fetch {
@@ -822,10 +854,60 @@ HISTFILE="$HOME/.history"
 HISTSIZE=10000
 SAVEHIST=10000
 
+autoload -Uz add-zsh-hook
+
+function _iterm_title_clean {
+	local value="$1"
+	value="${value//$'\e'/}"
+	value="${value//$'\a'/}"
+	printf '%s' "$value"
+}
+
+function _iterm_session_title {
+	local title="${ITERM_TAB_TITLE:-${SESSION_NAME:-${PI_SESSION_NAME:-${AVIS_SESSION_NAME:-${CODEX_SESSION_TITLE:-}}}}}"
+
+	if [[ -z "$title" && -n "$TMUX" ]] && command -v tmux >/dev/null 2>&1; then
+		title="$(tmux display-message -p '#S' 2>/dev/null)"
+	fi
+
+	if [[ -z "$title" ]]; then
+		title="${PWD:t}"
+	fi
+
+	printf '%s' "$title"
+}
+
+function _iterm_set_title {
+	[[ "$TERM_PROGRAM" == "iTerm.app" ]] || return 0
+	local title
+	title="$(_iterm_title_clean "$(_iterm_session_title)")"
+	printf '\e]1;%s\a\e]2;%s\a' "$title" "$title"
+}
+
+function _iterm_set_title_for_command {
+	[[ "$TERM_PROGRAM" == "iTerm.app" ]] || return 0
+	local title command_name
+	title="$(_iterm_session_title)"
+	command_name="${1%% *}"
+	[[ -n "$command_name" ]] && title="$title — $command_name"
+	title="$(_iterm_title_clean "$title")"
+	printf '\e]1;%s\a\e]2;%s\a' "$title" "$title"
+}
+
+function session {
+	if [[ -z "$*" ]]; then
+		printf '%s\n' "$SESSION_NAME"
+		return 0
+	fi
+
+	export SESSION_NAME="$*"
+	_iterm_set_title
+}
+
+add-zsh-hook precmd _iterm_set_title
+add-zsh-hook preexec _iterm_set_title_for_command
+_iterm_set_title
+
 prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
 > '
 # prompt='%F{cyan}%h %F{red}% $(branch_name)%f→ '
-
-function paola {
-	echo "hi, my name is paola"
-}
