@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>DocumentAutoCenter</key>
+	<true/>
+	<key>InspectorVisible</key>
+	<true/>
+	<key>NSNavLastUserSetHideExtensionButtonState</key>
+	<false/>
+	<key>NSOSPLastRootDirectory</key>
+	<data>
+	Ym9va7ACAAAAAAUQQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+	AAAAAAAAAAAAAAAAAJABAAAEAAAAAwMAAAAAACAFAAAAAQEAAFVzZXJzAAAACgAAAAEB
+	AABrYWlvZmVycmF6AAAJAAAAAQEAAERvY3VtZW50cwAAAAwAAAABBgAAEAAAACAAAAA0
+	AAAACAAAAAQDAAAKUgAAAAAAAAgAAAAEAwAA1jQBAAAAAAAIAAAABAMAABvuAwAAAAAA
+	DAAAAAEGAABcAAAAbAAAAHwAAAAIAAAAAAQAAEHGYB3QAAAAGAAAAAECAAACAAAAAAAA
+	AA8AAAAAAAAAAAAAAAAAAAAAAAAAAQUAAAgAAAAEAwAAAQAAAAAAAAAEAAAAAwMAAPYB
+	AAAIAAAAAQkAAGZpbGU6Ly8vDAAAAAEBAABNYWNpbnRvc2ggSEQIAAAABAMAAABAsclz
+	AAAACAAAAAAEAABBx9+ALwAAACQAAAABAQAARDYzNkFBQjgtOTQzRi00NTYwLTlBRjAt
+	QTJCQ0JCMjU3MTA5GAAAAAECAACBAAAAAQAAAO8TAAABAAAAAAAAAAAAAAABAAAAAQEA
+	AC8AAADYAAAA/v///wEAAAAAAAAAEQAAAAQQAABIAAAAAAAAAAUQAACMAAAAAAAAABAQ
+	AACwAAAAAAAAAEAQAACgAAAAAAAAAAIgAACEAQAAAAAAAAUgAAD0AAAAAAAAABAgAAAE
+	AQAAAAAAABEgAAA4AQAAAAAAABIgAAAYAQAAAAAAABMgAAAoAQAAAAAAACAgAABkAQAA
+	AAAAADAgAADQAAAAAAAAAAHAAADYAAAAAAAAABHAAAAgAAAAAAAAABLAAADoAAAAAAAA
+	AAHQAADQAAAAAAAAABDQAAAEAAAAAAAAAA==
+	</data>
+	<key>NSOutlineView Items template.navigator.outline</key>
+	<array>
+		<string>allBrands</string>
+		<string>templatesHeader</string>
+	</array>
+	<key>NSToolbar Configuration 36DB5E78-E01B-462B-829C-1815640BBF28</key>
+	<dict>
+		<key>TB Display Mode</key>
+		<integer>2</integer>
+		<key>TB Icon Size Mode</key>
+		<integer>1</integer>
+		<key>TB Is Shown</key>
+		<true/>
+		<key>TB Size Mode</key>
+		<integer>1</integer>
+	</dict>
+	<key>NSWindow Frame PreferencesWindow</key>
+	<string>579 291 570 660 0 0 1728 1084 </string>
+	<key>NSWindow Frame TemplateBrowserWindow</key>
+	<string>215 236 1297 769 0 0 1728 1084 </string>
+	<key>PXMKitDocumentLossyImageFormatsOpeningBehaviour</key>
+	<string>openInOriginalFormat</string>
+	<key>SelectedToolIdentifierV2</key>
+	<string>distortToolWarp</string>
+	<key>__APP_SETTINGS__bundleIdentifier</key>
+	<string>com.pixelmatorteam.pixelmator.x</string>
+	<key>applicationLaunchedCount</key>
+	<integer>1</integer>
+	<key>applicationTerminatedCount</key>
+	<integer>3</integer>
+	<key>arrangeSizeUnits</key>
+	<string>PXMPreferencesUnitsPercent</string>
+	<key>distortSize</key>
+	<real>100</real>
+	<key>distortStrength</key>
+	<real>0.5</real>
+	<key>distortTwirlRight</key>
+	<true/>
+	<key>documentExportDirectoryPath</key>
+	<string>/Users/kaioferraz/Documents</string>
+	<key>enableHDRContentLoading</key>
+	<true/>
+	<key>exportFileAlphaEnabled</key>
+	<true/>
+	<key>exportFileAnimatedImageFrameRate</key>
+	<real>15</real>
+	<key>exportFileCompression</key>
+	<true/>
+	<key>exportFileCompressionType</key>
+	<data>
+	eyJoZXZjIjp7InF1YWxpdHkiOjc1fX0=
+	</data>
+	<key>exportFileDocumentSizePopUpTag</key>
+	<integer>0</integer>
+	<key>exportFileMotionDuration</key>
+	<real>10</real>
+	<key>exportFileMotionFrameRate</key>
+	<string>fps25</string>
+	<key>exportFileOptimizeForFinalCutPro</key>
+	<false/>
+	<key>exportFilePDFPreserveLayers</key>
+	<true/>
+	<key>exportFileQuality</key>
+	<real>100</real>
+	<key>exportFileSelectedFormat</key>
+	<integer>1</integer>
+	<key>firstAppLaunch</key>
+	<false/>
+	<key>highestLaunchedAppVersion</key>
+	<string>3.8</string>
+	<key>highestLaunchedMajorMacOSVersion</key>
+	<integer>26</integer>
+	<key>lastLaunchedAppVersion</key>
+	<string>3.8</string>
+	<key>lastUsedUnitType</key>
+	<integer>0</integer>
+	<key>preferencesSelectedTab</key>
+	<string>InterfaceLayoutPreferences</string>
+	<key>preferredBinaryNativeDocumentType</key>
+	<true/>
+	<key>removeSketchBook2023</key>
+	<false/>
+	<key>templates.browser.recentData</key>
+	<data>
+	eyJ0ZW1wbGF0ZVBhdGhzIjpbXX0=
+	</data>
+	<key>toolsOnboardingCompleted</key>
+	<true/>
+	<key>transformHandlesVisible</key>
+	<true/>
+</dict>
+</plist>

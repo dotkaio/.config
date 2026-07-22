@@ -1,0 +1,13 @@
+// @ts-nocheck
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =6
+let g:netrw_dirhist_6='/Users/kaioferraz'
+let g:netrw_dirhist_5='/Users/kaioferraz/.agent/homes/codex'
+let g:netrw_dirhist_4='/Users/kaioferraz'
+let g:netrw_dirhist_3='/Users/kaioferraz/.agent/homes/codex'
+let g:netrw_dirhist_2='/Users/kaioferraz'
+let g:netrw_dirhist_1='/Users/kaioferraz/.cache'
+let g:netrw_dirhist_0='/Users/kaioferraz'
+let g:netrw_dirhist_9='/private/var/folders/9r/hlvn3n2s3z7dd3cxj_hthgqh0000gp/T/tmp.FPY1P1ssOG'
+let g:netrw_dirhist_8='/private/var/folders/9r/hlvn3n2s3z7dd3cxj_hthgqh0000gp/T/tmp.DimhjnXJLf'
+let g:netrw_dirhist_7='/private/var/folders/9r/hlvn3n2s3z7dd3cxj_hthgqh0000gp/T/tmp.v9Drhiyvj3'

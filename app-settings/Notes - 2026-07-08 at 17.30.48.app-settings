@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CKPerBootTasks</key>
+	<array>
+		<string>CKAccountInfoCacheReset</string>
+	</array>
+	<key>CKStartupTime</key>
+	<integer>1781842107</integer>
+	<key>CloudKitAccountInfoCache</key>
+	<dict>
+		<key>b9e3665c011300030fa155b72d06652f51e95fc5b7e776046e9c9b0f3f6d8d80</key>
+		<data>
+		YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9i
+		amVjdHMSAAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGkCwwhIlUk
+		bnVsbNsNDg8QERITFBUWFxgZGhsYHBoeGB8gXxAaQWNjb3VudEFjY2Vzc0F1
+		dGhvcml6YXRpb25cV2FscnVzU3RhdHVzXxATQnlwYXNzUENTRW5jcnlwdGlv
+		bl8QE0hhc1ZhbGlkQ3JlZGVudGlhbHNfEBBBY2NvdW50UGFydGl0aW9uXxAk
+		RGV2aWNlVG9EZXZpY2VFbmNyeXB0aW9uQXZhaWxhYmlsaXR5XxASTmVlZHNU
+		b1ZlcmlmeVRlcm1zViRjbGFzc11BY2NvdW50U3RhdHVzWklkZW50aWZpZXJf
+		EBxBY2NvdW50SW5mb1ZhbGlkYXRpb25Db3VudGVyEAEQAggJEAMIgAOAAhAG
+		XxAsZGdOOEdIRmF3WnpKUHFzcXhZVGRaU1ZNbXA0MkloZ3VtZG1QeWZ3M0Fm
+		cz3SIyQlJlokY2xhc3NuYW1lWCRjbGFzc2VzXUNLQWNjb3VudEluZm+iJSdY
+		TlNPYmplY3QACAARABoAJAApADIANwBJAEwAUQBTAFgAXgB1AJIAnwC1AMsA
+		3gEFARoBIQEvAToBWQFbAV0BXgFfAWEBYgFkAWYBaAGXAZwBpwGwAb4BwQAA
+		AAAAAAIBAAAAAAAAACgAAAAAAAAAAAAAAAAAAAHK
+		</data>
+	</dict>
+	<key>CloudKitAccountZonesNeedingFetchChanges</key>
+	<dict/>
+	<key>DidChooseToMigrateLocalAccount</key>
+	<true/>
+	<key>DidDeleteCoherenceContextsFromGroupContainerLaunchTask</key>
+	<true/>
+	<key>DidFixExcludedFromBackupFlagsV3</key>
+	<true/>
+	<key>DidFixGallerySubAttachments</key>
+	<true/>
+	<key>DidMigrateLocalAccount</key>
+	<true/>
+	<key>DidRegenerateGalleryAttachmentNoteTitlesV2</key>
+	<true/>
+	<key>ICCleanupTemporaryAssetDirectoryLaunchTaskExecuted</key>
+	<true/>
+	<key>ICFixLegacyFolderAccountRelationshipLaunchTask</key>
+	<true/>
+	<key>ICGenerateWidgetSnippetForFirstTimeLaunchTaskV3</key>
+	<true/>
+	<key>ICGenerateWidgetSnippetForFirstTimeLaunchTaskV4</key>
+	<true/>
+	<key>ICMMainWindowToolbarFixupV1</key>
+	<true/>
+	<key>ICRefetchNoteRecordsLaunchTask-Fall2024</key>
+	<true/>
+	<key>ICRefreshHashtagStandardizedContentLaunchTask</key>
+	<true/>
+	<key>ICRemoveTemporaryPaperKitBundlesLaunchTask</key>
+	<true/>
+	<key>ICRetranscribeAfterVersionIncrementLaunchTaskV1</key>
+	<true/>
+	<key>ICSidebarToolbarItemsToInsert</key>
+	<array>
+		<string>NSToolbarFlexibleSpaceItem</string>
+		<string>AddFolderToolbarItem</string>
+		<string>FoldersToolbarItem</string>
+	</array>
+	<key>ICUpdateAccountReferenceInAttachmentsAndMediaLaunchTask</key>
+	<true/>
+	<key>ICUpdateDerivedChecklistAttributesLaunchTask</key>
+	<true/>
+	<key>ICUpdateInlineDrawingsSectionLaunchTask</key>
+	<true/>
+	<key>ICUpdatePaperDocumentScansSectionLaunchTask</key>
+	<true/>
+	<key>LastVacuumDate</key>
+	<real>805071909.82637894</real>
+	<key>NSSplitView Subview Frames ICMSingleNoteWindowSplitViewControllerAutosaveName</key>
+	<array>
+		<string>0.000000, 0.000000, 500.000000, 500.000000, NO, NO</string>
+	</array>
+	<key>NSSplitView Subview Frames noteSplitViewAutoSaveName</key>
+	<array>
+		<string>0.000000, 0.000000, 228.000000, 758.000000, YES, NO</string>
+		<string>0.000000, 0.000000, 500.000000, 1084.000000, NO, NO</string>
+		<string>0.000000, 0.000000, 250.000000, 0.000000, YES, NO</string>
+	</array>
+	<key>NSToolbar Configuration ICMSingleNoteWindowToolbarIdentifier</key>
+	<dict>
+		<key>TB Display Mode</key>
+		<integer>2</integer>
+		<key>TB Icon Size Mode</key>
+		<integer>1</integer>
+		<key>TB Is Shown</key>
+		<true/>
+		<key>TB Size Mode</key>
+		<integer>1</integer>
+	</dict>
+	<key>NSToolbar Configuration MainWindowToolbar</key>
+	<dict>
+		<key>TB Display Mode</key>
+		<integer>2</integer>
+		<key>TB Icon Size Mode</key>
+		<integer>1</integer>
+		<key>TB Is Shown</key>
+		<true/>
+		<key>TB Size Mode</key>
+		<integer>1</integer>
+	</dict>
+	<key>NSWindow Frame ICMSingleNoteWindow</key>
+	<string>614 292 500 500 0 0 1728 1084 </string>
+	<key>NSWindow Frame NSFontPanel</key>
+	<string>1213 59 478 281 0 0 1728 1084 </string>
+	<key>NSWindow Frame NSSpellCheckerSpellingPanel</key>
+	<string>496 455 431 289 0 0 1728 1084 </string>
+	<key>NSWindow Frame NSSpellCheckerSubstitutionsPanel2</key>
+	<string>692 399 359 150 0 0 1728 1084 </string>
+	<key>NSWindow Frame Notes</key>
+	<string>0 0 500 1084 0 0 1728 1084 </string>
+	<key>OSVersionStringOfLastRun_DidSetReindexEverythingFlagPerUpgrade</key>
+	<string>26-5-1</string>
+	<key>OSVersionStringOfLastRun_DidSetReindexEverythingFlagPerUpgrade_AttemptCounter</key>
+	<integer>1</integer>
+	<key>__APP_SETTINGS__bundleIdentifier</key>
+	<string>com.apple.Notes</string>
+	<key>canLaunchPages</key>
+	<true/>
+	<key>com.apple.app-analytics.crash-detection.last-app-instance-date</key>
+	<date>2026-07-06T23:04:56Z</date>
+	<key>com.apple.app-analytics.crash-detection.will-terminate</key>
+	<true/>
+	<key>hasShownWelcomeScreen</key>
+	<true/>
+	<key>lastKnownOperatingSystemVersion</key>
+	<dict>
+		<key>majorVersion</key>
+		<integer>26</integer>
+		<key>minorVersion</key>
+		<integer>5</integer>
+		<key>patchVersion</key>
+		<integer>1</integer>
+	</dict>
+	<key>lastShownStartupVersion-1</key>
+	<array>
+		<integer>26</integer>
+		<integer>5</integer>
+		<integer>1</integer>
+	</array>
+	<key>windowStateArchive</key>
+	<dict>
+		<key>currentContainerObjectIDURLs</key>
+		<array>
+			<string>x-coredata://BE91A500-E9AF-49CD-A092-9E89C9612AE8/ICFolder/p3</string>
+		</array>
+		<key>currentNoteContainerViewMode</key>
+		<integer>1</integer>
+		<key>currentNoteObjectID</key>
+		<string>x-coredata://BE91A500-E9AF-49CD-A092-9E89C9612AE8/ICNote/p663</string>
+		<key>gridViewNoteItemSizeRatio</key>
+		<real>1</real>
+		<key>isPrimaryContentVisible</key>
+		<false/>
+		<key>kICWindowStateExpansionState</key>
+		<dict>
+			<key>ICExpansionStateGlobalContext</key>
+			<dict>
+				<key>ICExpansionStateItemTypePersistentIdentifier</key>
+				<dict>
+					<key>3C96556B-22B4-455C-9912-1D13E10649AE</key>
+					<true/>
+					<key>AllowNotificationHeader</key>
+					<false/>
+					<key>ICVirtualSmartFolderItemIdentifierTypeCallNotes</key>
+					<false/>
+					<key>ICVirtualSmartFolderItemIdentifierTypeSharedWithYou</key>
+					<false/>
+					<key>ICVirtualSmartFolderItemIdentifierTypeSystemPaper</key>
+					<false/>
+					<key>TagsHeader</key>
+					<false/>
+				</dict>
+			</dict>
+		</dict>
+		<key>kICWindowStatePreferredNoteContainerViewMode</key>
+		<integer>-1</integer>
+	</dict>
+</dict>
+</plist>

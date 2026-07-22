@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSSplitView Subview Frames TTRMMainWindowSplitView</key>
+	<array>
+		<string>0.000000, 0.000000, 368.000000, 600.000000, NO, NO</string>
+		<string>0.000000, 0.000000, 740.000000, 600.000000, NO, NO</string>
+	</array>
+	<key>NSWindow Frame TTRMMainWindowFrameAutosaveName</key>
+	<string>221 235 740 600 0 0 1728 1084 </string>
+	<key>__APP_SETTINGS__bundleIdentifier</key>
+	<string>com.apple.reminders</string>
+</dict>
+</plist>

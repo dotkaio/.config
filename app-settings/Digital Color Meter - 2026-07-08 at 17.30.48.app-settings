@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSWindow Frame Digital Color Meter Window</key>
+	<string>677 452 408 217 0 0 1728 1084 </string>
+	<key>__APP_SETTINGS__bundleIdentifier</key>
+	<string>com.apple.DigitalColorMeter</string>
+</dict>
+</plist>

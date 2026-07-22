@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSWindow Frame iphone-mirroring-main</key>
+	<string>687 82 456 1002 0 0 1728 1084 </string>
+	<key>__APP_SETTINGS__bundleIdentifier</key>
+	<string>com.apple.ScreenContinuity</string>
+	<key>isAuthFrequencySet</key>
+	<true/>
+	<key>lastWindowScalingPreset</key>
+	<integer>1</integer>
+	<key>previousSession</key>
+	<integer>1</integer>
+	<key>previousSessionDate</key>
+	<integer>1783292907</integer>
+</dict>
+</plist>

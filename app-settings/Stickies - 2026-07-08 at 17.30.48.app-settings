@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>DashboardStickiesImported</key>
+	<true/>
+	<key>DefaultsVersion</key>
+	<real>10.4</real>
+	<key>LegacyStickiesMigrated</key>
+	<true/>
+	<key>NSFullScreenMenuItemEverywhere</key>
+	<false/>
+	<key>NSWindow Frame NSFontPanel</key>
+	<string>1213 59 478 281 0 0 1728 1084 </string>
+	<key>NSWindow Frame NSSpellCheckerSpellingPanel</key>
+	<string>496 455 431 289 0 0 1728 1084 </string>
+	<key>NSWindow Frame NSSpellCheckerSubstitutionsPanel2</key>
+	<string>692 399 359 150 0 0 1728 1084 </string>
+	<key>__APP_SETTINGS__bundleIdentifier</key>
+	<string>com.apple.Stickies</string>
+</dict>
+</plist>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AppQuitTransactions</key>
+	<array/>
+	<key>CurrentExtensionURL</key>
+	<string>/System/Library/ExtensionKit/Extensions/Wi-Fi.appex</string>
+	<key>NSNavPanelExpandedSizeForOpenMode</key>
+	<string>{880, 1030}</string>
+	<key>NSOSPLastRootDirectory</key>
+	<data>
+	Ym9vawwCAAAAAAUQQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+	AAAAAAAAAAAAAAAAABABAAAEAAAAAwMAAAAAACAMAAAAAQEAAEFwcGxpY2F0aW9ucwQA
+	AAABBgAAEAAAAAgAAAAEAwAAw5LeAAAAAAAEAAAAAQYAADAAAAAIAAAAAAQAAEHH34Av
+	AAAAGAAAAAECAAACAAAAAAAAAA8AAAAAAAAAAAAAAAAAAAAAAAAAAQUAAAgAAAABCQAA
+	ZmlsZTovLy8MAAAAAQEAAE1hY2ludG9zaCBIRAgAAAAEAwAAAECxyXMAAAAkAAAAAQEA
+	AEQ2MzZBQUI4LTk0M0YtNDU2MC05QUYwLUEyQkNCQjI1NzEwORgAAAABAgAAgQAAAAEA
+	AADvEwAAAQAAAAAAAAAAAAAAAQAAAAEBAAAvAAAAtAAAAP7///8BAAAAAAAAAA4AAAAE
+	EAAAJAAAAAAAAAAFEAAAQAAAAAAAAAAQEAAAXAAAAAAAAABAEAAATAAAAAAAAAACIAAA
+	BAEAAAAAAAAFIAAAhAAAAAAAAAAQIAAAlAAAAAAAAAARIAAAuAAAAAAAAAASIAAAqAAA
+	AAAAAAATIAAATAAAAAAAAAAgIAAA5AAAAAAAAAAwIAAAfAAAAAAAAAAB0AAAfAAAAAAA
+	AAAQ0AAABAAAAAAAAAA=
+	</data>
+	<key>NSQuitAlwaysKeepsWindows</key>
+	<false/>
+	<key>NSSplitView Subview Frames main, SidebarNavigationSplitView</key>
+	<array>
+		<string>0.000000, 0.000000, 223.000000, 994.000000, NO, NO</string>
+		<string>0.000000, 0.000000, 723.000000, 994.000000, NO, NO</string>
+	</array>
+	<key>NSWindow Frame main</key>
+	<string>0 90 723 994 0 0 1728 1084 </string>
+	<key>ThirdPartyCount</key>
+	<integer>0</integer>
+	<key>__APP_SETTINGS__bundleIdentifier</key>
+	<string>com.apple.systempreferences</string>
+	<key>recentPanes</key>
+	<array>
+		<string>com.apple.Displays-Settings.extension</string>
+		<string>com.apple.Displays-Settings.extension</string>
+		<string>com.apple.settings.PrivacySecurity.extension</string>
+		<string>com.apple.BluetoothSettings</string>
+		<string>com.apple.Desktop-Settings.extension</string>
+		<string>com.apple.Accessibility-Settings.extension</string>
+	</array>
+</dict>
+</plist>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSPreferencesSelectedIndex</key>
+	<integer>0</integer>
+	<key>NSWindow Frame MainSceneWindow</key>
+	<string>2176 249 1024 768 1728 37 1920 1050 </string>
+	<key>NSWindow Frame NSSpellCheckerSpellingPanel</key>
+	<string>496 455 431 289 0 0 1728 1084 </string>
+	<key>NSWindow Frame NSSpellCheckerSubstitutionsPanel2</key>
+	<string>692 399 359 150 0 0 1728 1084 </string>
+	<key>NSWindow Frame Preferences</key>
+	<string>564 573 300 196 0 0 1728 1084 </string>
+	<key>__APP_SETTINGS__bundleIdentifier</key>
+	<string>com.apple.VoiceMemos</string>
+	<key>app_analytics.summary_event.last_flushed</key>
+	<date>2026-07-07T02:15:19Z</date>
+	<key>com.apple.UIKit.UISplitViewController.Root</key>
+	<dict>
+		<key>primaryEdgeSplitViewControllerColumn</key>
+		<integer>1</integer>
+		<key>secondaryEdgeSplitViewControllerColumn</key>
+		<integer>999</integer>
+	</dict>
+	<key>com.apple.app-analytics.crash-detection.last-app-instance-date</key>
+	<date>2026-07-07T14:29:08Z</date>
+	<key>com.apple.app-analytics.crash-detection.will-terminate</key>
+	<true/>
+	<key>com.apple.app-analytics.transparency.last-flush-date</key>
+	<date>2026-07-07T02:15:19Z</date>
+	<key>com.apple.voicememos.lastSendEvent.didCaptureModifyExistingRecording</key>
+	<date>2026-05-20T19:14:53Z</date>
+	<key>com.apple.voicememos.lastSendEvent.didCaptureNewRecording</key>
+	<date>2026-05-20T19:14:42Z</date>
+	<key>com.apple.voicememos.lastSendEvent.didTrimMemo</key>
+	<date>2026-05-20T19:16:08Z</date>
+	<key>com.apple.voicememos.lastSendEvent.newRecording.duration</key>
+	<date>2026-07-07T14:29:17Z</date>
+	<key>com.apple.voicememos.lastSendEvent.playback</key>
+	<date>2026-05-20T19:15:08Z</date>
+	<key>voicememos.welcome.last_completed</key>
+	<string>3.2</string>
+</dict>
+</plist>

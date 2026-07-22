@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSWindow Frame MainSceneWindow</key>
+	<string>0 17 960 1050 0 0 1728 1084 </string>
+	<key>NSWindow Frame NSSpellCheckerSpellingPanel</key>
+	<string>496 455 431 289 0 0 1728 1084 </string>
+	<key>NSWindow Frame NSSpellCheckerSubstitutionsPanel2</key>
+	<string>2097 1501 360 150 1303 1117 1920 1050 </string>
+	<key>__APP_SETTINGS__bundleIdentifier</key>
+	<string>com.apple.findmy</string>
+	<key>coarseServiceAcknowledged_v1.0</key>
+	<false/>
+	<key>com.apple.UIKit.UISplitViewController.Root</key>
+	<dict>
+		<key>primaryEdgeSplitViewControllerColumn</key>
+		<integer>999</integer>
+		<key>secondaryEdgeSplitViewControllerColumn</key>
+		<integer>999</integer>
+	</dict>
+	<key>onboarding_v3.1</key>
+	<true/>
+	<key>restoreState</key>
+	<string>people</string>
+	<key>tabInfo</key>
+	<data>
+	YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMS
+	AAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGuCwwZGhscICEnLi8wNzhVJG51
+	bGzTDQ4PEBQYV05TLmtleXNaTlMub2JqZWN0c1YkY2xhc3OjERITgAKAA4AEoxUWF4AF
+	gAiAC4ANWmN1cnJlbnRUYWJZdGltZVNwZW50XxAPbGFzdFZpc2l0ZWRUaW1l0g4PHR+h
+	HoAGgAcjAAAAAAAAAADSIiMkJVokY2xhc3NuYW1lWCRjbGFzc2VzV05TQXJyYXmiJCZY
+	TlNPYmplY3TSDg8oH6QpKioqgAmACoAKgAqAByNAQdWLYAAAACO/8AAAAAAAANIODzEf
+	pDIqKiqADIAKgAqACoAHI0Hak11KB8iC0iIjOTpcTlNEaWN0aW9uYXJ5ojkmAAgAEQAa
+	ACQAKQAyADcASQBMAFEAUwBiAGgAbwB3AIIAiQCNAI8AkQCTAJcAmQCbAJ0AnwCqALQA
+	xgDLAM0AzwDRANoA3wDqAPMA+wD+AQcBDAERARMBFQEXARkBGwEkAS0BMgE3ATkBOwE9
+	AT8BQQFKAU8BXAAAAAAAAAIBAAAAAAAAADsAAAAAAAAAAAAAAAAAAAFf
+	</data>
+</dict>
+</plist>

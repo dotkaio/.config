@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSWindow Frame find panel</key>
+	<string>68 548 357 136 0 0 1728 1084 </string>
+	<key>__APP_SETTINGS__bundleIdentifier</key>
+	<string>com.apple.Dictionary</string>
+	<key>window frames</key>
+	<array>
+		<string>519 342 690 628 0 0 1728 1084 </string>
+	</array>
+	<key>window settings</key>
+	<array>
+		<dict>
+			<key>dictionaries</key>
+			<array>
+				<dict>
+					<key>disclosure opened</key>
+					<true/>
+					<key>path</key>
+					<string>/System/Library/AssetsV2/com_apple_MobileAsset_DictionaryServices_dictionary3macOS/b9e021ec5ecf0a0a52e39cb5471a0492a0b82f97.asset/AssetData/New Oxford American Dictionary.dictionary</string>
+					<key>user choice</key>
+					<true/>
+				</dict>
+				<dict>
+					<key>disclosure opened</key>
+					<true/>
+					<key>path</key>
+					<string>/System/Library/AssetsV2/com_apple_MobileAsset_DictionaryServices_dictionary3macOS/9ef40b7cccb3ede15ebbd7090af2f9056251956f.asset/AssetData/Apple Dictionary.dictionary</string>
+					<key>user choice</key>
+					<false/>
+				</dict>
+				<dict>
+					<key>disclosure opened</key>
+					<true/>
+					<key>path</key>
+					<string>/System/Library/Frameworks/CoreServices.framework/Frameworks/DictionaryServices.framework/Resources/Wikipedia.wikipediadictionary</string>
+					<key>sub-dictionaries</key>
+					<array>
+						<dict>
+							<key>disclosure opened</key>
+							<true/>
+							<key>identifier</key>
+							<string>com.apple.dictionary.Wikipedia-en</string>
+							<key>user choice</key>
+							<false/>
+						</dict>
+					</array>
+					<key>user choice</key>
+					<false/>
+				</dict>
+			</array>
+			<key>image window frame</key>
+			<string>{{0, 0}, {0, 0}}</string>
+			<key>image window parent frame</key>
+			<string>{{0, 0}, {0, 0}}</string>
+			<key>index width</key>
+			<integer>175</integer>
+			<key>search method</key>
+			<integer>1</integer>
+			<key>window ID</key>
+			<integer>1</integer>
+		</dict>
+	</array>
+</dict>
+</plist>

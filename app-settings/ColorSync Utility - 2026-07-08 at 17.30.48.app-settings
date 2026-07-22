@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CSUtilitiesContentSize</key>
+	<string>{600, 520}</string>
+	<key>CSUtilitiesSelectedIdentifier</key>
+	<string>com.apple.ColorSyncUtility.Filters</string>
+	<key>__APP_SETTINGS__bundleIdentifier</key>
+	<string>com.apple.ColorSyncUtility</string>
+</dict>
+</plist>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CKPerBootTasks</key>
+	<array>
+		<string>CKAccountInfoCacheReset</string>
+	</array>
+	<key>CKStartupTime</key>
+	<integer>1781842107</integer>
+	<key>CloudKitAccountInfoCache</key>
+	<dict>
+		<key>ed4b325d6bde5b8d994492ca421612ddfc5bb2b23e9d1da3d2955a790bd5452d</key>
+		<data>
+		YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9i
+		amVjdHMSAAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGkCwwhIlUk
+		bnVsbNsNDg8QERITFBUWFxgZGhsYHBoeGB8gXxAaQWNjb3VudEFjY2Vzc0F1
+		dGhvcml6YXRpb25cV2FscnVzU3RhdHVzXxATQnlwYXNzUENTRW5jcnlwdGlv
+		bl8QE0hhc1ZhbGlkQ3JlZGVudGlhbHNfEBBBY2NvdW50UGFydGl0aW9uXxAk
+		RGV2aWNlVG9EZXZpY2VFbmNyeXB0aW9uQXZhaWxhYmlsaXR5XxASTmVlZHNU
+		b1ZlcmlmeVRlcm1zViRjbGFzc11BY2NvdW50U3RhdHVzWklkZW50aWZpZXJf
+		EBxBY2NvdW50SW5mb1ZhbGlkYXRpb25Db3VudGVyEAEQAggJEAMIgAOAAhAQ
+		XxAsaHM5ZWc4MXhWS2x0Tk1PLzNqZWJFdFV2ZGVWQTlMMkkyUmNJcHJJRDNj
+		bz3SIyQlJlokY2xhc3NuYW1lWCRjbGFzc2VzXUNLQWNjb3VudEluZm+iJSdY
+		TlNPYmplY3QACAARABoAJAApADIANwBJAEwAUQBTAFgAXgB1AJIAnwC1AMsA
+		3gEFARoBIQEvAToBWQFbAV0BXgFfAWEBYgFkAWYBaAGXAZwBpwGwAb4BwQAA
+		AAAAAAIBAAAAAAAAACgAAAAAAAAAAAAAAAAAAAHK
+		</data>
+	</dict>
+	<key>__APP_SETTINGS__bundleIdentifier</key>
+	<string>com.apple.shortcuts</string>
+</dict>
+</plist>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSSplitView Subview Frames SUMainWindow</key>
+	<array>
+		<string>0.000000, 0.000000, 264.000000, 632.000000, NO, NO</string>
+		<string>264.000000, 0.000000, 878.000000, 632.000000, NO, NO</string>
+	</array>
+	<key>NSToolbar Configuration kMainToolbarIdentifier</key>
+	<dict>
+		<key>TB Display Mode</key>
+		<integer>1</integer>
+		<key>TB Icon Size Mode</key>
+		<integer>1</integer>
+		<key>TB Is Shown</key>
+		<true/>
+		<key>TB Size Mode</key>
+		<integer>1</integer>
+	</dict>
+	<key>NSWindow Frame MainWindow</key>
+	<string>293 210 1142 632 0 0 1728 1084 </string>
+	<key>NSWindow Frame NSSpellCheckerSpellingPanel</key>
+	<string>496 455 431 289 0 0 1728 1084 </string>
+	<key>NSWindow Frame NSSpellCheckerSubstitutionsPanel2</key>
+	<string>692 399 359 150 0 0 1728 1084 </string>
+	<key>NSWindow Frame OperationProgress</key>
+	<string>627 455 475 174 0 0 1728 1084 </string>
+	<key>SidebarShowAllDevices</key>
+	<true/>
+	<key>__APP_SETTINGS__bundleIdentifier</key>
+	<string>com.apple.DiskUtility</string>
+</dict>
+</plist>

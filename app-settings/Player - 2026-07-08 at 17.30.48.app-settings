@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>MainWindowLastPosition</key>
+	<string>{{544, 342}, {640, 400}}</string>
+	<key>NSFullScreenMenuItemEverywhere</key>
+	<false/>
+	<key>NSNavPanelExpandedSizeForOpenMode</key>
+	<string>{880, 448}</string>
+	<key>NSOSPLastRootDirectory</key>
+	<data>
+	Ym9vaxADAAAAAAUQQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+	AAAAAAAAAAAAAAAAAPABAAAEAAAAAwMAAAAAACAFAAAAAQEAAFVzZXJzAAAACgAAAAEB
+	AABrYWlvZmVycmF6AAAHAAAAAQEAAExpYnJhcnkAEAAAAAEBAABNb2JpbGUgRG9jdW1l
+	bnRzEwAAAAEBAABjb21+YXBwbGV+Q2xvdWREb2NzABQAAAABBgAAEAAAACAAAAA0AAAA
+	RAAAAFwAAAAIAAAABAMAAApSAAAAAAAACAAAAAQDAADWNAEAAAAAAAgAAAAEAwAA3jQB
+	AAAAAAAIAAAABAMAAPuyAwAAAAAACAAAAAQDAAD/sgMAAAAAABQAAAABBgAAlAAAAKQA
+	AAC0AAAAxAAAANQAAAAIAAAAAAQAAEHH0Er1321MGAAAAAECAAACAAAAAAAAAA8AAAAA
+	AAAAAAAAAAAAAAAAAAAAAQUAAAgAAAAEAwAAAwAAAAAAAAAEAAAAAwMAAPYBAAAIAAAA
+	AQkAAGZpbGU6Ly8vDAAAAAEBAABNYWNpbnRvc2ggSEQIAAAABAMAAABAsclzAAAACAAA
+	AAAEAABBx9+ALwAAACQAAAABAQAARDYzNkFBQjgtOTQzRi00NTYwLTlBRjAtQTJCQ0JC
+	MjU3MTA5GAAAAAECAACBAAAAAQAAAO8TAAABAAAAAAAAAAAAAAABAAAAAQEAAC8AAADY
+	AAAA/v///wEAAAAAAAAAEQAAAAQQAAB4AAAAAAAAAAUQAADkAAAAAAAAABAQAAAQAQAA
+	AAAAAEAQAAAAAQAAAAAAAAIgAADkAQAAAAAAAAUgAABUAQAAAAAAABAgAABkAQAAAAAA
+	ABEgAACYAQAAAAAAABIgAAB4AQAAAAAAABMgAACIAQAAAAAAACAgAADEAQAAAAAAADAg
+	AAAwAQAAAAAAAAHAAAA4AQAAAAAAABHAAAAgAAAAAAAAABLAAABIAQAAAAAAAAHQAAAw
+	AQAAAAAAABDQAAAEAAAAAAAAAA==
+	</data>
+	<key>NSSplitView Subview Frames NSColorPanelSplitView</key>
+	<array>
+		<string>0.000000, 0.000000, 230.000000, 262.000000, NO, NO</string>
+		<string>0.000000, 263.000000, 230.000000, 67.000000, NO, NO</string>
+	</array>
+	<key>NSToolbar Configuration com.apple.NSColorPanel</key>
+	<dict>
+		<key>TB Is Shown</key>
+		<integer>1</integer>
+	</dict>
+	<key>NSWindow Frame IINAMiniPlayerWindow</key>
+	<string>124 0 300 372 0 0 1728 1084 </string>
+	<key>NSWindow Frame IINAOpenURLWindow</key>
+	<string>576 411 576 262 0 0 1728 1084 </string>
+	<key>NSWindow Frame IINAPreferenceWindow</key>
+	<string>130 106 1210 921 0 0 1728 1084 </string>
+	<key>NSWindow Frame IINAWelcomeWindow</key>
+	<string>1535 1443 640 400 896 1117 1920 1050 </string>
+	<key>NSWindow Frame NSColorPanel</key>
+	<string>0 83 250 297 0 0 1728 1084 </string>
+	<key>PluginEnabled.io.iina.opensub</key>
+	<false/>
+	<key>PluginEnabled.io.iina.user-script</key>
+	<false/>
+	<key>PluginEnabled.io.iina.ytdl</key>
+	<true/>
+	<key>PluginOrder</key>
+	<array>
+		<string>io.iina.ytdl</string>
+		<string>io.iina.opensub</string>
+		<string>io.iina.user-script</string>
+	</array>
+	<key>SUAutomaticallyUpdate</key>
+	<true/>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUHasLaunchedBefore</key>
+	<true/>
+	<key>SULastCheckTime</key>
+	<date>2026-07-06T09:58:35Z</date>
+	<key>SUSendProfileInfo</key>
+	<false/>
+	<key>SUUpdateGroupIdentifier</key>
+	<integer>1293387402</integer>
+	<key>__APP_SETTINGS__bundleIdentifier</key>
+	<string>com.colliderli.iina</string>
+	<key>actionAfterLaunch</key>
+	<integer>1</integer>
+	<key>controlBarPositionHorizontal</key>
+	<real>0.5</real>
+	<key>controlBarPositionVertical</key>
+	<real>0.10000000149011612</real>
+	<key>enableAdvancedSettings</key>
+	<integer>1</integer>
+	<key>iinaLastPlayedFilePosition</key>
+	<real>266.13266666666669</real>
+	<key>initialWindowSizePosition</key>
+	<string></string>
+	<key>keepOpenOnFileEnd</key>
+	<false/>
+	<key>pauseWhenGoesToSleep</key>
+	<false/>
+	<key>resizeWindowOption</key>
+	<integer>3</integer>
+	<key>resumeLastPosition</key>
+	<false/>
+	<key>screenShotIncludeSubtitle</key>
+	<false/>
+	<key>screenshotCopyToClipboard</key>
+	<true/>
+	<key>screenshotSaveToFile</key>
+	<false/>
+	<key>softVolume</key>
+	<real>95</real>
+	<key>themeMaterial</key>
+	<integer>4</integer>
+	<key>transportRTSPThrough</key>
+	<integer>0</integer>
+	<key>useMpvOsd</key>
+	<true/>
+	<key>useUserDefinedConfDir</key>
+	<false/>
+</dict>
+</plist>

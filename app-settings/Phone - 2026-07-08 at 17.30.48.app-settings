@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>FaceTimeVideoWindowPreference</key>
+	<string>{{373, 268}, {980, 612}}</string>
+	<key>PNRltc</key>
+	<date>2026-07-08T17:16:07Z</date>
+	<key>PhoneLayout</key>
+	<integer>1</integer>
+	<key>__APP_SETTINGS__bundleIdentifier</key>
+	<string>com.apple.mobilephone</string>
+	<key>com.apple.UIKit.UISplitViewController.Root</key>
+	<dict>
+		<key>primaryEdgeSplitViewControllerColumn</key>
+		<integer>1</integer>
+		<key>secondaryEdgeSplitViewControllerColumn</key>
+		<integer>999</integer>
+	</dict>
+	<key>lastPosterKitCacheVersion</key>
+	<integer>2</integer>
+</dict>
+</plist>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AccountDisplayOrder</key>
+	<array>
+		<string>______NativeStorePersistentID_______</string>
+		<string>02DA2F23-9500-43E1-92E2-34A9932DF925</string>
+		<string>635B85D5-B4BA-4B89-BA1B-EA8A4ABB85C4</string>
+		<string>3568C09E-52A5-40EB-ABB3-4AB74D2B8960</string>
+	</array>
+	<key>AllDayAreaHeight</key>
+	<real>0.0</real>
+	<key>BirthdayEventsGenerationAttemptsToResetKey</key>
+	<integer>0</integer>
+	<key>BirthdayEventsGenerationLastLocale</key>
+	<string>en_US</string>
+	<key>CALPrefLastTruthFileMigrationVersion</key>
+	<integer>1</integer>
+	<key>CalDefaultCalendar</key>
+	<string>8625E60D-8BF8-4DB5-B053-22F077EEF4B0</string>
+	<key>CalDefaultCalendarSelectedByUser</key>
+	<false/>
+	<key>CalDefaultPrincipal</key>
+	<string>635B85D5-B4BA-4B89-BA1B-EA8A4ABB85C4</string>
+	<key>CalFirstVisibleDate</key>
+	<date>2026-07-07T07:00:00Z</date>
+	<key>CalUICanvasOccurrenceFontSize</key>
+	<real>13</real>
+	<key>CalendarListMiniMonthVisibleMonths</key>
+	<integer>1</integer>
+	<key>CalendarSidebarShown</key>
+	<true/>
+	<key>CalendarSidebarView</key>
+	<integer>0</integer>
+	<key>CollapsedTopLevelNodes</key>
+	<dict>
+		<key>MainWindow</key>
+		<array/>
+	</dict>
+	<key>Default duration in minutes for new event</key>
+	<real>30</real>
+	<key>DelegatesInSeparateWindows</key>
+	<dict>
+		<key>iCal</key>
+		<dict>
+			<key>inspectors</key>
+			<array/>
+		</dict>
+	</dict>
+	<key>DisabledCalendars</key>
+	<dict>
+		<key>MainWindow</key>
+		<array/>
+	</dict>
+	<key>InvitationNotificationsDisabled</key>
+	<true/>
+	<key>InviteeDeclineAlerts</key>
+	<false/>
+	<key>LastSaveDate</key>
+	<date>2026-07-07T12:20:42Z</date>
+	<key>NSDontMakeMainWindowKey</key>
+	<string>NO</string>
+	<key>NSEventConcurrentProcessingEnabled</key>
+	<string>YES</string>
+	<key>NSSplitView Subview Frames CalendarSplitView</key>
+	<array>
+		<string>0.000000, 0.000000, 250.000000, 872.000000, NO, NO</string>
+		<string>0.000000, 0.000000, 1335.000000, 872.000000, NO, NO</string>
+		<string>695.000000, 0.000000, 240.000000, 598.000000, YES, NO</string>
+	</array>
+	<key>NSWindow Frame NSSpellCheckerSpellingPanel</key>
+	<string>496 455 431 289 0 0 1728 1084 </string>
+	<key>NSWindow Frame NSSpellCheckerSubstitutionsPanel2</key>
+	<string>692 399 359 150 0 0 1728 1084 </string>
+	<key>NSWindow Frame RemindersCalendarInspector</key>
+	<string>664 470 525 177 0 0 1728 1084 </string>
+	<key>NSWindow Frame goToDate</key>
+	<string>721 481 288 156 0 0 1728 1084 </string>
+	<key>NSWindow Frame iCal</key>
+	<string>197 107 1335 872 0 0 1728 1084 </string>
+	<key>NSWindow Frame iCal inspector 0</key>
+	<string>18 615 300 451 0 0 1728 1084 </string>
+	<key>NotificationSourceClientIdentifierVersion</key>
+	<integer>1</integer>
+	<key>NotificationsLastLocale</key>
+	<string>en_US</string>
+	<key>OpenEventsInWindowType</key>
+	<false/>
+	<key>PrefMigrationSeed</key>
+	<integer>6</integer>
+	<key>ReindexAttemptsWithoutProgress</key>
+	<integer>0</integer>
+	<key>SelectedEvents</key>
+	<dict>
+		<key>iCal</key>
+		<array>
+			<string>54732DCA-0F2C-4AD4-9ED7-938894CA2FD3</string>
+		</array>
+	</dict>
+	<key>Show Week Numbers</key>
+	<true/>
+	<key>Show heat map in Year View</key>
+	<false/>
+	<key>TabbedWindowGroups</key>
+	<array/>
+	<key>TimeZone support enabled</key>
+	<true/>
+	<key>__APP_SETTINGS__bundleIdentifier</key>
+	<string>com.apple.iCal</string>
+	<key>defaultCalendarChangedReason</key>
+	<string>EventKit (&lt;ClientIdentity: 0xb7f2da2e0&gt;, applicationIdentifier: [com.apple.calendar], bundleIdentifier: [com.apple.iCal], clientName: [Calendar], pid: [1969], teamIdentifier: [0000000000])</string>
+	<key>defaultCalendarChangedTimestamp</key>
+	<integer>801034844</integer>
+	<key>defaultCalendarDatabaseID</key>
+	<integer>0</integer>
+	<key>defaultCalendarID</key>
+	<string>8625E60D-8BF8-4DB5-B053-22F077EEF4B0</string>
+	<key>defaultCalendarStoreUID</key>
+	<integer>4</integer>
+	<key>enableTravelAdvisoriesForAutomaticBehavior</key>
+	<true/>
+	<key>first day of week</key>
+	<integer>2</integer>
+	<key>first minute of day time range</key>
+	<integer>0</integer>
+	<key>first minute of work hours</key>
+	<integer>540</integer>
+	<key>first shown minute of day</key>
+	<real>0.0</real>
+	<key>iCal version</key>
+	<integer>150994944</integer>
+	<key>kCalDBLastSpotLightIndexCalendarsVersion</key>
+	<integer>1</integer>
+	<key>kCalDBLastSpotLightIndexVersion</key>
+	<integer>24</integer>
+	<key>last calendar view description</key>
+	<string>Daily</string>
+	<key>last minute of day time range</key>
+	<integer>1440</integer>
+	<key>last minute of work hours</key>
+	<integer>1020</integer>
+	<key>last selected calendar list item</key>
+	<string>50B4919C-00AF-4F06-AD4A-ADBF020E99A7</string>
+	<key>lastViewsTimeZone</key>
+	<string>America/Los_Angeles</string>
+	<key>migrationAttempts</key>
+	<integer>0</integer>
+	<key>number of hours displayed</key>
+	<integer>12</integer>
+	<key>scroll by weeks in week view</key>
+	<integer>2</integer>
+	<key>view rects</key>
+	<dict/>
+</dict>
+</plist>

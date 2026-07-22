@@ -3,18 +3,6 @@ export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 export CONFIG="$HOME/.config"
 export CHROME_EXECUTABLE="/Applications/Chromium.app/Contents/MacOS/Chromium"
 export PNPM_HOME="$HOME/Library/pnpm"
-export HOMEBREW_NO_ANALYTICS
-export HOMEBREW_NO_EMOJI
-export HOMEBREW_NO_INSECURE_REDIRECT=1
-export HOMEBREW_NO_ENV_HINTS=1
-export HOMEBREW_CASK_OPTS=--require-sha
-export HOMEBREW_NO_ANALYTICS
-export OLLAMA_FLASH_ATTENTION=1
-export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
-export CONFIG="$HOME/.config"
-export CHROME_EXECUTABLE="/Applications/Chromium.app/Contents/MacOS/Chromium"
-export PNPM_HOME="/Users/kaioferraz/Library/pnpm"
-export HOMEBREW_NO_ANALYTICS
 export HOMEBREW_NO_EMOJI
 export HOMEBREW_NO_INSECURE_REDIRECT=1
 export HOMEBREW_NO_ENV_HINTS=1
@@ -22,13 +10,28 @@ export HOMEBREW_CASK_OPTS=--require-sha
 export HOMEBREW_NO_ANALYTICS=1
 export OLLAMA_FLASH_ATTENTION=1
 export IMESSAGE_APPEND_SIGNATURE=false
+export BROWSERSLIST_IGNORE_OLD_DATA=1
+export NVM_DIR="$HOME/.nvm"
+export PATH="$HOME/.pi/agent/bin:/opt/homebrew/opt/rustup/bin:/opt/homebrew/bin:/opt/homebrew/sbin:$PNPM_HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
 
-export PATH="/opt/homebrew/opt/rustup/bin:/opt/homebrew/bin:/opt/homebrew/sbin:$PNPM_HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
+# Keep Node and global npm CLIs available without paying NVM's startup cost.
+typeset -a _nvm_node_versions
+_nvm_node_versions=("$NVM_DIR"/versions/node/*(Nn))
+if (( ${#_nvm_node_versions} )); then
+	export PATH="${_nvm_node_versions[-1]}/bin:$PATH"
+fi
+unset _nvm_node_versions
 
-[ -d "$HOME/.nvm" ] &&
-	export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+# Load the full NVM shell integration only when the nvm command is used.
+function nvm {
+	unfunction nvm
+	if [[ ! -s "$NVM_DIR/nvm.sh" ]]; then
+		echo "NVM is not installed at $NVM_DIR." >&2
+		return 127
+	fi
+	source "$NVM_DIR/nvm.sh"
+	nvm "$@"
+}
 
 function gp {
 	git pull --rebase --autostash
@@ -86,12 +89,18 @@ function dev {
 }
 
 function fetch {
-	if [ "$(command -v wget)" ]; then
-		/Users/dotkaio/.config/scripts/shell/download_webflow.sh "$@"
-	else
-		brew install wget
-		/Users/dotkaio/.config/scripts/shell/download_webflow.sh "$@"
+	local script="$HOME/.config/scripts/shell/download_webflow.sh"
+
+	if ! command -v wget >/dev/null 2>&1; then
+		brew install wget || return $?
 	fi
+
+	if [[ ! -f "$script" ]]; then
+		echo "Missing helper script: $script" >&2
+		return 1
+	fi
+
+	"$script" "$@"
 }
 
 function cleanup() {
@@ -664,6 +673,57 @@ function groq {
 	printf '%s\n' "$content"
 }
 
+function imagine {
+	if [[ -z "${AI_GATEWAY_API_KEY}" ]]; then
+		echo "AI_GATEWAY_API_KEY is not set." >&2
+		return 1
+	fi
+
+	if [[ -z "$*" ]]; then
+		echo 'usage: imagine "the image to be generated"' >&2
+		return 1
+	fi
+
+	local prompt raw http_code body error b64 out slug ts
+	prompt=$(printf '%s' "$*" | tr -d '\000-\010\013-\037')
+	ts=$(date +%Y%m%d-%H%M%S)
+	slug=$(printf '%s' "$prompt" | tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9' '-' | cut -c1-48)
+	slug=${slug#-}
+	slug=${slug%-}
+	[[ -z "$slug" ]] && slug="image"
+	out="${PWD}/imagine-${slug}-${ts}.png"
+
+	raw=$(curl -sS -w $'\n%{http_code}' https://ai-gateway.vercel.sh/v1/images/generations \
+		-H "Content-Type: application/json" \
+		-H "Authorization: Bearer ${AI_GATEWAY_API_KEY}" \
+		-d "$(jq -n --arg prompt "$prompt" '{model:"bytedance/seedream-5.0-pro",prompt:$prompt,n:1,size:"1024x1024",response_format:"b64_json"}')") || return 1
+
+	http_code="${raw##*$'\n'}"
+	body="${raw%$'\n'*}"
+
+	if ((http_code >= 400)); then
+		error=$(printf '%s' "$body" | jq -r '.error.message // .message // empty' 2>/dev/null)
+		[[ -z "$error" ]] && error="$body"
+		echo "AI Gateway error ($http_code): $error" >&2
+		return 1
+	fi
+
+	b64=$(printf '%s' "$body" | jq -r '.data[0].b64_json // empty' 2>/dev/null)
+	if [[ -z "$b64" ]]; then
+		echo "AI Gateway returned no image data." >&2
+		printf '%s\n' "$body" >&2
+		return 1
+	fi
+
+	if ! printf '%s' "$b64" | base64 --decode >"$out" 2>/dev/null; then
+		echo "Failed to decode image to $out" >&2
+		return 1
+	fi
+
+	printf '%s\n' "$out"
+	command -v open >/dev/null 2>&1 && open "$out"
+}
+
 function push {
 	git add .
 	local commit_message
@@ -815,10 +875,10 @@ autoload -U \
 	compinit
 
 promptinit
-vcs_info
 
 zmodload zsh/zutil
 
+FPATH="$CONFIG/terminal/completions:$FPATH"
 compinit -C -u
 compdef '_brew uninstall' remove
 compdef '_brew install' install
@@ -844,11 +904,10 @@ compdef '_ollama' llm
 compdef '_pfctl' pf
 
 #source extras
-source "$CONFIG/terminal/suggestions"
-source "$CONFIG/terminal/highlight/init"
+# source "$CONFIG/terminal/suggestions"
+# source "$CONFIG/terminal/highlight/init"
 source "$HOME/Library/Mobile Documents/com~apple~CloudDocs/.env"
 
-FPATH="$CONFIG/terminal/completions:$FPATH"
 TERMINAL="$HOME/.config/terminal"
 HISTFILE="$HOME/.history"
 HISTSIZE=10000
@@ -908,6 +967,7 @@ add-zsh-hook precmd _iterm_set_title
 add-zsh-hook preexec _iterm_set_title_for_command
 _iterm_set_title
 
-prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
-> '
+# prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
+# > '
 # prompt='%F{cyan}%h %F{red}% $(branch_name)%f→ '
+prompt='%F{red}% $(branch_name)%f→ '

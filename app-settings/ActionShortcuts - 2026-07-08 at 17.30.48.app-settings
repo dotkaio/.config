@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>BuildForRunCount</key>
+	<integer>116</integer>
+	<key>MigratedToSMAppService</key>
+	<true/>
+	<key>NSWindow Frame Settings</key>
+	<string>674 452 540 372 0 0 1728 1084 </string>
+	<key>RatingAskedBuild</key>
+	<integer>116</integer>
+	<key>RunCountForBuild</key>
+	<integer>107</integer>
+	<key>SKPurchaseIntentUpdatesLastChecked</key>
+	<real>805233270.299909</real>
+	<key>ScriptExecutionCount</key>
+	<integer>107</integer>
+	<key>SettingsTab</key>
+	<integer>0</integer>
+	<key>ShowIcon</key>
+	<false/>
+	<key>__APP_SETTINGS__bundleIdentifier</key>
+	<string>com.pointum.actions</string>
+</dict>
+</plist>

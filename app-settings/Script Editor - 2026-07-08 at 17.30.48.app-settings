@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSNavPanelExpandedSizeForOpenMode</key>
+	<string>{880, 448}</string>
+	<key>NSOSPLastRootDirectory</key>
+	<data>
+	Ym9va4QCAAAAAAUQQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+	AAAAAAAAAAAAAAAAAGQBAAAEAAAAAwMAAAAAACAFAAAAAQEAAFVzZXJzAAAACgAAAAEB
+	AABrYWlvZmVycmF6AAAIAAAAAQYAABAAAAAgAAAACAAAAAQDAAAKUgAAAAAAAAgAAAAE
+	AwAA1jQBAAAAAAAIAAAAAQYAAEQAAABUAAAACAAAAAAEAABBx9BJfGXyZxgAAAABAgAA
+	AgAAAAAAAAAPAAAAAAAAAAAAAAAAAAAAAAAAAAEFAAAIAAAABAMAAAAAAAAAAAAABAAA
+	AAMDAAD2AQAACAAAAAEJAABmaWxlOi8vLwwAAAABAQAATWFjaW50b3NoIEhECAAAAAQD
+	AAAAQLHJcwAAAAgAAAAABAAAQcffgC8AAAAkAAAAAQEAAEQ2MzZBQUI4LTk0M0YtNDU2
+	MC05QUYwLUEyQkNCQjI1NzEwORgAAAABAgAAgQAAAAEAAADvEwAAAQAAAAAAAAAAAAAA
+	AQAAAAEBAAAvAAAA2AAAAP7///8BAAAAAAAAABEAAAAEEAAANAAAAAAAAAAFEAAAZAAA
+	AAAAAAAQEAAAhAAAAAAAAABAEAAAdAAAAAAAAAACIAAAWAEAAAAAAAAFIAAAyAAAAAAA
+	AAAQIAAA2AAAAAAAAAARIAAADAEAAAAAAAASIAAA7AAAAAAAAAATIAAA/AAAAAAAAAAg
+	IAAAOAEAAAAAAAAwIAAApAAAAAAAAAABwAAArAAAAAAAAAARwAAAIAAAAAAAAAASwAAA
+	vAAAAAAAAAAB0AAApAAAAAAAAAAQ0AAABAAAAAAAAAA=
+	</data>
+	<key>NSToolbar Configuration Document Toolbar Identifier</key>
+	<dict>
+		<key>TB Display Mode</key>
+		<integer>2</integer>
+		<key>TB Icon Size Mode</key>
+		<integer>1</integer>
+		<key>TB Is Shown</key>
+		<true/>
+		<key>TB Size Mode</key>
+		<integer>1</integer>
+	</dict>
+	<key>NSToolbar Configuration Event Log Toolbar Identifier</key>
+	<dict>
+		<key>TB Display Mode</key>
+		<integer>1</integer>
+		<key>TB Icon Size Mode</key>
+		<integer>1</integer>
+		<key>TB Is Shown</key>
+		<true/>
+		<key>TB Size Mode</key>
+		<integer>1</integer>
+	</dict>
+	<key>NSWindow Frame NSSpellCheckerSpellingPanel</key>
+	<string>496 455 431 289 0 0 1728 1084 </string>
+	<key>NSWindow Frame NSSpellCheckerSubstitutionsPanel2</key>
+	<string>692 399 359 150 0 0 1728 1084 </string>
+	<key>NSWindow Frame SEEventLogWindow</key>
+	<string>514 281 700 382 0 0 1728 1084 </string>
+	<key>__APP_SETTINGS__bundleIdentifier</key>
+	<string>com.apple.ScriptEditor2</string>
+</dict>
+</plist>

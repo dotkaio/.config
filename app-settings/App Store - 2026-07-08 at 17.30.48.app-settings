@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ASAcknowledgedOnboardingItems</key>
+	<array>
+		<string>AccessibilityLabels</string>
+		<string>AgeRatings</string>
+	</array>
+	<key>ASAcknowledgedOnboardingVersion</key>
+	<integer>9</integer>
+	<key>AutoPlayVideoSetting</key>
+	<string>on</string>
+	<key>JetEngine_metricsSampling_page_render_sampleWindowStart</key>
+	<real>801721798.93545699</real>
+	<key>NSWindow Frame AppStoreMainWindow</key>
+	<string>0 17 1728 1050 0 0 1728 1084 </string>
+	<key>UserSetAutoPlayVideoSetting</key>
+	<false/>
+	<key>__APP_SETTINGS__bundleIdentifier</key>
+	<string>com.apple.AppStore</string>
+	<key>kAOSUIProfilePictureCropRect</key>
+	<string>{{0, 653}, {1320, 1320}}</string>
+	<key>lastBootstrapDate</key>
+	<real>805233195.44735599</real>
+	<key>lastBootstrapTimeZone</key>
+	<string>America/Los_Angeles</string>
+	<key>mostRecentTabIdentifier</key>
+	<string>search</string>
+</dict>
+</plist>
