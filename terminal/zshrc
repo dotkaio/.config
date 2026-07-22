@@ -970,4 +970,4 @@ _iterm_set_title
 # prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
 # > '
 # prompt='%F{cyan}%h %F{red}% $(branch_name)%f→ '
-prompt='%F{red}% $(branch_name)%f→ '
+prompt='%F{red}% $(branch_name)%f% '
