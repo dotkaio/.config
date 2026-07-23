@@ -1,4 +1,3 @@
-// @ts-nocheck
 let g:netrw_dirhistmax  =10
 let g:netrw_dirhistcnt =6
 let g:netrw_dirhist_6='/Users/kaioferraz'

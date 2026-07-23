@@ -905,7 +905,7 @@ compdef '_pfctl' pf
 
 #source extras
 # source "$CONFIG/terminal/suggestions"
-# source "$CONFIG/terminal/highlight/init"
+source "$CONFIG/terminal/highlight/init"
 source "$HOME/Library/Mobile Documents/com~apple~CloudDocs/.env"
 
 TERMINAL="$HOME/.config/terminal"
