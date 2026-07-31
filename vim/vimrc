@@ -305,7 +305,7 @@ function! s:ConfigureQuickfixPanel() abort
 	setlocal nonumber norelativenumber
 	setlocal statusline=\ PROBLEMS%=%{len(getqflist())}\ 
 	nnoremap <silent><buffer> q :cclose<CR>
-	nnoremap <silent><buffer> <C-.> :call <SID>ClosePanels()<CR>
+	nnoremap <silent><buffer> <C-.> :call <SID>ToggleTerminal()<CR>
 endfunction
 
 function! s:OpenProblems() abort
@@ -331,6 +331,7 @@ function! s:OpenTerminal() abort
 		endif
 	endfor
 
+	call s:ClosePanels()
 	botright 12new
 	let l:terminal_buffer = s:TerminalBuffer()
 	if l:terminal_buffer > 0
@@ -342,6 +343,16 @@ function! s:OpenTerminal() abort
 	let w:vscode_panel = 'terminal'
 	setlocal statusline=\ TERMINAL%=%{getcwd()}\ 
 	startinsert
+endfunction
+
+function! s:ToggleTerminal() abort
+	for l:winid in s:PanelWinids()
+		if win_id2win(l:winid) > 0 && getwinvar(win_id2win(l:winid), 'vscode_panel', '') ==# 'terminal'
+			call s:ClosePanels()
+			return
+		endif
+	endfor
+	call s:OpenTerminal()
 endfunction
 
 function! s:TogglePanel() abort
@@ -479,6 +490,7 @@ command! QuickOpen call <SID>QuickOpen()
 command! -nargs=? ProjectSearch call <SID>ProjectSearch(<f-args>)
 command! Problems call <SID>OpenProblems()
 command! TerminalPanel call <SID>OpenTerminal()
+command! TerminalToggle call <SID>ToggleTerminal()
 command! PanelToggle call <SID>TogglePanel()
 command! CommandPalette call <SID>OpenCommandPalette()
 command! SaveActiveFile call <SID>SaveActiveFile()
@@ -505,9 +517,9 @@ nnoremap <silent> <C-P> :CommandPalette<CR>
 inoremap <silent> <C-P> <Esc>:CommandPalette<CR>
 nnoremap <silent> <C-F> :ProjectSearch<CR>
 inoremap <silent> <C-F> <Esc>:ProjectSearch<CR>
-nnoremap <silent> <C-.> :PanelToggle<CR>
-inoremap <silent> <C-.> <C-O>:PanelToggle<CR>
-tnoremap <silent> <C-.> <C-W>:PanelToggle<CR>
+nnoremap <silent> <C-.> :TerminalToggle<CR>
+inoremap <silent> <C-.> <C-O>:TerminalToggle<CR>
+tnoremap <silent> <C-.> <C-W>:TerminalToggle<CR>
 
 nnoremap <silent> <C-M-Left> <C-W>h
 nnoremap <silent> <C-M-Right> <C-W>l

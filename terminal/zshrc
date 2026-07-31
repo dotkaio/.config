@@ -33,11 +33,11 @@ function nvm {
 	nvm "$@"
 }
 
-function gp {
+function gpra {
 	git pull --rebase --autostash
 }
 
-function resolve_conflicts {
+function git_merge_keep_current {
 	awk '
   /^<<<<<<< / { in_conflict=1; next }    # start conflict
   /^=======/  { in_conflict_keep=0; next }  # switch to OUT side
@@ -904,7 +904,7 @@ compdef '_ollama' llm
 compdef '_pfctl' pf
 
 #source extras
-# source "$CONFIG/terminal/suggestions"
+source "$CONFIG/terminal/suggestions"
 source "$CONFIG/terminal/highlight/init"
 source "$HOME/Library/Mobile Documents/com~apple~CloudDocs/.env"
 
@@ -967,7 +967,8 @@ add-zsh-hook precmd _iterm_set_title
 add-zsh-hook preexec _iterm_set_title_for_command
 _iterm_set_title
 
-# prompt='%F{cyan}%h %F{green}%B%~%F{red}%b $(branch_name)%f
-# > '
+
+prompt='%F{cyan}%h %F{green}%H%~%F{red}%b $(branch_name)%f
+→ '
 # prompt='%F{cyan}%h %F{red}% $(branch_name)%f→ '
-prompt='%F{red}% $(branch_name)%f% '
+# prompt='%F{red}% $(branch_name)%f% '

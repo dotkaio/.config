@@ -30,7 +30,7 @@ The Explorer opens automatically on the left and remains rooted at that launch d
 | `Ctrl+G` | Start recursive file lookup with `:find`; use Tab to complete |
 | `Ctrl+P` | Open the keyboard-filterable command palette |
 | `Ctrl+F` | Search the entire project and show results in Problems |
-| `Ctrl+.` | Toggle the bottom panel |
+| `Ctrl+.` | Toggle the integrated terminal |
 | `Ctrl+Option+Arrow` | Move between Vim windows when supported by the terminal |
 | `Ctrl+W` | Close the active file while preserving Explorer |
 | `Right` in Explorer | Expand a directory or open a file and return to Explorer |
@@ -52,8 +52,9 @@ The bottom panel uses native Vim windows:
 
 ```vim
 :Problems       " Show search, :make, and quickfix results
-:TerminalPanel  " Open or return to the persistent terminal
-:PanelToggle    " Open or close the panel
+:TerminalPanel  " Open or focus the persistent terminal
+:TerminalToggle " Toggle the persistent terminal
+:PanelToggle    " Open or close the general bottom panel
 ```
 
 Project search is dependency-free and uses `globpath()` plus `:vimgrep`. Results open in the Problems panel; press Enter on a result to open it in the single editor window. `.git`, `node_modules`, and `.vercel` are excluded.
