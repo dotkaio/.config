@@ -1,22 +1,12 @@
 # CLI tools
-brew "bun"
-brew "ffmpeg"
 brew "gh"
 brew "hf"
-brew "steipete/tap/imsg"
-brew "llama.cpp"
-brew "openai-whisper"
 brew "pnpm"
 brew "ripgrep"
 brew "rustup"
-brew "shellcheck"
-brew "tesseract"
 brew "tree"
 brew "uv"
-brew "wget"
-brew "yt-dlp"
 
 # GUI applications
-cask "iterm2"
 cask "santa"
 cask "ungoogled-chromium"

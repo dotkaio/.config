@@ -34,10 +34,6 @@ export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_ENV_HINTS=1
 
-log "Trusting the declared third-party formula"
-"$BREW_BIN" tap steipete/tap
-"$BREW_BIN" trust --formula steipete/tap/imsg
-
 log "Installing declared tools and applications"
 "$BREW_BIN" bundle install --file="$BREWFILE"
 "$BREW_BIN" analytics off >/dev/null

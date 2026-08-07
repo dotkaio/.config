@@ -40,23 +40,21 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 pass "Brewfile dependencies"
 
 formulae=(
-  bun ffmpeg gh hf imsg llama.cpp openai-whisper pnpm ripgrep rustup shellcheck
-  tesseract tree uv wget yt-dlp
+  gh hf pnpm ripgrep rustup tree uv
 )
 for formula in "${formulae[@]}"; do
   "$BREW_BIN" list --formula "$formula" >/dev/null 2>&1 || fail "missing formula: $formula"
 done
 pass "Homebrew formulae"
 
-casks=(iterm2 santa ungoogled-chromium)
+casks=(santa ungoogled-chromium)
 for cask in "${casks[@]}"; do
   "$BREW_BIN" list --cask "$cask" >/dev/null 2>&1 || fail "missing cask: $cask"
 done
 pass "Homebrew casks"
 
 commands=(
-  brew bun ffmpeg gh hf imsg llama-cli pnpm rg rustup shellcheck tesseract tree uv
-  wget whisper yt-dlp
+  brew gh hf pnpm rg rustup tree uv
 )
 for command_name in "${commands[@]}"; do
   command -v "$command_name" >/dev/null 2>&1 || fail "command does not resolve: $command_name"

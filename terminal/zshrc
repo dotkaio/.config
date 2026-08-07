@@ -963,9 +963,9 @@ function session {
 	_iterm_set_title
 }
 
-add-zsh-hook precmd _iterm_set_title
-add-zsh-hook preexec _iterm_set_title_for_command
-_iterm_set_title
+#add-zsh-hook precmd _iterm_set_title
+#add-zsh-hook preexec _iterm_set_title_for_command
+#_iterm_set_title
 
 
 prompt='%F{cyan}%h %F{green}%H%~%F{red}%b $(branch_name)%f
