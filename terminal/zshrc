@@ -213,13 +213,42 @@ function t {
 }
 
 # ensure to call this when santactl is installed
+# block <app-name> [app-name ...] — resolves app names to their .app paths
 function block {
-	if command -v santactl >/dev/null; then
-		# if the user use the "all"
-		sudo santactl rule --silent-block --path "$@"
-	else
+	if ! command -v santactl >/dev/null; then
 		echo "Santa not installed"
+		return 1
 	fi
+
+	if [[ $# -eq 0 ]]; then
+		echo "Usage: block <app-name> [app-name ...]"
+		return 1
+	fi
+
+	local dir app name apppath found
+	for app in "$@"; do
+		# strip a trailing .app so "Messages.app" and "Messages" both work
+		name="${app%.app}"
+		found=""
+		for dir in /System/Applications /System/Library/CoreServices /Applications "$HOME/Applications"; do
+			if [[ -d "$dir/$name.app" ]]; then
+				apppath="$dir/$name.app"
+				found=1
+				break
+			fi
+		done
+
+		if [[ -z $found ]]; then
+			echo "block: '$app' not found in /System/Applications, /System/Library/CoreServices, /Applications, or ~/Applications; skipping"
+			continue
+		fi
+
+		if sudo santactl rule --silent-block --path "$apppath"; then
+			echo "booom blocked: $app"
+		else
+			echo "block: failed to block '$app'"
+		fi
+	done
 }
 
 function unblock {
@@ -321,16 +350,16 @@ function plist {
 	esac
 }
 
-function remove {
-	if [[ "$1" == "brew" ]]; then
-		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
-		if [[ -d "$CONFIG/homebrew" ]]; then
-			brew cleanup
-			rm -rf "$CONFIG/homebrew"
-		elif [[ -d "/opt/homebrew" ]]; then
-			brew cleanup
-			rm -rf /opt/homebrew
-		fi
+function rm {
+	local first="$1"
+	if [[ -z "$first" ]]; then
+		echo "Usage: rm <path|brew-package>" >&2
+		return 1
+	fi
+	if [[ "$first" == -* ]]; then
+		command rm "$@"
+	elif [[ -e "$first" ]]; then
+		command rm -drf -- "$@"
 	else
 		brew uninstall "$@" && brew autoremove && brew cleanup
 	fi
@@ -836,7 +865,6 @@ alias pbc="pbcopy"
 alias pbp="pbpaste"
 alias pc="pbcopy"
 alias pp="pbpaste"
-alias rm="rm -drf"
 alias santa="santactl"
 alias sha256="shasum -a 256"
 alias speed="unwrap && networkQuality && wrap"
@@ -880,7 +908,6 @@ zmodload zsh/zutil
 
 FPATH="$CONFIG/terminal/completions:$FPATH"
 compinit -C -u
-compdef '_brew uninstall' remove
 compdef '_brew install' install
 compdef '_brew info' info
 compdef '_brew doctor' doctor
