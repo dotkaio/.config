@@ -212,8 +212,45 @@ function t {
 
 }
 
-# ensure to call this when santactl is installed
-# block <app-name> [app-name ...] — resolves app names to their .app paths
+# Santa 2026.7 only accepts plain files, not .app bundle directories. Resolve an
+# app name or bundle path to the executable declared by CFBundleExecutable.
+function _santa_resolve_executable {
+	local input="${1%/}"
+	local dir name apppath executable_name executable
+
+	if [[ -f "$input" ]]; then
+		print -r -- "$input"
+		return 0
+	fi
+
+	if [[ -d "$input" && "$input" == *.app ]]; then
+		apppath="$input"
+	else
+		name="${input%.app}"
+		for dir in /System/Applications /System/Library/CoreServices /Applications "$HOME/Applications"; do
+			if [[ -d "$dir/$name.app" ]]; then
+				apppath="$dir/$name.app"
+				break
+			fi
+		done
+	fi
+
+	if [[ -z "$apppath" ]]; then
+		print -u2 -- "Santa: '$1' was not found as an app or executable"
+		return 1
+	fi
+
+	executable_name=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$apppath/Contents/Info.plist" 2>/dev/null)
+	executable="$apppath/Contents/MacOS/$executable_name"
+	if [[ -z "$executable_name" || ! -f "$executable" ]]; then
+		print -u2 -- "Santa: could not find the main executable inside '$apppath'"
+		return 1
+	fi
+
+	print -r -- "$executable"
+}
+
+# block <app-name-or-path> [app-name-or-path ...]
 function block {
 	if ! command -v santactl >/dev/null; then
 		echo "Santa not installed"
@@ -221,54 +258,64 @@ function block {
 	fi
 
 	if [[ $# -eq 0 ]]; then
-		echo "Usage: block <app-name> [app-name ...]"
+		echo "Usage: block <app-name-or-path> [app-name-or-path ...]"
 		return 1
 	fi
 
-	local dir app name apppath found
+	local app executable
+	local result=0
 	for app in "$@"; do
-		# strip a trailing .app so "Messages.app" and "Messages" both work
-		name="${app%.app}"
-		found=""
-		for dir in /System/Applications /System/Library/CoreServices /Applications "$HOME/Applications"; do
-			if [[ -d "$dir/$name.app" ]]; then
-				apppath="$dir/$name.app"
-				found=1
-				break
-			fi
-		done
-
-		if [[ -z $found ]]; then
-			echo "block: '$app' not found in /System/Applications, /System/Library/CoreServices, /Applications, or ~/Applications; skipping"
+		if ! executable="$(_santa_resolve_executable "$app")"; then
+			result=1
 			continue
 		fi
 
-		if sudo santactl rule --silent-block --path "$apppath"; then
+		if sudo santactl rule --silent-block --path "$executable"; then
 			echo "booom blocked: $app"
 		else
 			echo "block: failed to block '$app'"
+			result=1
 		fi
 	done
+	return $result
 }
 
+# unblock <app-name-or-path> [app-name-or-path ...]
 function unblock {
-	if [[ -z "$1" ]]; then
-		echo "\n\nUnblock what? lol\n\n"
+	if ! command -v santactl >/dev/null; then
+		echo "Santa not installed"
 		return 1
 	fi
-	sudo santactl rule --remove --path "$@"
+
+	if [[ $# -eq 0 ]]; then
+		echo "Usage: unblock <app-name-or-path> [app-name-or-path ...]"
+		return 1
+	fi
+
+	local app executable
+	local result=0
+	for app in "$@"; do
+		if ! executable="$(_santa_resolve_executable "$app")"; then
+			result=1
+			continue
+		fi
+
+		if sudo santactl rule --remove --path "$executable"; then
+			echo "unblocked: $app"
+		else
+			echo "unblock: failed to unblock '$app'"
+			result=1
+		fi
+	done
+	return $result
 }
 
 function unblockall {
-	for app in "Messages.app" "FaceTime.app" "Mail.app" "System Settings.app"; do
-		sudo santactl rule --remove --path "/System/Applications/$app"
-	done
+	unblock "Messages" "FaceTime" "Mail" "System Settings"
 }
 
 function blockall {
-	for app in "Messages.app" "FaceTime.app" "Mail.app" "System Settings.app"; do
-		sudo santactl rule --silent-block --path "/System/Applications/$app"
-	done
+	block "Messages" "FaceTime" "Mail" "System Settings"
 }
 
 function proxy {
@@ -850,6 +897,7 @@ alias flp="flutter pub"
 alias flpg="flutter pub get"
 alias flpgb="flutter pub get && flutter packages pub run build_runner build --delete-conflicting-outputs"
 alias flr="flutter run"
+# include for alias and reduce the amount of functions along the boot
 alias ga="git add ."
 alias gm="git commit"
 alias gs="git status"
@@ -905,6 +953,11 @@ autoload -U \
 promptinit
 
 zmodload zsh/zutil
+
+
+function delete_firstLoad {
+	for i in {1..$1} #include value from the first incoming class.
+}
 
 FPATH="$CONFIG/terminal/completions:$FPATH"
 compinit -C -u
