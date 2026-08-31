@@ -37,6 +37,72 @@ function gpra {
 	git pull --rebase --autostash
 }
 
+function deploy {
+	local max_attempts="${DEPLOY_MAX_ATTEMPTS:-3}"
+	local attempt=1
+	local deploy_log deploy_status outdated
+
+	if [[ "$max_attempts" != <-> || "$max_attempts" -lt 1 ]]; then
+		echo "DEPLOY_MAX_ATTEMPTS must be a positive integer." >&2
+		return 2
+	fi
+
+	if ! command -v brew >/dev/null 2>&1; then
+		echo "Homebrew is required to install or update Vercel CLI." >&2
+		return 127
+	fi
+
+	if ! command -v vercel >/dev/null 2>&1; then
+		echo "Vercel CLI is not installed; installing it now."
+		if brew list --formula vercel >/dev/null 2>&1; then
+			brew reinstall vercel || return $?
+		else
+			brew install vercel || return $?
+		fi
+	fi
+
+	echo "Checking Vercel CLI for updates..."
+	brew update || return $?
+	outdated="$(brew outdated --formula vercel)" || return $?
+	if [[ -n "$outdated" ]]; then
+		brew upgrade vercel || return $?
+	fi
+
+	while (( attempt <= max_attempts )); do
+		deploy_log="$(mktemp -t vercel-deploy.XXXXXX)" || return 1
+		echo "Production deployment attempt $attempt/$max_attempts..."
+		vercel --prod "$@" 2>&1 | tee "$deploy_log"
+		deploy_status=$pipestatus[1]
+
+		if (( deploy_status == 0 )); then
+			command rm -f "$deploy_log"
+			return 0
+		fi
+
+		if ! command -v dot >/dev/null 2>&1; then
+			echo "Deployment failed and Dot is not installed. Log: $deploy_log" >&2
+			return "$deploy_status"
+		fi
+
+		if (( attempt == max_attempts )); then
+			echo "Deployment failed after $max_attempts attempts. Log: $deploy_log" >&2
+			return "$deploy_status"
+		fi
+
+		echo "Deployment failed; waiting for Dot to diagnose and fix it..."
+		dot --approve --no-session --name "Fix Vercel deployment" --print \
+			"<instruction>Diagnose and fix the Vercel production deployment failure. Inspect the project, make the smallest correct source changes, and run focused validation. Do not deploy; the calling shell will retry after you exit.</instruction><context>Working directory: $PWD. Complete Vercel output: $deploy_log.</context><constraints>Preserve unrelated work. Read the deployment log first. Do not commit, push, or broaden scope.</constraints><output_format>Fix the failure, verify the fix, then report the result concisely.</output_format>"
+		local dot_status=$?
+		if (( dot_status != 0 )); then
+			echo "Dot failed with status $dot_status. Log: $deploy_log" >&2
+			return "$dot_status"
+		fi
+
+		command rm -f "$deploy_log"
+		(( attempt++ ))
+	done
+}
+
 function git_merge_keep_current {
 	awk '
   /^<<<<<<< / { in_conflict=1; next }    # start conflict
@@ -150,12 +216,8 @@ function ip_from_url {
 	done <<<"$data"
 }
 
-function convert_nextjs {
+function convert_to_nextjs {
 	/opt/homebrew/Caskroom/miniconda/base/bin/python $HOME/.config/scripts/python/convert_to_nextjs.py
-}
-
-function to_number {
-	tr 'Aa' '4' | tr 'Ee' '3' | tr 'Ii' '1' | tr 'Oo' '0' | tr 'Ss' '5' | tr 'Tt' '7'
 }
 
 function dmg2iso {
@@ -888,8 +950,9 @@ alias ....="cd ../../.."
 alias ...="cd ../.."
 alias ..="cd .."
 alias .="open ."
+
 alias copy="pbcopy"
-# alias pi="/Users/kaioferraz/Developer/pi-mono/pi-test.sh"
+alias pkn="pkill node"
 alias diff="colordiff"
 alias doctor="brew doctor"
 alias fl="flutter"
@@ -897,15 +960,13 @@ alias flp="flutter pub"
 alias flpg="flutter pub get"
 alias flpgb="flutter pub get && flutter packages pub run build_runner build --delete-conflicting-outputs"
 alias flr="flutter run"
-# include for alias and reduce the amount of functions along the boot
+
 alias ga="git add ."
 alias gm="git commit"
 alias gs="git status"
-alias hide='chflags hidden'
+
 alias json="jq -r '.choices[0].message.content'"
 alias ll="ls -lhAGF1"
-alias lower="tr '[:upper:]' '[:lower:]'"
-alias upper="tr '[:lower:]' '[:upper:]'"
 alias md="mkdir -p"
 alias osa="osascript -e"
 alias paste="pbpaste"
@@ -920,6 +981,9 @@ alias status="git status"
 alias time="date -u +%T"
 alias today="date +%m-%d-%Y | pbcopy"
 alias z="zsh"
+
+alias lower="tr '[:upper:]' '[:lower:]'"
+alias upper="tr '[:lower:]' '[:upper:]'"
 
 #set options
 setopt \

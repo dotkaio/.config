@@ -1,5 +1,8 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =8
+let g:netrw_dirhistcnt =1
+let g:netrw_dirhist_1='/Users/kaioferraz'
+let g:netrw_dirhist_0='/Users/kaioferraz/Documents/Projects/ascend-commercial-cleaning'
+let g:netrw_dirhist_9='/Users/kaioferraz/.ssh'
 let g:netrw_dirhist_8='/Users/kaioferraz'
 let g:netrw_dirhist_7='/Users/kaioferraz/.vim'
 let g:netrw_dirhist_6='/Users/kaioferraz'
@@ -7,6 +10,3 @@ let g:netrw_dirhist_5='/Users/kaioferraz/.nvm'
 let g:netrw_dirhist_4='/Users/kaioferraz'
 let g:netrw_dirhist_3='/Users/kaioferraz/.agent'
 let g:netrw_dirhist_2='/Users/kaioferraz'
-let g:netrw_dirhist_1='/Users/kaioferraz/.agent'
-let g:netrw_dirhist_0='/Users/kaioferraz/.agent/homes'
-let g:netrw_dirhist_9='/Users/kaioferraz/.agent/homes/codex'
