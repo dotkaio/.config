@@ -12,7 +12,17 @@ export OLLAMA_FLASH_ATTENTION=1
 export IMESSAGE_APPEND_SIGNATURE=false
 export BROWSERSLIST_IGNORE_OLD_DATA=1
 export NVM_DIR="$HOME/.nvm"
-export PATH="$HOME/.pi/agent/bin:/opt/homebrew/opt/rustup/bin:/opt/homebrew/bin:/opt/homebrew/sbin:$PNPM_HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH=\
+"/opt/homebrew/opt/rustup/bin:\
+/opt/homebrew/bin:\
+/opt/homebrew/sbin:\
+$PNPM_HOME/bin:\
+/usr/local/bin:\
+/usr/local/sbin:\
+/usr/bin:\
+/bin:\
+/usr/sbin:\
+/sbin"\
 
 # Keep Node and global npm CLIs available without paying NVM's startup cost.
 typeset -a _nvm_node_versions
@@ -1106,6 +1116,25 @@ function session {
 	export SESSION_NAME="$*"
 	_iterm_set_title
 }
+
+dot () {
+	local arg
+	for arg in "$@"
+	do
+		if [[ "$arg" == "--no-env" ]]
+		then
+			command "$HOME/.local/bin/dot" "$@"
+			return $?
+		fi
+	done
+	if (( $+commands[bun] ))
+	then
+		command "$commands[bun]" "$DEVELOPER/dot/packages/coding-agent/src/cli.ts" "$@"
+		return $?
+	fi
+	command "$HOME/.local/bin/dot" "$@"
+}
+
 
 #add-zsh-hook precmd _iterm_set_title
 #add-zsh-hook preexec _iterm_set_title_for_command
