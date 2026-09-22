@@ -4,35 +4,35 @@ echo "Finding and removing all build artifacts..."
 
 # Find and remove all node_modules
 echo "Removing node_modules..."
-find ~/Developer -type d -name "node_modules" -prune -exec rm -rf {} + 2>/dev/null
+find "$PWD" -type d -name "node_modules" -prune -exec rm -rf {} + 2>/dev/null
 
 # Find and remove .next
 echo "Removing .next..."
-find ~/Developer -type d -name ".next" -prune -exec rm -rf {} + 2>/dev/null
+find "$PWD" -type d -name ".next" -prune -exec rm -rf {} + 2>/dev/null
 
 # Find and remove dist/build/out
 echo "Removing build directories..."
-find ~/Developer -type d \( -name "dist" -o -name "build" -o -name "out" -o -name ".build" \) -prune -exec rm -rf {} + 2>/dev/null
+find "$PWD" -type d \( -name "dist" -o -name "build" -o -name "out" -o -name ".build" \) -prune -exec rm -rf {} + 2>/dev/null
 
 # Find and remove .turbo
 echo "Removing .turbo..."
-find ~/Developer -type d -name ".turbo" -prune -exec rm -rf {} + 2>/dev/null
+find "$PWD" -type d -name ".turbo" -prune -exec rm -rf {} + 2>/dev/null
 
 # Find and remove .vercel
 echo "Removing .vercel..."
-find ~/Developer -type d -name ".vercel" -prune -exec rm -rf {} + 2>/dev/null
+find "$PWD" -type d -name ".vercel" -prune -exec rm -rf {} + 2>/dev/null
 
 # Find and remove cache directories
 echo "Removing cache directories..."
-find ~/Developer -type d \( -name ".cache" -o -name ".parcel-cache" -o -name ".vite" \) -prune -exec rm -rf {} + 2>/dev/null
+find "$PWD" -type d \( -name ".cache" -o -name ".parcel-cache" -o -name ".vite" \) -prune -exec rm -rf {} + 2>/dev/null
 
 # Find and remove temp directories
 echo "Removing temp directories..."
-find ~/Developer -type d \( -name "tmp" -o -name "temp" -o -name ".tmp" \) -prune -exec rm -rf {} + 2>/dev/null
+find "$PWD" -type d \( -name "tmp" -o -name "temp" -o -name ".tmp" \) -prune -exec rm -rf {} + 2>/dev/null
 
 # Find and remove coverage
 echo "Removing coverage..."
-find ~/Developer -type d -name "coverage" -prune -exec rm -rf {} + 2>/dev/null
+find "$PWD" -type d -name "coverage" -prune -exec rm -rf {} + 2>/dev/null
 
 echo "✓ Deep clean complete!"
-du -sh ~/Developer
+du -sh "$PWD"

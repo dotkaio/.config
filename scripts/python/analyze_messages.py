@@ -4,7 +4,6 @@ import datetime as dt
 import html
 import json
 import math
-import os
 import re
 import sqlite3
 import statistics
@@ -13,7 +12,9 @@ from pathlib import Path
 
 
 DB_PATH = Path("/Users/kaioferraz/Library/Messages/chat.db")
-DESKTOP = Path("/Users/kaioferraz/Desktop")
+OUTPUT_ROOT = Path("/Users/kaioferraz/Projects/analysis/messages")
+SOURCE_SCRIPT = Path(__file__).resolve()
+DIRECT_CHAT_STYLE = 45
 
 
 POSITIVE = {
@@ -92,6 +93,13 @@ THEMES = {
 TOKEN_RE = re.compile(r"[a-zA-Z][a-zA-Z']+|[0-9]+(?:\.[0-9]+)?")
 URL_RE = re.compile(r"https?://\S+|www\.\S+")
 CONTROL_RE = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f]")
+ATTRIBUTED_BODY_RUN_RE = re.compile(rb"(?:[\x20-\x7e]|[\xc2-\xf4][\x80-\xbf]{1,3})+")
+STAMP_RE = re.compile(r"\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}")
+ATTRIBUTED_BODY_CLASS_NAMES = {
+    "NSString", "NSAttributedString", "NSMutableAttributedString", "NSObject",
+    "NSMutableString", "NSDictionary", "NSNumber", "NSValue", "streamtyped",
+    "__kIMMessagePartAttributeName",
+}
 
 
 def apple_time_to_datetime(value):
@@ -111,26 +119,13 @@ def apple_time_to_datetime(value):
 def decode_attributed_body(blob):
     if not blob:
         return ""
-    try:
-        decoded = blob.decode("utf-8", errors="ignore")
-    except AttributeError:
+    marker = blob.find(b"NSString")
+    if marker == -1:
         return ""
-    if not decoded:
-        return ""
-    candidates = []
-    if "NSString" in decoded:
-        tail = decoded.split("NSString", 1)[1]
-        for marker in ("NSDictionary", "NSColor", "NSFont", "NSObject", "NSNumber"):
-            if marker in tail:
-                tail = tail.split(marker, 1)[0]
-        candidates.append(tail)
-    candidates.append(decoded)
-    for candidate in candidates:
-        cleaned = CONTROL_RE.sub(" ", candidate)
-        cleaned = re.sub(r"\s+", " ", cleaned).strip()
-        cleaned = cleaned.strip(" +_-$#@!~^*()[]{};:'\",.<>?/\\|`")
-        if len(cleaned) >= 2 and not cleaned.startswith("streamtyped"):
-            return cleaned
+    for run in ATTRIBUTED_BODY_RUN_RE.findall(blob[marker + len(b"NSString"):]):
+        candidate = run.decode("utf-8", errors="replace").strip()
+        if candidate and candidate not in ATTRIBUTED_BODY_CLASS_NAMES:
+            return candidate
     return ""
 
 
@@ -147,7 +142,68 @@ def normalize_text(text):
 def clean_contact(value):
     if not value:
         return "(unknown)"
-    return value.replace("\n", " ").strip()
+    return str(value).replace("\n", " ").strip()
+
+
+def normalize_identifier(value):
+    if not value:
+        return ""
+    identifier = str(value).strip().lower()
+    for prefix in ("tel:", "mailto:"):
+        if identifier.startswith(prefix):
+            identifier = identifier[len(prefix):]
+    if "@" in identifier:
+        return identifier
+    if re.fullmatch(r"[+\d().\-\s]+", identifier):
+        digits = re.sub(r"\D", "", identifier)
+        if len(digits) == 10:
+            digits = f"1{digits}"
+        if len(digits) >= 7:
+            return f"+{digits}"
+    return identifier
+
+
+def cloud_chat_parts(value):
+    if not value:
+        return "", ""
+    raw = str(value).strip()
+    parts = raw.split(";", 2)
+    if len(parts) == 3 and parts[1] == "-" and parts[2]:
+        return "direct", parts[2]
+    if len(parts) == 3 and parts[1] == "+" and parts[2]:
+        return "thread", parts[2]
+    return "thread", raw
+
+
+def resolve_chat(row):
+    joined_identifier = row["chat_identifier"] or row["handle_id_text"] or ""
+    if row["chat_id"] is not None:
+        if row["chat_style"] == DIRECT_CHAT_STYLE and joined_identifier:
+            identifier = normalize_identifier(joined_identifier)
+            if identifier:
+                name = row["display_name"] or joined_identifier
+                return f"direct:{identifier}", "joined", clean_contact(name), identifier
+        stable = row["chat_identifier"] or row["chat_guid"] or str(row["chat_id"])
+        name = row["display_name"] or row["room_name"] or stable
+        return f"thread:{stable}", "joined", clean_contact(name), clean_contact(stable)
+
+    cloud_kind, cloud_identifier = cloud_chat_parts(row["ck_chat_id"])
+    if cloud_identifier:
+        if cloud_kind == "direct":
+            identifier = normalize_identifier(cloud_identifier)
+            return f"direct:{identifier}", "cloud", clean_contact(cloud_identifier), identifier
+        return (
+            f"thread:{cloud_identifier}", "cloud", clean_contact(cloud_identifier),
+            clean_contact(cloud_identifier),
+        )
+
+    fallback = row["handle_id_text"]
+    if not fallback and row["handle_rowid"]:
+        fallback = f"handle-rowid:{row['handle_rowid']}"
+    if fallback:
+        identifier = normalize_identifier(fallback)
+        return f"direct:{identifier}", "handle", clean_contact(fallback), identifier
+    return "", "unresolved", "(unresolved chat)", "(unknown)"
 
 
 def tokens(text):
@@ -246,6 +302,8 @@ def read_rows():
             m.cache_has_attachments AS has_attachments,
             m.is_system_message AS is_system_message,
             m.associated_message_type AS associated_message_type,
+            m.ck_chat_id AS ck_chat_id,
+            m.handle_id AS handle_rowid,
             h.id AS handle_id_text,
             h.service AS handle_service,
             c.ROWID AS chat_id,
@@ -263,38 +321,44 @@ def read_rows():
     """
     rows = []
     seen = set()
-    for row in con.execute(query):
-        key = (row["message_id"], row["chat_id"])
-        if key in seen:
-            continue
-        seen.add(key)
-        text = normalize_text(row["text"]) or normalize_text(decode_attributed_body(row["attributed_body"]))
-        when = apple_time_to_datetime(row["message_date"])
-        local_when = when.astimezone() if when else None
-        chat_name = row["display_name"] or row["chat_identifier"] or row["room_name"] or row["handle_id_text"] or "(unknown chat)"
-        rows.append({
-            "message_id": row["message_id"],
-            "message_guid": row["message_guid"],
-            "chat_id": row["chat_id"] if row["chat_id"] is not None else -1,
-            "chat_name": clean_contact(chat_name),
-            "chat_identifier": clean_contact(row["chat_identifier"]),
-            "contact": "me" if row["is_from_me"] else clean_contact(row["handle_id_text"]),
-            "direction": "outbound" if row["is_from_me"] else "inbound",
-            "service": row["message_service"] or row["chat_service"] or row["handle_service"] or "",
-            "datetime": local_when.isoformat(timespec="seconds") if local_when else "",
-            "date": local_when.date().isoformat() if local_when else "",
-            "hour": local_when.hour if local_when else "",
-            "weekday": local_when.strftime("%A") if local_when else "",
-            "is_from_me": int(row["is_from_me"] or 0),
-            "is_read": int(row["is_read"] or 0),
-            "is_sent": int(row["is_sent"] or 0),
-            "is_delivered": int(row["is_delivered"] or 0),
-            "has_attachments": int(row["has_attachments"] or 0),
-            "is_system_message": int(row["is_system_message"] or 0),
-            "associated_message_type": int(row["associated_message_type"] or 0),
-            "text": text,
-        })
-    con.close()
+    try:
+        for row in con.execute(query):
+            chat_key, chat_source, chat_name, chat_identifier = resolve_chat(row)
+            dedup_key = (row["message_id"], chat_key or f"unresolved:{row['message_id']}")
+            if dedup_key in seen:
+                continue
+            seen.add(dedup_key)
+            text = normalize_text(row["text"]) or normalize_text(
+                decode_attributed_body(row["attributed_body"])
+            )
+            when = apple_time_to_datetime(row["message_date"])
+            local_when = when.astimezone() if when else None
+            rows.append({
+                "message_id": row["message_id"],
+                "message_guid": row["message_guid"],
+                "chat_key": chat_key,
+                "chat_source": chat_source,
+                "chat_id": row["chat_id"] if row["chat_id"] is not None else -1,
+                "chat_name": chat_name,
+                "chat_identifier": chat_identifier,
+                "contact": "me" if row["is_from_me"] else clean_contact(row["handle_id_text"]),
+                "direction": "outbound" if row["is_from_me"] else "inbound",
+                "service": row["message_service"] or row["chat_service"] or row["handle_service"] or "",
+                "datetime": local_when.isoformat(timespec="seconds") if local_when else "",
+                "date": local_when.date().isoformat() if local_when else "",
+                "hour": local_when.hour if local_when else "",
+                "weekday": local_when.strftime("%A") if local_when else "",
+                "is_from_me": int(row["is_from_me"] or 0),
+                "is_read": int(row["is_read"] or 0),
+                "is_sent": int(row["is_sent"] or 0),
+                "is_delivered": int(row["is_delivered"] or 0),
+                "has_attachments": int(row["has_attachments"] or 0),
+                "is_system_message": int(row["is_system_message"] or 0),
+                "associated_message_type": int(row["associated_message_type"] or 0),
+                "text": text,
+            })
+    finally:
+        con.close()
     return rows
 
 
@@ -314,9 +378,12 @@ def analyze(rows):
     by_weekday = defaultdict(list)
     by_service = defaultdict(list)
     all_theme_counts = Counter()
+    resolution_counts = Counter()
 
     for row in rows:
-        chats[row["chat_id"]].append(row)
+        if row["chat_key"]:
+            chats[row["chat_key"]].append(row)
+        resolution_counts[row["chat_source"]] += 1
         if row["date"]:
             by_day[row["date"]].append(row)
             by_month[row["date"][:7]].append(row)
@@ -329,7 +396,7 @@ def analyze(rows):
 
     chat_summaries = []
     response_samples = []
-    for chat_id, items in chats.items():
+    for chat_key, items in chats.items():
         items.sort(key=lambda r: (r["datetime"], r["message_id"]))
         scores = [r["sentiment_score"] for r in items if r["text"]]
         outbound = [r for r in items if r["is_from_me"]]
@@ -356,7 +423,8 @@ def analyze(rows):
                     else:
                         response_to_me.append(minutes)
                     response_samples.append({
-                        "chat_id": chat_id,
+                        "chat_key": chat_key,
+                        "chat_id": current["chat_id"],
                         "chat_name": current["chat_name"],
                         "responder": "me" if current["is_from_me"] else "them",
                         "minutes": round(minutes, 2),
@@ -371,7 +439,8 @@ def analyze(rows):
         for r in items:
             theme_total.update(theme_counts(r["text"]))
         chat_summaries.append({
-            "chat_id": chat_id,
+            "chat_key": chat_key,
+            "chat_id": items[-1]["chat_id"],
             "chat_name": items[-1]["chat_name"],
             "chat_identifier": items[-1]["chat_identifier"],
             "messages": len(items),
@@ -419,6 +488,13 @@ def analyze(rows):
         "outbound_messages": sum(1 for r in rows if r["is_from_me"]),
         "inbound_messages": sum(1 for r in rows if not r["is_from_me"]),
         "unique_chats": len(chats),
+        "chat_resolution": {
+            "resolved_message_rows": len(rows) - resolution_counts["unresolved"],
+            "joined_message_rows": resolution_counts["joined"],
+            "cloud_message_rows": resolution_counts["cloud"],
+            "handle_message_rows": resolution_counts["handle"],
+            "unresolved_message_rows": resolution_counts["unresolved"],
+        },
         "date_range": {
             "first": next((r["datetime"] for r in rows if r["datetime"]), ""),
             "last": next((r["datetime"] for r in reversed(rows) if r["datetime"]), ""),
@@ -470,6 +546,7 @@ def markdown_report(summary, chat_summaries):
     hour_rows = sorted(summary["hourly"], key=lambda r: r["messages"], reverse=True)[:5]
     weekday_rows = sorted(summary["weekday"], key=lambda r: r["messages"], reverse=True)
     theme_rows = Counter(summary["theme_counts"]).most_common()
+    resolution = summary["chat_resolution"]
 
     lines = []
     lines.append("# Messages Pattern Analysis")
@@ -481,9 +558,13 @@ def markdown_report(summary, chat_summaries):
     lines.append("")
     lines.append(f"- Message rows analyzed: {summary['total_message_rows']:,}")
     lines.append(f"- Messages with extractable text: {summary['messages_with_text']:,}")
-    lines.append(f"- Unique chats: {summary['unique_chats']:,}")
+    lines.append(f"- Resolved chats: {summary['unique_chats']:,}")
     lines.append(f"- Date range: {summary['date_range']['first']} to {summary['date_range']['last']}")
     lines.append(f"- Outbound / inbound: {summary['outbound_messages']:,} / {summary['inbound_messages']:,}")
+    lines.append(
+        f"- Thread resolution: {resolution['resolved_message_rows']:,} resolved rows; "
+        f"{resolution['unresolved_message_rows']:,} unresolved rows excluded from per-chat metrics."
+    )
     lines.append("")
     lines.append("## Overall Sentiment")
     lines.append("")
@@ -553,29 +634,87 @@ def markdown_report(summary, chat_summaries):
     lines.append("")
     lines.append("- Sentiment is local lexicon-based analysis, not a cloud model. It is useful for aggregate directional patterns, not perfect emotional truth.")
     lines.append("- Messages were read read-only from `chat.db`; the script did not send, modify, or delete messages.")
+    lines.append("- Legacy joins, cloud chat IDs, and handle fallbacks are canonicalized into stable thread keys.")
+    lines.append("- Rows without a recoverable thread ID remain in global aggregates but not per-chat metrics.")
     lines.append("- Contact names are whatever Messages stores in `chat.db`; some group chats may appear by identifier if no display name is stored.")
     return "\n".join(lines) + "\n"
 
 
+def executive_summary(summary):
+    sentiment_summary = summary["sentiment"]
+    resolution = summary["chat_resolution"]
+    top_hours = sorted(summary["hourly"], key=lambda row: row["messages"], reverse=True)[:3]
+    top_weekdays = sorted(summary["weekday"], key=lambda row: row["messages"], reverse=True)[:3]
+    top_themes = Counter(summary["theme_counts"]).most_common(5)
+    hour_names = ", ".join(f"{row['bucket']}:00" for row in top_hours)
+    weekday_names = ", ".join(row["bucket"] for row in top_weekdays)
+    theme_names = ", ".join(name.replace("_", "/") for name, _ in top_themes)
+
+    lines = [
+        "# Executive Summary",
+        "",
+        "This snapshot preserves and analyzes the locally available Messages history.",
+        "",
+        "## Scope",
+        "",
+        f"- Read directly from `{DB_PATH}` using a read-only connection.",
+        f"- Exported {summary['total_message_rows']:,} messages, including {summary['messages_with_text']:,} rows with extractable text.",
+        f"- Covered {summary['unique_chats']:,} resolved chats from {summary['date_range']['first']} through {summary['date_range']['last']}.",
+        f"- Direction balance: {summary['outbound_messages']:,} outbound and {summary['inbound_messages']:,} inbound messages.",
+        f"- Thread resolution: {resolution['resolved_message_rows']:,} resolved and {resolution['unresolved_message_rows']:,} unresolved rows.",
+        f"- Average local lexicon sentiment: {sentiment_summary['avg_score']}; {sentiment_summary['positive_pct']}% positive and {sentiment_summary['negative_pct']}% negative.",
+        "",
+        "## Core patterns",
+        "",
+        "- Overall send/receive volume is nearly balanced; communication asymmetry is concentrated in individual chats.",
+        f"- Dominant keyword themes: {theme_names}.",
+        f"- The highest-volume texting hours are {hour_names}.",
+        f"- The busiest weekdays are {weekday_names}.",
+        "",
+        "## Archive contents",
+        "",
+        "- `messages_with_sentiment.csv` is the row-level text and metadata export.",
+        "- `analysis_summary.json` contains aggregate analysis, thread-resolution metrics, and response samples.",
+        "- `chat_sentiment_summary.csv` contains per-chat metrics keyed by canonical thread ID.",
+        "- `pattern_report.md` provides the human-readable analysis.",
+        "- The remaining CSV files contain daily, monthly, hourly, weekday, service, and response-time aggregates.",
+        "",
+        "## Method note",
+        "",
+        "The source database was opened read-only. Sentiment is deterministic local lexicon analysis, not a cloud-model judgment.",
+    ]
+    return "\n".join(lines) + "\n"
+
+
+def latest_prior_run():
+    OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
+    candidates = [
+        path for path in OUTPUT_ROOT.iterdir()
+        if path.is_dir() and STAMP_RE.fullmatch(path.name)
+    ]
+    return max(candidates, key=lambda path: path.name) if candidates else None
+
+
 def main():
+    prior_run = latest_prior_run()
     stamp = dt.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    out_dir = DESKTOP / f"messages-analysis-{stamp}"
+    out_dir = OUTPUT_ROOT / stamp
     out_dir.mkdir(parents=True, exist_ok=False)
 
     rows = read_rows()
     summary, chat_summaries = analyze(rows)
 
     message_fields = [
-        "message_id", "message_guid", "chat_id", "chat_name", "chat_identifier", "contact",
-        "direction", "service", "datetime", "date", "hour", "weekday", "is_from_me",
-        "is_read", "is_sent", "is_delivered", "has_attachments", "is_system_message",
-        "associated_message_type", "sentiment_score", "sentiment_label", "word_count",
-        "char_count", "text",
+        "message_id", "message_guid", "chat_key", "chat_source", "chat_id", "chat_name",
+        "chat_identifier", "contact", "direction", "service", "datetime", "date", "hour",
+        "weekday", "is_from_me", "is_read", "is_sent", "is_delivered", "has_attachments",
+        "is_system_message", "associated_message_type", "sentiment_score", "sentiment_label",
+        "word_count", "char_count", "text",
     ]
     chat_fields = [
-        "chat_id", "chat_name", "chat_identifier", "messages", "text_messages", "outbound",
-        "inbound", "outbound_pct", "avg_sentiment", "avg_my_sentiment", "avg_their_sentiment",
-        "positive_pct", "negative_pct", "median_my_response_minutes",
+        "chat_key", "chat_id", "chat_name", "chat_identifier", "messages", "text_messages",
+        "outbound", "inbound", "outbound_pct", "avg_sentiment", "avg_my_sentiment",
+        "avg_their_sentiment", "positive_pct", "negative_pct", "median_my_response_minutes",
         "median_their_response_minutes", "first_message", "last_message", "top_terms",
         "dominant_theme",
     ]
@@ -589,24 +728,35 @@ def main():
     write_csv(out_dir / "weekday_sentiment.csv", summary["weekday"], bucket_fields)
     write_csv(out_dir / "service_sentiment.csv", summary["service"], bucket_fields)
     write_csv(out_dir / "response_time_samples.csv", summary["response_samples"], [
-        "chat_id", "chat_name", "responder", "minutes", "previous_datetime", "response_datetime",
+        "chat_key", "chat_id", "chat_name", "responder", "minutes", "previous_datetime",
+        "response_datetime",
     ])
-    with (out_dir / "analysis_summary.json").open("w", encoding="utf-8") as f:
-        json.dump(summary, f, ensure_ascii=False, indent=2)
-    (out_dir / "pattern_report.md").write_text(markdown_report(summary, chat_summaries), encoding="utf-8")
+    with (out_dir / "analysis_summary.json").open("w", encoding="utf-8") as file:
+        json.dump(summary, file, ensure_ascii=False, indent=2)
+    (out_dir / "pattern_report.md").write_text(
+        markdown_report(summary, chat_summaries), encoding="utf-8"
+    )
+    (out_dir / "executive_summary.md").write_text(executive_summary(summary), encoding="utf-8")
 
+    files = sorted([path.name for path in out_dir.iterdir()] + ["manifest.json"])
     manifest = {
+        "analysis_version": 2,
         "output_dir": str(out_dir),
-        "files": sorted(p.name for p in out_dir.iterdir()),
+        "files": files,
         "summary": {
             "messages": summary["total_message_rows"],
             "messages_with_text": summary["messages_with_text"],
             "unique_chats": summary["unique_chats"],
+            "chat_resolution": summary["chat_resolution"],
             "date_range": summary["date_range"],
             "avg_sentiment": summary["sentiment"]["avg_score"],
         },
+        "source_script": str(SOURCE_SCRIPT),
+        "prior_run": str(prior_run) if prior_run else None,
     }
-    (out_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    (out_dir / "manifest.json").write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
     print(json.dumps(manifest, ensure_ascii=False, indent=2))
 
 
