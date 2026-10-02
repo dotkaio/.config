@@ -1056,6 +1056,7 @@ compdef '_conda activate' activate
 compdef '_git push' push
 compdef '_ollama' llm
 compdef '_pfctl' pf
+compdef _dot dot
 
 #source extras
 source "$CONFIG/terminal/suggestions"
@@ -1086,7 +1087,7 @@ function _iterm_session_title {
 	if [[ -z "$title" ]]; then
 		title="${PWD:t}"
 	fi
-
+s
 	printf '%s' "$title"
 }
 
@@ -1117,24 +1118,23 @@ function session {
 	_iterm_set_title
 }
 
-dot () {
+function dot {
 	local arg
-	for arg in "$@"
-	do
-		if [[ "$arg" == "--no-env" ]]
-		then
+	for arg in "$@"; do
+		if [[ "$arg" == "--no-env" ]]; then
 			command "$HOME/.local/bin/dot" "$@"
 			return $?
 		fi
 	done
-	if (( $+commands[bun] ))
-	then
-		command "$commands[bun]" "$DEVELOPER/dot/packages/coding-agent/src/cli.ts" "$@"
+
+	if (( $+commands[bun] )); then
+		command "$commands[bun]" \
+			"$HOME/Documents/Projects/dot/packages/coding-agent/src/cli.ts" "$@"
 		return $?
 	fi
+
 	command "$HOME/.local/bin/dot" "$@"
 }
-
 
 #add-zsh-hook precmd _iterm_set_title
 #add-zsh-hook preexec _iterm_set_title_for_command
