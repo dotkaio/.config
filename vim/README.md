@@ -50,12 +50,12 @@ Press `Ctrl+P`, type part of an action name, use the arrow keys, and press Enter
 
 The bottom panel uses native Vim windows:
 
-```vim
+<!-- ```vim
 :Problems       " Show search, :make, and quickfix results
 :TerminalPanel  " Open or focus the persistent terminal
 :TerminalToggle " Toggle the persistent terminal
 :PanelToggle    " Open or close the general bottom panel
-```
+``` -->
 
 Project search is dependency-free and uses `globpath()` plus `:vimgrep`. Results open in the Problems panel; press Enter on a result to open it in the single editor window. `.git`, `node_modules`, and `.vercel` are excluded.
 

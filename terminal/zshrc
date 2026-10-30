@@ -24,6 +24,7 @@ $PNPM_HOME/bin:\
 /usr/sbin:\
 /sbin"\
 
+
 # Keep Node and global npm CLIs available without paying NVM's startup cost.
 typeset -a _nvm_node_versions
 _nvm_node_versions=("$NVM_DIR"/versions/node/*(Nn))
@@ -1145,3 +1146,16 @@ prompt='%F{cyan}%h %F{green}%H%~%F{red}%b $(branch_name)%f
 → '
 # prompt='%F{cyan}%h %F{red}% $(branch_name)%f→ '
 # prompt='%F{red}% $(branch_name)%f% '
+
+
+# Cute class with Ms. Martha s2
+# Simple function for learning argument
+# function hello {
+# 	if [[ $@ ]]; then
+# 		echo "There where?"
+# 	elif [[ $1 == "world" ]]; then
+# 		echo "here, motherfucker!"
+# 	else
+# 		echo "\n\t\t\tfellow demons!\n"
+# 	fi
+# }
