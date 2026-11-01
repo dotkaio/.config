@@ -1,4 +1,5 @@
 # !/usr/bin/env zsh
+
 export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 export CONFIG="$HOME/.config"
 export CHROME_EXECUTABLE="/Applications/Chromium.app/Contents/MacOS/Chromium"
@@ -782,6 +783,8 @@ function groq {
 		return 1
 	fi
 
+	
+
 	local raw http_code body error content msg
 	# strip raw control characters (bare newlines, tabs, etc.) that break JSON
 	msg=$(printf '%s' "$*" | tr -d '\000-\010\013-\037')
@@ -1026,10 +1029,7 @@ autoload -U \
 	compinit
 
 promptinit
-
 zmodload zsh/zutil
-
-
 function delete_firstLoad {
 	for i in {1..$1} #include value from the first incoming class.
 }
