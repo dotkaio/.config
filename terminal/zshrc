@@ -1,5 +1,7 @@
 # !/usr/bin/env zsh
 
+bindkey '^U' backward-kill-line
+
 export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 export CONFIG="$HOME/.config"
 export CHROME_EXECUTABLE="/Applications/Chromium.app/Contents/MacOS/Chromium"
