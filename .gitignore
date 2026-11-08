@@ -1,9 +1,9 @@
-.DS_Store
 .git
 .env
 iterm2/
 gh-copilot/
 local
-containers
+containers/
 gh/
 github-copilot/
+.DS_Store
