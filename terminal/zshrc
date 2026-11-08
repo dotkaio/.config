@@ -36,15 +36,9 @@ if (( ${#_nvm_node_versions} )); then
 fi
 unset _nvm_node_versions
 
-# Load the full NVM shell integration only when the nvm command is used.
-function nvm {
-	unfunction nvm
-	if [[ ! -s "$NVM_DIR/nvm.sh" ]]; then
-		echo "NVM is not installed at $NVM_DIR." >&2
-		return 127
-	fi
-	source "$NVM_DIR/nvm.sh"
-	nvm "$@"
+
+function delete_firstLoad {
+	for i in {1..$1} #include value from the first incoming class.
 }
 
 function gpra {
@@ -956,6 +950,74 @@ function lookup {
 	esac
 }
 
+
+function _iterm_title_clean {
+	local value="$1"
+	value="${value//$'\e'/}"
+	value="${value//$'\a'/}"
+	printf '%s' "$value"
+}
+
+function _iterm_session_title {
+	local title="${ITERM_TAB_TITLE:-${SESSION_NAME:-${PI_SESSION_NAME:-${AVIS_SESSION_NAME:-${CODEX_SESSION_TITLE:-}}}}}"
+
+	if [[ -z "$title" && -n "$TMUX" ]] && command -v tmux >/dev/null 2>&1; then
+		title="$(tmux display-message -p '#S' 2>/dev/null)"
+	fi
+
+	if [[ -z "$title" ]]; then
+		title="${PWD:t}"
+	fi
+s
+	printf '%s' "$title"
+}
+
+function _iterm_set_title {
+	[[ "$TERM_PROGRAM" == "iTerm.app" ]] || return 0
+	local title
+	title="$(_iterm_title_clean "$(_iterm_session_title)")"
+	printf '\e]1;%s\a\e]2;%s\a' "$title" "$title"
+}
+
+function _iterm_set_title_for_command {
+	[[ "$TERM_PROGRAM" == "iTerm.app" ]] || return 0
+	local title command_name
+	title="$(_iterm_session_title)"
+	command_name="${1%% *}"
+	[[ -n "$command_name" ]] && title="$title — $command_name"
+	title="$(_iterm_title_clean "$title")"
+	printf '\e]1;%s\a\e]2;%s\a' "$title" "$title"
+}
+
+function session {
+	if [[ -z "$*" ]]; then
+		printf '%s\n' "$SESSION_NAME"
+		return 0
+	fi
+
+	export SESSION_NAME="$*"
+	_iterm_set_title
+}
+
+function dot {
+	local arg
+	for arg in "$@"; do
+		if [[ "$arg" == "--no-env" ]]; then
+			command "$HOME/.local/bin/dot" "$@"
+			return $?
+		fi
+	done
+
+	if (( $+commands[bun] )); then
+		command "$commands[bun]" \
+			"$HOME/Documents/Projects/dot/packages/coding-agent/src/cli.ts" "$@"
+		return $?
+	fi
+
+	command "$HOME/.local/bin/dot" "$@"
+}
+
+
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 zstyle ':completion:*' menu select=1
 zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
@@ -1032,9 +1094,6 @@ autoload -U \
 
 promptinit
 zmodload zsh/zutil
-function delete_firstLoad {
-	for i in {1..$1} #include value from the first incoming class.
-}
 
 FPATH="$CONFIG/terminal/completions:$FPATH"
 compinit -C -u
@@ -1072,72 +1131,6 @@ HISTSIZE=10000
 SAVEHIST=10000
 
 autoload -Uz add-zsh-hook
-
-function _iterm_title_clean {
-	local value="$1"
-	value="${value//$'\e'/}"
-	value="${value//$'\a'/}"
-	printf '%s' "$value"
-}
-
-function _iterm_session_title {
-	local title="${ITERM_TAB_TITLE:-${SESSION_NAME:-${PI_SESSION_NAME:-${AVIS_SESSION_NAME:-${CODEX_SESSION_TITLE:-}}}}}"
-
-	if [[ -z "$title" && -n "$TMUX" ]] && command -v tmux >/dev/null 2>&1; then
-		title="$(tmux display-message -p '#S' 2>/dev/null)"
-	fi
-
-	if [[ -z "$title" ]]; then
-		title="${PWD:t}"
-	fi
-s
-	printf '%s' "$title"
-}
-
-function _iterm_set_title {
-	[[ "$TERM_PROGRAM" == "iTerm.app" ]] || return 0
-	local title
-	title="$(_iterm_title_clean "$(_iterm_session_title)")"
-	printf '\e]1;%s\a\e]2;%s\a' "$title" "$title"
-}
-
-function _iterm_set_title_for_command {
-	[[ "$TERM_PROGRAM" == "iTerm.app" ]] || return 0
-	local title command_name
-	title="$(_iterm_session_title)"
-	command_name="${1%% *}"
-	[[ -n "$command_name" ]] && title="$title — $command_name"
-	title="$(_iterm_title_clean "$title")"
-	printf '\e]1;%s\a\e]2;%s\a' "$title" "$title"
-}
-
-function session {
-	if [[ -z "$*" ]]; then
-		printf '%s\n' "$SESSION_NAME"
-		return 0
-	fi
-
-	export SESSION_NAME="$*"
-	_iterm_set_title
-}
-
-function dot {
-	local arg
-	for arg in "$@"; do
-		if [[ "$arg" == "--no-env" ]]; then
-			command "$HOME/.local/bin/dot" "$@"
-			return $?
-		fi
-	done
-
-	if (( $+commands[bun] )); then
-		command "$commands[bun]" \
-			"$HOME/Documents/Projects/dot/packages/coding-agent/src/cli.ts" "$@"
-		return $?
-	fi
-
-	command "$HOME/.local/bin/dot" "$@"
-}
 
 #add-zsh-hook precmd _iterm_set_title
 #add-zsh-hook preexec _iterm_set_title_for_command
